@@ -4,3 +4,5 @@
 /TelegramTestingFile
 /*.iml
 /.idea/**
+*.class
+*.jar
