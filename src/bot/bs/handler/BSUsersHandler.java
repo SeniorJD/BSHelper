@@ -1,4 +1,4 @@
-package bot.bs;
+package bot.bs.handler;
 
 import bot.plugins.handlers.UsersHandler;
 import org.jetbrains.annotations.NotNull;

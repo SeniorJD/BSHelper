@@ -15,7 +15,7 @@ public class BSMediator {
         return INSTANCE;
     }
 
-    int goldToChange = 200000;
+    public int goldToChange = 200000;
     public boolean autoAttack = true;
     public boolean autoSearch = true;
     public boolean autoBuild = true;

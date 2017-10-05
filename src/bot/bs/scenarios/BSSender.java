@@ -1,6 +1,6 @@
 package bot.bs.scenarios;
 
-import bot.bs.BSMessageHandler;
+import bot.bs.handler.BSMessageHandler;
 import bot.bs.Util;
 import bot.plugins.structure.ChatImpl;
 import bot.plugins.structure.User;

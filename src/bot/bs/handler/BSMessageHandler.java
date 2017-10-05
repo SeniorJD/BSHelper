@@ -1,5 +1,7 @@
-package bot.bs;
+package bot.bs.handler;
 
+import bot.bs.BSMediator;
+import bot.bs.Helper;
 import bot.bs.player.Battles;
 import bot.bs.scenarios.*;
 import bot.plugins.handlers.MessageHandler;

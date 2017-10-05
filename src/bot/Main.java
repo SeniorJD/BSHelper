@@ -1,6 +1,6 @@
 package bot;
 
-import bot.bs.*;
+import bot.bs.handler.*;
 import bot.bs.scenarios.BSSender;
 import bot.plugins.BotConfigImpl;
 import bot.plugins.handlers.TLMessageHandler;
@@ -74,7 +74,7 @@ public class Main {
     }
 
     private static void readSettings() {
-        File file = new File("settings.bs");
+        File file = new File("auth_settings.bs");
         if (!file.exists()) {
             System.out.println("enter your phone number");
             Scanner in = new Scanner(System.in);

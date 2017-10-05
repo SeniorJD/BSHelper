@@ -1,4 +1,4 @@
-package bot.bs;
+package bot.bs.handler;
 
 import bot.plugins.handlers.ChatsHandler;
 import org.telegram.api.chat.TLAbsChat;

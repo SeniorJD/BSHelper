@@ -1,4 +1,4 @@
-package bot.bs;
+package bot.bs.handler;
 
 import bot.plugins.structure.ChatImpl;
 import bot.plugins.structure.User;
