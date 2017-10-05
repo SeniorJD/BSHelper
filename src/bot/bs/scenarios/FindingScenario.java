@@ -139,12 +139,22 @@ public class FindingScenario implements RunningScenario {
         String originalMessage = message;
 
         if (originalMessage.contains(NO_MONEY)) {
-            sendHelperMessage("No money");
-            stop();
+            createTimer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    sendMessage(CONTROL_FIND_ALL);
+                }
+            }, 1000* 60);
             return;
         } else if (originalMessage.contains(NO_FOOD)) {
-            sendHelperMessage("No food");
-            stop();
+            createTimer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    sendMessage(CONTROL_FIND_ALL);
+                }
+            }, 1000* 60);
             return;
         }
 
@@ -225,12 +235,22 @@ public class FindingScenario implements RunningScenario {
     public void handleMessage(TLUpdateShortMessage tlUpdateShortMessage) {
         String message = tlUpdateShortMessage.getMessage();
         if (message.contains(NO_MONEY)) {
-            sendHelperMessage("No money");
-            stop();
+            createTimer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    sendMessage(CONTROL_FIND_ALL);
+                }
+            }, 1000* 60);
             return;
         } else if (message.contains(NO_FOOD)) {
-            sendHelperMessage("No food");
-            stop();
+            createTimer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    sendMessage(CONTROL_FIND_ALL);
+                }
+            }, 1000* 60);
             return;
         }
 

@@ -16,11 +16,11 @@ import java.util.Map;
  */
 public class BSDatabaseManager implements DatabaseManager {
     private static final ChatImpl chat = new ChatImpl(0){{
-        setAccessHash(0L);
+        setAccessHash(1L);
     }};
 
     private static final IUser user = new User(0){{
-        setUserHash(0L);
+        setUserHash(1L);
     }};
     @Override
     public @Nullable Chat getChatById(int i) {
