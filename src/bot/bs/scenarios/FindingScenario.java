@@ -1,16 +1,15 @@
 package bot.bs.scenarios;
 
 import bot.bs.BSMediator;
-import bot.bs.handler.BSMessageHandler;
 import bot.bs.Helper;
+import bot.bs.Settings;
 import bot.bs.Util;
+import bot.bs.handler.BSMessageHandler;
 import bot.bs.player.Battles;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.api.message.TLMessage;
 import org.telegram.api.updates.TLUpdateShortMessage;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -27,35 +26,11 @@ public class FindingScenario implements RunningScenario {
 
     protected Timer timer;
 
-    String ukraineAl = "\uD83D\uDE0E";
-    String cowsAl = "\uD83D\uDC04";
-    String ftarsAl = "\uD83C\uDF1A";
-    String foxAl = "\uD83E\uDD8A";
-    String trebAl = "⚔️";
-    String trebAl2 = "⚔";
-
-    String linker = "Linker";
-    String linker2 = "paradox";
-    String ptn = "птн";
-
-    List<String> allyAlliancesList = new ArrayList<>();
-    List<String> friendlyPlayersList = new ArrayList<>();
-
+    boolean foundByName = false;
 
     public FindingScenario(BSMessageHandler messageHandler) {
         this.messageHandler = messageHandler;
         this.sender = messageHandler.getSender();
-
-        allyAlliancesList.add(ukraineAl);
-        allyAlliancesList.add(cowsAl);
-        allyAlliancesList.add(ftarsAl);
-        allyAlliancesList.add(foxAl);
-        allyAlliancesList.add(trebAl);
-        allyAlliancesList.add(trebAl2);
-
-        friendlyPlayersList.add(linker);
-        friendlyPlayersList.add(linker2);
-        friendlyPlayersList.add(ptn);
     }
 
     protected void sendMessage(String message) {
@@ -76,7 +51,9 @@ public class FindingScenario implements RunningScenario {
     @Override
     public void stop() {
         cancelTimer();
-        getMediator().findOpponent = "";
+        if (foundByName) {
+            Settings.setFindOpponent("");
+        }
         messageHandler.setRunningScenario(null);
         messageHandler = null;
     }
@@ -182,10 +159,11 @@ public class FindingScenario implements RunningScenario {
             return;
         }
 
-        if (!getMediator().findOpponent.isEmpty()) {
-            if (playerName.contains(getMediator().findOpponent) || playerAlliance.contains(getMediator().findOpponent)) {
+        if (!Settings.getFindOpponent().isEmpty()) {
+            foundByName = playerName.contains(Settings.getFindOpponent());
+            if (foundByName || playerAlliance.contains(Settings.getFindOpponent())) {
                 stop();
-                if (getMediator().autoAttack) {
+                if (Settings.isAutoAttack()) {
                     sender.pressAttackButton(tlMessage);
                 } else {
                     sendHelperMessage(originalMessage);
@@ -221,7 +199,7 @@ public class FindingScenario implements RunningScenario {
 
         if (karma == 0 || karma == 1) {
             stop();
-            if (getMediator().autoAttack) {
+            if (Settings.isAutoAttack()) {
                 sender.pressAttackButton(tlMessage);
             } else {
                 sendHelperMessage(originalMessage);
@@ -260,14 +238,15 @@ public class FindingScenario implements RunningScenario {
 
     private boolean isAllyOrFriend(String playerAlliance, String playerName) {
         if (!playerAlliance.isEmpty()) {
-            for (String s : allyAlliancesList) {
+            for (String s : Settings.getAllyAlliances()) {
                 if (playerAlliance.contains(s)) {
                     return true;
                 }
             }
         }
 
-        for (String s : friendlyPlayersList) {
+        playerName = playerName.toLowerCase();
+        for (String s : Settings.getAllyPlayers()) {
             if (playerName.contains(s)) {
                 return true;
             }

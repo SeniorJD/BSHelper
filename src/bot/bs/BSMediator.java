@@ -15,13 +15,6 @@ public class BSMediator {
         return INSTANCE;
     }
 
-    public int goldToChange = 200000;
-    public boolean autoAttack = true;
-    public boolean autoSearch = true;
-    public boolean autoBuild = true;
-
-    long timestamp = -1;
-
     public int territory = 0;
     public int population = 0;
     public int army = 0;
@@ -49,8 +42,6 @@ public class BSMediator {
     public int woodRequired = 0;
     public int stoneRequired = 0;
     public int foodRequired = 0;
-
-    public String findOpponent = "";
 
     public boolean inBattle = false;
 
@@ -85,8 +76,6 @@ public class BSMediator {
                 parseFood(s);
             }
         }
-
-        timestamp = System.currentTimeMillis();
     }
 
     public void parseBuildingsState(String message) {
@@ -399,10 +388,10 @@ public class BSMediator {
                     goldRequired += stoneRequired * 2;
                 }
 
-                if (gold > goldToChange) {
+                if (gold > Settings.getGoldToChange()) {
                     timeToWait = -1;
                 } else {
-                    timeToWait = (Math.min(goldRequired, goldToChange) / goldPerMinute + 1) * 1000 * 60;
+                    timeToWait = (Math.min(goldRequired, Settings.getGoldToChange()) / goldPerMinute + 1) * 1000 * 60;
                 }
             }
         }
@@ -413,8 +402,8 @@ public class BSMediator {
                 foodRequired = stockCapacity - food;
             }
 
-            if (gold < goldToChange) {
-                timeToWait = ((goldToChange - gold) / goldPerMinute + 1) * 1000 * 60;
+            if (gold < Settings.getGoldToChange()) {
+                timeToWait = ((Settings.getGoldToChange() - gold) / goldPerMinute + 1) * 1000 * 60;
             } else {
                 timeToWait = -1;
             }

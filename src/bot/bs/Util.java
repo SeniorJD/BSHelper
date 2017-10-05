@@ -5,13 +5,10 @@ package bot.bs;
  */
 public class Util {
 
-    public static final int[] BUY_AMOUNTS = new int[]
-            {100, 500, 1000, 5000, 10000, 50000, 100000, 250000, 500000};
-
     public static final String BS_BOT_NAME = "BastionSiegeBot";
     public static final String BS_HELPER_NAME = "BastionSiegeHelper";
 
-    public static final String PLAYER_NAME = "JD One";
+    public static final String SEASON = "Сезон";
     public static final String BUILDINGS_MENU = "Постройки";
     public static final String CANNOT_BUILD = "К сожалению, у тебя не хватает";
     public static final String DEFENCE_STARTED = "Твои владения атакованы!";

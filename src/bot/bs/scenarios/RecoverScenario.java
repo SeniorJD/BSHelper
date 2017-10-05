@@ -1,6 +1,7 @@
 package bot.bs.scenarios;
 
 import bot.bs.BSMediator;
+import bot.bs.Settings;
 import bot.bs.handler.BSMessageHandler;
 import bot.bs.Util;
 import org.telegram.api.message.TLMessage;
@@ -57,7 +58,7 @@ public class RecoverScenario implements RunningScenario {
         cancelTimer();
         messageHandler.setRunningScenario(null);
 
-        if (!getMediator().autoBuild) {
+        if (!Settings.isAutoBuild()) {
             messageHandler = null;
             return;
         }
@@ -179,7 +180,7 @@ public class RecoverScenario implements RunningScenario {
                     getMediator().population += getMediator().houseLevel;
                     handleRecruit(message);
                 }
-            }, 80*1000);
+            }, 60*1000);
         }
     }
 }

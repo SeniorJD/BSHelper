@@ -1,5 +1,6 @@
 package bot;
 
+import bot.bs.Settings;
 import bot.bs.handler.*;
 import bot.bs.scenarios.BSSender;
 import bot.plugins.BotConfigImpl;
@@ -32,6 +33,7 @@ public class Main {
         Logger.getGlobal().setLevel(Level.ALL);
 
         readSettings();
+        Settings.readSettings();
 
 //        final DatabaseManagerImpl databaseManager = new DatabaseManagerImpl();
         final BotConfig botConfig = new BotConfigImpl(PHONENUMBER);

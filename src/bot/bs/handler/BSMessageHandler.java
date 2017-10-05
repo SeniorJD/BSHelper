@@ -2,6 +2,7 @@ package bot.bs.handler;
 
 import bot.bs.BSMediator;
 import bot.bs.Helper;
+import bot.bs.Settings;
 import bot.bs.player.Battles;
 import bot.bs.scenarios.*;
 import bot.plugins.handlers.MessageHandler;
@@ -74,26 +75,11 @@ public class BSMessageHandler extends MessageHandler {
                 }
                 runningScenario = null;
             }
+            started = false;
             return;
         }
 
-        if (runningScenario != null) {
-            return;
-        }
-
-        if (message.startsWith(Helper.COMMAND_FIND)) {
-            String task = tlMessage.getMessage().substring(Helper.COMMAND_FIND.length());
-            if (!task.isEmpty()) {
-                if (task.startsWith(" ")) {
-                    task = task.substring(1);
-                }
-            }
-
-            mediator.findOpponent = task;
-            runningScenario = new FindingScenario(this);
-            runningScenario.start();
-            return;
-        } else if (message.startsWith(Helper.COMMAND_SETGOLD)) {
+        if (message.startsWith(Helper.COMMAND_SETGOLD)) {
             String[] parsed = message.split("\\D");
 
             int value = 100000;
@@ -108,7 +94,11 @@ public class BSMessageHandler extends MessageHandler {
                     t.printStackTrace();
                 }
 
-                mediator.goldToChange = value;
+                if (value <= 0) {
+                    return;
+                }
+
+                Settings.setGoldToChange(value);
                 break;
             }
 
@@ -129,7 +119,7 @@ public class BSMessageHandler extends MessageHandler {
                     t.printStackTrace();
                 }
 
-                mediator.autoAttack = value;
+                Settings.setAutoAttack(value);
                 break;
             }
 
@@ -150,7 +140,7 @@ public class BSMessageHandler extends MessageHandler {
                     t.printStackTrace();
                 }
 
-                mediator.autoSearch = value;
+                Settings.setAutoSearch(value);
                 break;
             }
 
@@ -171,11 +161,85 @@ public class BSMessageHandler extends MessageHandler {
                     t.printStackTrace();
                 }
 
-                mediator.autoBuild = value;
+                Settings.setAutoBuild(value);
                 break;
             }
 
             getSender().sendHelperMessage("auto build: " + value);
+            return;
+        } else if (message.startsWith(Helper.COMMAND_ADD_ALLY_ALLIANCE)) {
+            if (message.equals(Helper.COMMAND_ADD_ALLY_ALLIANCE)) {
+                getSender().sendHelperMessage(Settings.generateAllyAlliancesValues());
+            } else {
+                String alliance = message.substring(Helper.COMMAND_ADD_ALLY_ALLIANCE.length() + 1);
+                Settings.addAllyAlliance(alliance);
+
+                getSender().sendHelperMessage(Settings.generateAllyAlliancesValues());
+            }
+
+            return;
+        } else if (message.startsWith(Helper.COMMAND_REMOVE_ALLY_ALLIANCE)) {
+            if (message.equals(Helper.COMMAND_REMOVE_ALLY_ALLIANCE)) {
+                getSender().sendHelperMessage(Settings.generateAllyAlliancesValues());
+            } else {
+                String alliance = message.substring(Helper.COMMAND_REMOVE_ALLY_ALLIANCE.length() + 1);
+                Settings.removeAllyAlliance(alliance);
+
+                getSender().sendHelperMessage(Settings.generateAllyAlliancesValues());
+            }
+
+            return;
+        } else if (message.startsWith(Helper.COMMAND_ADD_ALLY_PLAYER)) {
+            if (message.equals(Helper.COMMAND_ADD_ALLY_PLAYER)) {
+                getSender().sendHelperMessage(Settings.generateAllyPlayersValues());
+            } else {
+                String alliance = message.substring(Helper.COMMAND_ADD_ALLY_PLAYER.length() + 1);
+                Settings.addAllyPlayer(alliance);
+
+                getSender().sendHelperMessage(Settings.generateAllyPlayersValues());
+            }
+
+            return;
+        } else if (message.startsWith(Helper.COMMAND_REMOVE_ALLY_PLAYER)) {
+            if (message.equals(Helper.COMMAND_REMOVE_ALLY_PLAYER)) {
+                getSender().sendHelperMessage(Settings.generateAllyPlayersValues());
+            } else {
+                String alliance = message.substring(Helper.COMMAND_REMOVE_ALLY_PLAYER.length() + 1);
+                Settings.removeAllyPlayer(alliance);
+
+                getSender().sendHelperMessage(Settings.generateAllyPlayersValues());
+            }
+
+            return;
+        }
+
+        if (runningScenario != null) {
+            return;
+        }
+
+        if (message.startsWith(Helper.COMMAND_START)) {
+            started = true;
+
+            Settings.printSettings(sender);
+            return;
+        }
+
+        if (!started) {
+            sendHelperMessage("use start command in order to start the bot");
+            return;
+        }
+
+        if (message.startsWith(Helper.COMMAND_FIND)) {
+            String task = tlMessage.getMessage().substring(Helper.COMMAND_FIND.length());
+            if (!task.isEmpty()) {
+                if (task.startsWith(" ")) {
+                    task = task.substring(1);
+                }
+            }
+
+            Settings.setFindOpponent(task);
+            runningScenario = new FindingScenario(this);
+            runningScenario.start();
             return;
         } else if (message.startsWith(Helper.COMMAND_BUILD)) {
             if (mediator.inBattle) {
@@ -197,6 +261,9 @@ public class BSMessageHandler extends MessageHandler {
 
     @Override
     public void handleMessage(@NotNull TLUpdateShortMessage message) {
+        if (!started) {
+            return;
+        }
         IUser bsBot = sender.getUser();
 
         if (bsBot == null) {
@@ -230,6 +297,9 @@ public class BSMessageHandler extends MessageHandler {
 
     @Override
     public void handleMessage(@NotNull TLMessage message) {
+        if (!started) {
+            return;
+        }
         IUser bsBot = sender.getUser();
 
         if (bsBot == null) {

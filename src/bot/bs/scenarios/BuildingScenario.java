@@ -1,11 +1,11 @@
 package bot.bs.scenarios;
 
 import bot.bs.BSMediator;
+import bot.bs.Settings;
 import bot.bs.handler.BSMessageHandler;
 import org.telegram.api.message.TLMessage;
 import org.telegram.api.updates.TLUpdateShortMessage;
 
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -61,7 +61,7 @@ public class BuildingScenario implements RunningScenario {
         stage = RETRIEVING;
         sendMessage(CONTROL_UP);
 
-        if (!getMediator().autoSearch) {
+        if (!Settings.isAutoSearch()) {
             return;
         }
 
@@ -168,12 +168,16 @@ public class BuildingScenario implements RunningScenario {
     }
 
     private void parseMainState(String message) {
-        if (!message.contains(PLAYER_NAME)) {
-            if (Objects.equals(lastSentMessage, CONTROL_UP)) {
-                sendHelperMessage("Building failed: \n" + message);
-            } else {
-                sendMessage(CONTROL_UP);
-            }
+        if (!message.contains(SEASON)) {
+            sendHelperMessage("Building failed: \n" + message);
+            createTimer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    stage = RETRIEVING;
+                    sendMessage(CONTROL_UP);
+                }
+            }, 60 * 1000);
 
             return;
         }
@@ -204,7 +208,15 @@ public class BuildingScenario implements RunningScenario {
     private void parseBuildingsState(String message) {
         if (!message.contains(BUILDINGS_MENU)) {
             sendHelperMessage("Something gone wrong: \n" + message);
-            stop();
+
+            createTimer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    stage = RETRIEVING;
+                    sendMessage(CONTROL_UP);
+                }
+            }, 60 * 1000);
 
             return;
         }
