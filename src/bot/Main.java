@@ -38,14 +38,16 @@ public class Main {
 //        final DatabaseManagerImpl databaseManager = new DatabaseManagerImpl();
         final BotConfig botConfig = new BotConfigImpl(PHONENUMBER);
 
-        final IUsersHandler usersHandler = new BSUsersHandler();
-        final IChatsHandler chatsHandler = new BSChatsHandler();
+        BSDatabaseManager databaseManager = new BSDatabaseManager();
+
+        final IUsersHandler usersHandler = new BSUsersHandler(databaseManager);
+        final IChatsHandler chatsHandler = new BSChatsHandler(databaseManager);
         final BSMessageHandler messageHandler = new BSMessageHandler();
         final TLMessageHandler tlMessageHandler = new TLMessageHandlerExt(messageHandler);
 
         final ChatUpdatesBuilderImpl builder = new ChatUpdatesBuilderImpl(CustomUpdatesHandler.class);
         builder.setBotConfig(botConfig)
-                .setDatabaseManager(new BSDatabaseManager())
+                .setDatabaseManager(databaseManager)
                 .setUsersHandler(usersHandler)
                 .setChatsHandler(chatsHandler)
                 .setMessageHandler(messageHandler)

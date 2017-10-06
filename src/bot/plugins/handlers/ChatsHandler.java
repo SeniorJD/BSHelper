@@ -1,5 +1,7 @@
 package bot.plugins.handlers;
 
+import bot.bs.handler.BSDatabaseManager;
+import bot.plugins.structure.ChatImpl;
 import org.telegram.api.chat.TLAbsChat;
 import org.telegram.api.chat.TLChat;
 import org.telegram.api.chat.TLChatForbidden;
@@ -15,10 +17,10 @@ import java.util.List;
  */
 public class ChatsHandler implements IChatsHandler {
     private static final String LOGTAG = "CHATSHANDLER";
-//    protected final DatabaseManagerImpl databaseManager;
+    protected final BSDatabaseManager databaseManager;
 
-    public ChatsHandler() {
-//        this.databaseManager = databaseManager;
+    public ChatsHandler(BSDatabaseManager databaseManager) {
+        this.databaseManager = databaseManager;
     }
 
     @Override
@@ -63,6 +65,9 @@ public class ChatsHandler implements IChatsHandler {
 //        } else {
 //            databaseManager.addChat(current);
 //        }
+        ChatImpl chat = new ChatImpl(chatId);
+        chat.setChannel(false);
+        databaseManager.addChat(chat);
     }
 
 
@@ -81,6 +86,11 @@ public class ChatsHandler implements IChatsHandler {
 //        } else {
 //            databaseManager.addChat(current);
 //        }
+
+        ChatImpl chat = new ChatImpl(channel.getId());
+        chat.setAccessHash(channel.getAccessHash());
+        chat.setChannel(true);
+        databaseManager.addChat(chat);
     }
 
     private void onChannel(TLChannel channel) {
@@ -100,6 +110,12 @@ public class ChatsHandler implements IChatsHandler {
 //        } else {
 //            databaseManager.addChat(current);
 //        }
+        ChatImpl chat = new ChatImpl(channel.getId());
+        if (channel.hasAccessHash()) {
+            chat.setAccessHash(channel.getAccessHash());
+        }
+        chat.setChannel(true);
+        databaseManager.addChat(chat);
     }
 
 }

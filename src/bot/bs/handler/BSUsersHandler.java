@@ -9,8 +9,8 @@ import org.telegram.api.user.TLAbsUser;
  */
 public class BSUsersHandler extends UsersHandler {
 
-    public BSUsersHandler() {
-        super();
+    public BSUsersHandler(BSDatabaseManager databaseManager) {
+        super(databaseManager);
     }
 
     @Override

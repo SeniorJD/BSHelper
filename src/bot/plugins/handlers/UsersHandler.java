@@ -1,5 +1,6 @@
 package bot.plugins.handlers;
 
+import bot.bs.handler.BSDatabaseManager;
 import bot.plugins.structure.User;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,17 +10,18 @@ import org.telegram.bot.handlers.interfaces.IUsersHandler;
 import org.telegram.bot.services.BotLogger;
 
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author SeniorJD
  */
 public class UsersHandler implements IUsersHandler {
     private static final String LOGTAG = "USERSHANDLER";
-    private final ConcurrentHashMap<Integer, TLAbsUser> temporalUsers = new ConcurrentHashMap<>();
     private static final int MAXTEMPORALUSERS = 4000;
 
-    public UsersHandler() {
+    protected BSDatabaseManager databaseManager;
+
+    public UsersHandler(BSDatabaseManager databaseManager) {
+        this.databaseManager = databaseManager;
     }
 
     /**
@@ -27,10 +29,19 @@ public class UsersHandler implements IUsersHandler {
      * @param users List of users to add
      */
     public void onUsers(@NotNull List<TLAbsUser> users) {
-        if ((this.temporalUsers.size() + users.size()) > MAXTEMPORALUSERS) {
-            this.temporalUsers.clear();
+        for (TLAbsUser tlAbsUser : users) {
+            if (!(tlAbsUser instanceof TLUser)) {
+                continue;
+            }
+
+            TLUser tlUser = (TLUser) tlAbsUser;
+
+            if (databaseManager.getUserById(tlUser.getId()) == null) {
+                User user = new User(tlUser.getId());
+                user.setUserHash(tlUser.getAccessHash());
+            }
         }
-        users.stream().forEach(x -> this.temporalUsers.put(x.getId(), x));
+
         users.forEach(this::onUser);
     }
 

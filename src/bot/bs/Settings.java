@@ -156,7 +156,8 @@ public class Settings {
     }
 
     public static void printSettings(BSSender sender) {
-        sender.sendHelperMessage(generateSettings());
+        String s = generateSettings();
+        sender.sendHelperMessage(s);
     }
 
     public static int getGoldToChange() {
