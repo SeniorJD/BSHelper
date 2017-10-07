@@ -60,7 +60,9 @@ public class Main {
             if (status == LoginStatus.CODESENT) {
                 System.out.println("enter message sent from telegram");
                 Scanner in = new Scanner(System.in);
-                boolean success = kernel.getKernelAuth().setAuthCode(in.nextLine().trim());
+                String s = in.nextLine().trim();
+                System.out.println("message accepted: " + s + ". Sending...");
+                boolean success = kernel.getKernelAuth().setAuthCode(s);
                 if (success) {
                     status = LoginStatus.ALREADYLOGGED;
                 }

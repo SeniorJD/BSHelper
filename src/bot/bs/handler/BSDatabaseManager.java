@@ -66,7 +66,7 @@ public class BSDatabaseManager implements DatabaseManager {
 
             if (oldData[2] != i3) {
                 result = true;
-                oldData[3] = i3;
+                oldData[2] = i3;
             }
         }
 
