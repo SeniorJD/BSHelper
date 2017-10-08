@@ -23,6 +23,7 @@ public class Util {
     public static final String ATTACK_STARTED = "⚔Осада началась!";
     public static final String BATTLE_FINISHED = "Битва с";
     public static final String BATTLE_FINISHED_ALLIANCE = "Битва с альянсом";
+    public static final String BATTLE_UNFINISHED = "Текущая война сказывается на каждом";
     public static final String NO_MONEY = "Чтобы организовать хорошую разведку, нужно";
     public static final String NO_FOOD = "Отправить солдат в дозор без";
     public static final String RECRUITING_ARMY_DONE_WELL = "⚔Армии";

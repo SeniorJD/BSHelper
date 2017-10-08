@@ -211,6 +211,27 @@ public class BSMessageHandler extends MessageHandler {
             }
 
             return;
+        } else if (message.startsWith(Helper.COMMAND_BUILDING_SCENARIO)) {
+            String[] parsed = message.split("\\D");
+
+            int value = 0;
+            for (String s : parsed) {
+                if (s.isEmpty()) {
+                    continue;
+                }
+
+                try {
+                    value = Integer.parseInt(s);
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+
+                Settings.setBuildingScenario(value);
+                break;
+            }
+
+            getSender().sendHelperMessage("building scenario: " + value);
+            return;
         }
 
         if (runningScenario != null) {
@@ -352,6 +373,9 @@ public class BSMessageHandler extends MessageHandler {
             return true;
         } else if (message.contains(BATTLE_FINISHED)) {
             mediator.inBattle = false;
+            return true;
+        } else if (message.contains(BATTLE_UNFINISHED)) {
+            mediator.inBattle = true;
             return true;
         } else if (message.contains(HINT)) {
             return true;

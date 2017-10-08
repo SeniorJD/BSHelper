@@ -129,6 +129,7 @@ public class BuildingScenario implements RunningScenario {
             case CONTROL_STOCK:
             case CONTROL_TOWN:
             case CONTROL_HOUSE:
+            case CONTROL_BARRACKS:
                 sendMessage(CONTROL_UPGRADE);
                 break;
             case CONTROL_UPGRADE:
@@ -197,8 +198,10 @@ public class BuildingScenario implements RunningScenario {
                     sendMessage(CONTROL_STOCK);
                 } else if (getMediator().nextBuildingToUpgrade == TOWN) {
                     sendMessage(CONTROL_TOWN);
-                } else {
+                } else if (getMediator().nextBuildingToUpgrade == HOUSE) {
                     sendMessage(CONTROL_HOUSE);
+                } else if (getMediator().nextBuildingToUpgrade == BARRACKS) {
+                    sendMessage(CONTROL_BARRACKS);
                 }
                 break;
             }
@@ -249,8 +252,10 @@ public class BuildingScenario implements RunningScenario {
                 getMediator().townLevel++;
             } else if (getMediator().nextBuildingToUpgrade == HOUSE) {
                 getMediator().houseLevel++;
-            } else {
+            } else if (getMediator().nextBuildingToUpgrade == STOCK) {
                 getMediator().stockLevel++;
+            } else if (getMediator().nextBuildingToUpgrade == BARRACKS) {
+                getMediator().barracksLevel++;
             }
         }
 
@@ -314,6 +319,10 @@ public class BuildingScenario implements RunningScenario {
         } else if (woodRequired > stoneRequired) {
             int diff = woodRequired - stoneRequired;
 
+            if (diff > gold / 2) {
+                diff = gold / 2;
+            }
+
             int goldTemp = gold - diff * 2;
             int fourthPart = goldTemp / 4;
 
@@ -321,6 +330,10 @@ public class BuildingScenario implements RunningScenario {
             stoneToBuy = fourthPart;
         } else {
             int diff = stoneRequired - woodRequired;
+
+            if (diff > gold / 2) {
+                diff = gold / 2;
+            }
 
             int goldTemp = gold - diff * 2;
             int fourthPart = goldTemp / 4;

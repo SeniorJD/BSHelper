@@ -318,10 +318,19 @@ public class BSMediator {
 
     public void refreshUpgradeList() {
         nextBuildingToUpgrade = -1;
-        int foodLeftTime = foodPerMinute >= 0 ? Integer.MAX_VALUE : (food / -foodPerMinute) * 1000 * 60;
 
         int stockCapacity = getStockCapacity(stockLevel);
 
+        switch (Settings.getBuildingScenario()) {
+            case 1:
+                processUpgradeScenario1(stockCapacity);
+                break;
+            default:
+                processUpgradeScenario0(stockCapacity);
+        }
+    }
+
+    protected void processUpgradeScenario0(int stockCapacity) {
         int goldKoef = getGoldKoef(Util.HOUSE);
         int woodKoef = getWoodKoef(Util.HOUSE);
         int stoneKoef = getStoneKoef(Util.HOUSE);
@@ -396,6 +405,8 @@ public class BSMediator {
             }
         }
 
+        int foodLeftTime = foodPerMinute >= 0 ? Integer.MAX_VALUE : (food / -foodPerMinute) * 1000 * 60;
+
         if (timeToWait > foodLeftTime || foodLeftTime < 60 * 1000 * 60) {
             this.foodRequired = (int) (stockCapacity * 0.8 - food);
             if (foodRequired <= 0) {
@@ -414,6 +425,86 @@ public class BSMediator {
         this.goldRequired = goldRequired;
         this.woodRequired = woodRequired;
         this.stoneRequired = stoneRequired;
-        // process upgrade
+    }
+
+    protected void processUpgradeScenario1(int stockCapacity) {
+        int goldKoef = getGoldKoef(Util.BARRACKS);
+        int woodKoef = getWoodKoef(Util.BARRACKS);
+        int stoneKoef = getStoneKoef(Util.BARRACKS);
+
+        int goldRequiredForBarracks = getRequiredAmount(houseLevel, goldKoef);
+        int woodRequiredForBarracks = getRequiredAmount(houseLevel, woodKoef);
+        int stoneRequiredForBarracks = getRequiredAmount(houseLevel, stoneKoef);
+
+        if (woodRequiredForBarracks > stockCapacity || stoneRequiredForBarracks > stockCapacity) {
+            nextBuildingToUpgrade = Util.STOCK;
+        } else {
+            nextBuildingToUpgrade = Util.BARRACKS;
+        }
+
+        int goldRequired;
+        int woodRequired;
+        int stoneRequired;
+
+        if (nextBuildingToUpgrade == Util.STOCK) {
+            goldKoef = getGoldKoef(Util.STOCK);
+            woodKoef = getWoodKoef(Util.STOCK);
+            stoneKoef = getStoneKoef(Util.STOCK);
+
+            goldRequired = getRequiredAmount(stockLevel, goldKoef);
+            woodRequired = getRequiredAmount(stockLevel, woodKoef);
+            stoneRequired = getRequiredAmount(stockLevel, stoneKoef);
+        } else {
+            goldRequired = goldRequiredForBarracks;
+            woodRequired = woodRequiredForBarracks;
+            stoneRequired = stoneRequiredForBarracks;
+        }
+
+        goldRequired -= gold;
+        woodRequired -= wood;
+        stoneRequired -= stone;
+
+        if (woodRequired <= 0 && stoneRequired <= 0 && goldRequired <= 0) {
+            timeToWait = 0;
+        } else {
+            if (woodRequired <= 0 && stoneRequired <= 0) {
+                timeToWait = (goldRequired / goldPerMinute + 1) * 1000 * 60;
+            } else {
+                if (woodRequired > 0) {
+                    goldRequired += woodRequired * 2;
+                }
+
+                if (stoneRequired > 0) {
+                    goldRequired += stoneRequired * 2;
+                }
+
+                if (gold > Settings.getGoldToChange()) {
+                    timeToWait = -1;
+                } else {
+                    timeToWait = (Math.min(goldRequired, Settings.getGoldToChange()) / goldPerMinute + 1) * 1000 * 60;
+                }
+            }
+        }
+
+        int foodLeftTime = foodPerMinute >= 0 ? Integer.MAX_VALUE : (food / -foodPerMinute) * 1000 * 60;
+
+        if (timeToWait > foodLeftTime || foodLeftTime < 60 * 1000 * 60) {
+            this.foodRequired = (int) (stockCapacity * 0.8 - food);
+            if (foodRequired <= 0) {
+                foodRequired = stockCapacity - food;
+            }
+
+            if (gold < Settings.getGoldToChange()) {
+                timeToWait = ((Settings.getGoldToChange() - gold) / goldPerMinute + 1) * 1000 * 60;
+            } else {
+                timeToWait = -1;
+            }
+        } else {
+            this.foodRequired = 0;
+        }
+
+        this.goldRequired = goldRequired;
+        this.woodRequired = woodRequired;
+        this.stoneRequired = stoneRequired;
     }
 }

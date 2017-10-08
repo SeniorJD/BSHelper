@@ -18,11 +18,13 @@ public class Settings {
     public static final String FIND_KEY = "find";
     public static final String ALLY_ALLIANCES = "allyAlliances";
     public static final String ALLY_PLAYERS = "allyPlayers";
+    public static final String BUILDING_SCENARIO = "buildingScenario";
 
     private static int goldToChange = 100000;
     private static boolean autoAttack = true;
     private static boolean autoSearch = true;
     private static boolean autoBuild = true;
+    private static int buildingScenario = 0;
     private static String findOpponent = "";
     private static List<String> allyAlliances = new ArrayList<>();
     private static List<String> allyPlayers = new ArrayList<>();
@@ -41,15 +43,27 @@ public class Settings {
 
                 switch (arr[0]) {
                     case GOLD_TO_CHANGE_KEY:
+                        if (arr.length == 1) {
+                            break;
+                        }
                         goldToChange = Integer.valueOf(arr[1]);
                         break;
                     case AUTO_ATTACK_KEY:
+                        if (arr.length == 1) {
+                            break;
+                        }
                         autoAttack = Boolean.valueOf(arr[1]);
                         break;
                     case AUTO_SEARCH_KEY:
+                        if (arr.length == 1) {
+                            break;
+                        }
                         autoSearch = Boolean.valueOf(arr[1]);
                         break;
                     case AUTO_BUILD_KEY:
+                        if (arr.length == 1) {
+                            break;
+                        }
                         autoBuild = Boolean.valueOf(arr[1]);
                         break;
                     case FIND_KEY: {
@@ -88,6 +102,13 @@ public class Settings {
                         }
                         break;
                     }
+                    case BUILDING_SCENARIO: {
+                        if (arr.length == 1) {
+                            break;
+                        }
+                        buildingScenario = Integer.valueOf(arr[1]);
+                        break;
+                    }
                 }
             }
         } catch (IOException e) {
@@ -115,6 +136,7 @@ public class Settings {
                 AUTO_SEARCH_KEY + SPLITTER + autoSearch + "\n" +
                 AUTO_BUILD_KEY + SPLITTER + autoBuild + "\n" +
                 FIND_KEY + SPLITTER + findOpponent + "\n" +
+                BUILDING_SCENARIO + SPLITTER + buildingScenario + "\n" +
                 generateAllyAlliancesValues() +
                 generateAllyPlayersValues();
     }
@@ -129,10 +151,10 @@ public class Settings {
 
             if (i < allyAlliances.size() - 1) {
                 sb.append(";");
-            } else {
-                sb.append("\n");
             }
         }
+
+        sb.append("\n");
 
         return sb.toString();
     }
@@ -147,10 +169,10 @@ public class Settings {
 
             if (i < allyPlayers.size() - 1) {
                 sb.append(";");
-            } else {
-                sb.append("\n");
             }
         }
+
+        sb.append("\n");
 
         return sb.toString();
     }
@@ -233,5 +255,13 @@ public class Settings {
     public static void removeAllyPlayer(String player) {
         allyPlayers.remove(player);
         saveSettings();
+    }
+
+    public static void setBuildingScenario(int buildingScenario) {
+        Settings.buildingScenario = buildingScenario;
+    }
+
+    public static int getBuildingScenario() {
+        return buildingScenario;
     }
 }
