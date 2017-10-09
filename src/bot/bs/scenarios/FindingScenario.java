@@ -186,7 +186,7 @@ public class FindingScenario implements RunningScenario {
         String territoryS = message.substring(0, message.indexOf(Util.TERRITORY_SIGN));
         int territory = Integer.parseInt(territoryS);
 
-        if (territory > 20000) {
+        if (territory > Math.min(20000, getMediator().territory / 2)) {
             sendMessage(CONTROL_FIND_ALL);
             return;
         }
@@ -194,18 +194,28 @@ public class FindingScenario implements RunningScenario {
         index = message.indexOf(Helper.EXPLORING_4);
         message = message.substring(index + Helper.EXPLORING_4.length());
 
-        String karmaS = message.substring(0, message.indexOf(Util.KARMA_SIGN));
-        int karma = Integer.parseInt(karmaS);
+        int karmaIndex = message.indexOf(Util.KARMA_SIGN);
+        if (karmaIndex != -1) {
+            String karmaS = message.substring(0, karmaIndex);
+            int karma = Integer.parseInt(karmaS);
 
-        if (karma == 0 || karma == 1) {
+            if (karma == 0 || karma == 1) {
+                stop();
+                if (Settings.isAutoAttack()) {
+                    sender.pressAttackButton(tlMessage);
+                } else {
+                    sendHelperMessage(originalMessage);
+                }
+            } else {
+                sendMessage(CONTROL_FIND_ALL);
+            }
+        } else {
             stop();
             if (Settings.isAutoAttack()) {
                 sender.pressAttackButton(tlMessage);
             } else {
                 sendHelperMessage(originalMessage);
             }
-        } else {
-            sendMessage(CONTROL_FIND_ALL);
         }
     }
 
