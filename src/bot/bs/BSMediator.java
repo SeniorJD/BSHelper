@@ -432,9 +432,9 @@ public class BSMediator {
         int woodKoef = getWoodKoef(Util.BARRACKS);
         int stoneKoef = getStoneKoef(Util.BARRACKS);
 
-        int goldRequiredForBarracks = getRequiredAmount(houseLevel, goldKoef);
-        int woodRequiredForBarracks = getRequiredAmount(houseLevel, woodKoef);
-        int stoneRequiredForBarracks = getRequiredAmount(houseLevel, stoneKoef);
+        int goldRequiredForBarracks = getRequiredAmount(barracksLevel, goldKoef);
+        int woodRequiredForBarracks = getRequiredAmount(barracksLevel, woodKoef);
+        int stoneRequiredForBarracks = getRequiredAmount(barracksLevel, stoneKoef);
 
         if (woodRequiredForBarracks > stockCapacity || stoneRequiredForBarracks > stockCapacity) {
             nextBuildingToUpgrade = Util.STOCK;
