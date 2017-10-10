@@ -84,7 +84,7 @@ public class FindingScenario implements RunningScenario {
 
         switch (lastSentMessage) {
             case CONTROL_UP:
-                handleControlUp();
+                handleControlUp(tlMessage.getMessage());
                 break;
             case CONTROL_WAR:
                 handleWar();
@@ -95,7 +95,8 @@ public class FindingScenario implements RunningScenario {
         }
     }
 
-    private void handleControlUp() {
+    private void handleControlUp(String message) {
+        getMediator().parseMainState(message);
         sendMessage(CONTROL_WAR);
     }
 
