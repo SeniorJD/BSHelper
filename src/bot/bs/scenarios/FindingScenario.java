@@ -192,11 +192,11 @@ public class FindingScenario implements RunningScenario {
         }
 
         index = message.indexOf(Helper.EXPLORING_4);
-        message = message.substring(index + Helper.EXPLORING_4.length());
 
-        int karmaIndex = message.indexOf(Util.KARMA_SIGN);
-        if (karmaIndex != -1) {
-            String karmaS = message.substring(0, karmaIndex);
+        if (index != -1) {
+            message = message.substring(index + Helper.EXPLORING_4.length());
+
+            String karmaS = message.substring(0, message.indexOf(Util.KARMA_SIGN));
             int karma = Integer.parseInt(karmaS);
 
             if (karma == 0 || karma == 1) {
@@ -217,6 +217,7 @@ public class FindingScenario implements RunningScenario {
                 sendHelperMessage(originalMessage);
             }
         }
+
     }
 
     @Override
