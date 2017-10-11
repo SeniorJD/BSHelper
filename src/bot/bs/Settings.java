@@ -259,6 +259,7 @@ public class Settings {
 
     public static void setBuildingScenario(String buildingScenario) {
         Settings.buildingScenario = buildingScenario;
+        saveSettings();
     }
 
     public static String getBuildingScenario() {
