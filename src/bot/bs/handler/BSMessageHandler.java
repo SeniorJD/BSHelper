@@ -239,21 +239,31 @@ public class BSMessageHandler extends MessageHandler {
             getSender().sendHelperMessage("building scenario: " + scenario);
             return;
         } else if (message.startsWith(Helper.COMMAND_RISKY_ATTACK)) {
-            if (message.equals(Helper.COMMAND_RISKY_ATTACK)) {
-                getSender().sendHelperMessage(Settings.generateAllyPlayersValues());
-            } else {
-                String valueS = message.substring(Helper.COMMAND_RISKY_ATTACK.length() + 1);
-                boolean value = false;
-                try {
-                    value = Boolean.valueOf(valueS);
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-
-                Settings.setRiskyAttack(value);
-
-                getSender().sendHelperMessage("risky attack " + value);
+            String valueS = message.substring(Helper.COMMAND_RISKY_ATTACK.length() + 1);
+            boolean value = false;
+            try {
+                value = Boolean.valueOf(valueS);
+            } catch (Throwable t) {
+                t.printStackTrace();
             }
+
+            Settings.setRiskyAttack(value);
+
+            getSender().sendHelperMessage("risky attack " + value);
+
+            return;
+        } else if (message.startsWith(Helper.COMMAND_MAX_SEARCH)) {
+            String valueS = message.substring(Helper.COMMAND_MAX_SEARCH.length() + 1);
+            int value = 100;
+            try {
+                value = Integer.valueOf(valueS);
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+
+            Settings.setMaxSearch(value);
+
+            getSender().sendHelperMessage("max search " + value);
 
             return;
         }

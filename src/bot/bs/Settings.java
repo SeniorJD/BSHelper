@@ -20,8 +20,10 @@ public class Settings {
     public static final String ALLY_PLAYERS = "allyPlayers";
     public static final String BUILDING_SCENARIO = "building";
     public static final String RISKY_ATTACK = "riskyAttack";
+    public static final String MAX_SEARCH = "maxSearch";
 
     private static int goldToChange = 100000;
+    private static int maxSearch = 100;
     private static boolean autoAttack = true;
     private static boolean autoSearch = true;
     private static boolean autoBuild = true;
@@ -118,6 +120,13 @@ public class Settings {
                         riskyAttack = Boolean.valueOf(arr[1]);
                         break;
                     }
+                    case MAX_SEARCH: {
+                        if (arr.length == 1) {
+                            break;
+                        }
+                        maxSearch = Integer.valueOf(arr[1]);
+                        break;
+                    }
                 }
             }
         } catch (IOException e) {
@@ -146,6 +155,7 @@ public class Settings {
                 AUTO_BUILD_KEY + SPLITTER + autoBuild + "\n" +
                 RISKY_ATTACK + SPLITTER + riskyAttack + "\n" +
                 FIND_KEY + SPLITTER + findOpponent + "\n" +
+                MAX_SEARCH + SPLITTER + maxSearch + "\n" +
                 BUILDING_SCENARIO + SPLITTER + buildingScenario + "\n" +
                 generateAllyAlliancesValues() +
                 generateAllyPlayersValues();
@@ -283,5 +293,13 @@ public class Settings {
 
     public static boolean isRiskyAttackEnabled() {
         return riskyAttack;
+    }
+
+    public static void setMaxSearch(int maxSearch) {
+        Settings.maxSearch = maxSearch;
+    }
+
+    public static int getMaxSearch() {
+        return maxSearch;
     }
 }

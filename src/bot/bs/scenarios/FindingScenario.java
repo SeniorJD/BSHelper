@@ -28,6 +28,8 @@ public class FindingScenario implements RunningScenario {
 
     boolean foundByName = false;
 
+    int searchCount = 0;
+
     public FindingScenario(BSMessageHandler messageHandler) {
         this.messageHandler = messageHandler;
         this.sender = messageHandler.getSender();
@@ -112,6 +114,12 @@ public class FindingScenario implements RunningScenario {
     }
 
     private void handleFindAll(@NotNull TLMessage tlMessage) {
+        if (searchCount == Settings.getMaxSearch() && Settings.getFindOpponent() != null && !Settings.getFindOpponent().isEmpty()) {
+            sendHelperMessage("maximum searches amount reached, switching to default");
+            Settings.setFindOpponent("");
+        }
+        searchCount++;
+
         String message = tlMessage.getMessage();
 
         String originalMessage = message;
