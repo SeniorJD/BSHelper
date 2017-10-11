@@ -82,25 +82,6 @@ public class Util {
 
     public static final String KARMA_SIGN = "☯";
 
-    private static int BSBotId = 0;
-    private static int BSHelperId = 0;
-
-    public static void setBattleSiegeBotId(int bsBotId) {
-        Util.BSBotId = bsBotId;
-    }
-
-    public static int getBattleSiegeBotId() {
-        return BSBotId;
-    }
-
-    public static void setBattleSiegeHelperId(int bsHelperChatId) {
-        Util.BSHelperId = bsHelperChatId;
-    }
-
-    public static int getBattleSiegeHelperId() {
-        return BSHelperId;
-    }
-
     public static int getRequiredAmount(int currentLvl, int koef) {
         int nextLvl = currentLvl + 1;
         int part1 = (int) (nextLvl*(nextLvl-1)*((2.*nextLvl+8)/6+2./nextLvl));
@@ -111,9 +92,9 @@ public class Util {
     public static final int TOWN = 0;
     public static final int STOCK = 1;
     public static final int HOUSE = 2;
-    public static final int SAWMILL = 3;
-    public static final int MINES = 4;
-    public static final int FARM = 5;
+    public static final int FARM = 3;
+    public static final int SAWMILL = 4;
+    public static final int MINES = 5;
     public static final int BARRACKS = 6;
     public static final int WALL = 7;
     public static final int TREBUCHET = 8;

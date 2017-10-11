@@ -18,13 +18,13 @@ public class Settings {
     public static final String FIND_KEY = "find";
     public static final String ALLY_ALLIANCES = "allyAlliances";
     public static final String ALLY_PLAYERS = "allyPlayers";
-    public static final String BUILDING_SCENARIO = "buildingScenario";
+    public static final String BUILDING_SCENARIO = "building";
 
     private static int goldToChange = 100000;
     private static boolean autoAttack = true;
     private static boolean autoSearch = true;
     private static boolean autoBuild = true;
-    private static int buildingScenario = 0;
+    private static String buildingScenario = "0 2 1";
     private static String findOpponent = "";
     private static List<String> allyAlliances = new ArrayList<>();
     private static List<String> allyPlayers = new ArrayList<>();
@@ -106,7 +106,7 @@ public class Settings {
                         if (arr.length == 1) {
                             break;
                         }
-                        buildingScenario = Integer.valueOf(arr[1]);
+                        buildingScenario = arr[1];
                         break;
                     }
                 }
@@ -257,11 +257,11 @@ public class Settings {
         saveSettings();
     }
 
-    public static void setBuildingScenario(int buildingScenario) {
+    public static void setBuildingScenario(String buildingScenario) {
         Settings.buildingScenario = buildingScenario;
     }
 
-    public static int getBuildingScenario() {
+    public static String getBuildingScenario() {
         return buildingScenario;
     }
 }

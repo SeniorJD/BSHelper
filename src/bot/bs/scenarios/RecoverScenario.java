@@ -57,16 +57,21 @@ public class RecoverScenario implements RunningScenario {
     public void stop() {
         cancelTimer();
         messageHandler.setRunningScenario(null);
-
-        if (!Settings.isAutoBuild()) {
-            messageHandler = null;
-            return;
-        }
-
-        BuildingScenario buildingScenario = new BuildingScenario(messageHandler);
-        messageHandler.setRunningScenario(buildingScenario);
-        buildingScenario.start();
         messageHandler = null;
+    }
+
+    private void finish() {
+        if (!Settings.isAutoBuild()) {
+            stop();
+        } else {
+            cancelTimer();
+            messageHandler.setRunningScenario(null);
+
+            BuildingScenario buildingScenario = new BuildingScenario(messageHandler);
+            messageHandler.setRunningScenario(buildingScenario);
+            buildingScenario.start();
+            messageHandler = null;
+        }
     }
 
     BSMediator getMediator() {
@@ -113,7 +118,7 @@ public class RecoverScenario implements RunningScenario {
             case CONTROL_BUILDINGS:
                 getMediator().parseBuildingsState(message);
                 if (getMediator().army == getMediator().barracksLevel * 40) {
-                    stop();
+                    finish();
                     return;
                 }
                 sendMessage(CONTROL_BARRACKS);
@@ -130,7 +135,7 @@ public class RecoverScenario implements RunningScenario {
     private void handleRecruit(String message) {
         if (message.contains(RECRUITING_ARMY_DONE_WELL)) {
             if (getMediator().army >= getMediator().barracksLevel * 40) {
-                stop();
+                finish();
                 return;
             }
         }
@@ -141,7 +146,7 @@ public class RecoverScenario implements RunningScenario {
         int recruitsToCall = barracksCapacity - army;
 
         if (recruitsToCall == 0) {
-            stop();
+            finish();
             return;
         }
 
@@ -158,7 +163,7 @@ public class RecoverScenario implements RunningScenario {
         }
 
         if (army >= barracksCapacity) {
-            stop();
+            finish();
             return;
         }
 

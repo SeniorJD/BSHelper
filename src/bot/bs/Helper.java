@@ -14,7 +14,7 @@ public class Helper {
     public static final String COMMAND_AUTOSEARCH = "autosearch";
     public static final String COMMAND_AUTOBUILD = "autobuild";
     public static final String COMMAND_RECOVER = "recover";
-    public static final String COMMAND_BUILDING_SCENARIO = "buildingscenario";
+    public static final String COMMAND_BUILDING_SCENARIO = "building";
     public static final String COMMAND_ADD_ALLY_ALLIANCE = "addallyalliance";
     public static final String COMMAND_REMOVE_ALLY_ALLIANCE = "removeallyalliance";
     public static final String COMMAND_ADD_ALLY_PLAYER = "addallyplayer";
@@ -32,7 +32,15 @@ public class Helper {
             "autobuild true/false - стройка сразу после восстановления армий \n" +
             "addallyalliance/removeallyalliance X - добавить/удалить дружественный альянс в список \n" +
             "addallyplayer/removeallyplayer X - добавить/удалить дружественного игрока в список \n" +
-            "buildingScenario X - что будет строиться (1 - бараки, 0 - ратуща+склад+город) \n" +
+            "building X1 .. Xn - приоритет стройки. индексы: \n" +
+                    "\t0 - ратуша\n" +
+                    "\t1 - склад\n" +
+                    "\t2 - дом\n" +
+                    "\t3 - ферма\n" +
+                    "\t4 - лесопилка\n" +
+                    "\t5 - каменоломня\n" +
+                    "\t6 - бараки\n" +
+                    "\t7 - стена\n" +
             "exit - выйти из приложения";
 
     public static final String EXPLORING_1 = "Разведчики докладывают, что неподалеку расположился ";

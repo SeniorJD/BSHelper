@@ -212,9 +212,10 @@ public class BSMessageHandler extends MessageHandler {
 
             return;
         } else if (message.startsWith(Helper.COMMAND_BUILDING_SCENARIO)) {
-            String[] parsed = message.split("\\D");
+            String scenario = message.substring(Helper.COMMAND_BUILDING_SCENARIO.length() + 1);
+            String[] parsed = scenario.split("\\D+");
 
-            int value = 0;
+            int value = -1;
             for (String s : parsed) {
                 if (s.isEmpty()) {
                     continue;
@@ -224,18 +225,29 @@ public class BSMessageHandler extends MessageHandler {
                     value = Integer.parseInt(s);
                 } catch (Throwable t) {
                     t.printStackTrace();
+                    value = -1;
                 }
 
-                Settings.setBuildingScenario(value);
-                break;
+                if (value < 0 || value > 7) {
+                    getSender().sendHelperMessage("only values 0-7 are OK");
+                    return;
+                }
             }
 
-            getSender().sendHelperMessage("building scenario: " + value);
+            Settings.setBuildingScenario(scenario);
+
+            getSender().sendHelperMessage("building scenario: " + scenario);
             return;
         }
 
         if (runningScenario != null) {
-            return;
+            try {
+                runningScenario.stop();
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+            runningScenario = null;
+//            return;
         }
 
         if (message.startsWith(Helper.COMMAND_START)) {
