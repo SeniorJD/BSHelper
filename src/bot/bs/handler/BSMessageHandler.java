@@ -266,6 +266,22 @@ public class BSMessageHandler extends MessageHandler {
             getSender().sendHelperMessage("max search " + value);
 
             return;
+        } else if (message.startsWith(Helper.COMMAND_OPPONENT)) {
+            String task = tlMessage.getMessage().substring(Helper.COMMAND_OPPONENT.length());
+            if (!task.isEmpty()) {
+                if (task.startsWith(" ")) {
+                    task = task.substring(1);
+                }
+            }
+
+            Settings.setOpponent(task);
+            if (task.isEmpty()) {
+                getSender().sendHelperMessage("next opponent could be weak any player");
+            } else {
+                getSender().sendHelperMessage("next opponent: " + task);
+            }
+
+            return;
         }
 
         if (runningScenario != null) {
@@ -291,14 +307,6 @@ public class BSMessageHandler extends MessageHandler {
         }
 
         if (message.startsWith(Helper.COMMAND_FIND)) {
-            String task = tlMessage.getMessage().substring(Helper.COMMAND_FIND.length());
-            if (!task.isEmpty()) {
-                if (task.startsWith(" ")) {
-                    task = task.substring(1);
-                }
-            }
-
-            Settings.setFindOpponent(task);
             runningScenario = new FindingScenario(this);
             runningScenario.start();
             return;

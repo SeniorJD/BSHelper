@@ -15,7 +15,7 @@ public class Settings {
     public static final String AUTO_ATTACK_KEY = "autoAttack";
     public static final String AUTO_SEARCH_KEY = "autoSearch";
     public static final String AUTO_BUILD_KEY = "autoBuild";
-    public static final String FIND_KEY = "find";
+    public static final String OPPONENT_KEY = "opponent";
     public static final String ALLY_ALLIANCES = "allyAlliances";
     public static final String ALLY_PLAYERS = "allyPlayers";
     public static final String BUILDING_SCENARIO = "building";
@@ -29,7 +29,7 @@ public class Settings {
     private static boolean autoBuild = true;
     private static boolean riskyAttack = false;
     private static String buildingScenario = "0 2 1";
-    private static String findOpponent = "";
+    private static String opponent = "";
     private static List<String> allyAlliances = new ArrayList<>();
     private static List<String> allyPlayers = new ArrayList<>();
 
@@ -70,11 +70,11 @@ public class Settings {
                         }
                         autoBuild = Boolean.valueOf(arr[1]);
                         break;
-                    case FIND_KEY: {
+                    case OPPONENT_KEY: {
                         if (arr.length > 1) {
-                            findOpponent = (arr[1]);
+                            opponent = (arr[1]);
                         } else {
-                            findOpponent = "";
+                            opponent = "";
                         }
                         break;
                     }
@@ -154,7 +154,7 @@ public class Settings {
                 AUTO_SEARCH_KEY + SPLITTER + autoSearch + "\n" +
                 AUTO_BUILD_KEY + SPLITTER + autoBuild + "\n" +
                 RISKY_ATTACK + SPLITTER + riskyAttack + "\n" +
-                FIND_KEY + SPLITTER + findOpponent + "\n" +
+                OPPONENT_KEY + SPLITTER + opponent + "\n" +
                 MAX_SEARCH + SPLITTER + maxSearch + "\n" +
                 BUILDING_SCENARIO + SPLITTER + buildingScenario + "\n" +
                 generateAllyAlliancesValues() +
@@ -239,11 +239,11 @@ public class Settings {
     }
 
     public static String getFindOpponent() {
-        return findOpponent;
+        return opponent;
     }
 
-    public static void setFindOpponent(String findOpponent) {
-        Settings.findOpponent = findOpponent;
+    public static void setOpponent(String findOpponent) {
+        Settings.opponent = findOpponent;
         saveSettings();
     }
 

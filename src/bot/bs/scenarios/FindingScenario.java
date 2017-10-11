@@ -54,7 +54,7 @@ public class FindingScenario implements RunningScenario {
     public void stop() {
         cancelTimer();
         if (foundByName) {
-            Settings.setFindOpponent("");
+            Settings.setOpponent("");
         }
         messageHandler.setRunningScenario(null);
         messageHandler = null;
@@ -116,7 +116,7 @@ public class FindingScenario implements RunningScenario {
     private void handleFindAll(@NotNull TLMessage tlMessage) {
         if (searchCount == Settings.getMaxSearch() && Settings.getFindOpponent() != null && !Settings.getFindOpponent().isEmpty()) {
             sendHelperMessage("maximum searches amount reached, switching to default");
-            Settings.setFindOpponent("");
+            Settings.setOpponent("");
         }
         searchCount++;
 
