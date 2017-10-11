@@ -39,7 +39,11 @@ public class Util {
     public static final String CONTROL_BUY_FOOD = ":meat_on_bone: Еда";
     public static final String CONTROL_STOCK = "\uD83C\uDFDA Склад";
     public static final String CONTROL_HOUSE = "\uD83C\uDFD8 Дома";
+    public static final String CONTROL_FARM = ":sunflower: Ферма";
+    public static final String CONTROL_SAWMILL = ":evergreen_tree: Лесопилка";
+    public static final String CONTROL_MINES = "⛏ Шахта";
     public static final String CONTROL_BARRACKS = "\uD83D\uDEE1 Казармы";
+    public static final String CONTROL_WALL = ":european_castle: Стена";
     public static final String CONTROL_UPGRADE = "⚒ Улучшить";
     public static final String CONTROL_WAR = "⚔ Война";
     public static final String CONTROL_FIND_ALL = ":mag_right: Всех";

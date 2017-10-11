@@ -26,11 +26,11 @@ public class BSMediator {
     public int townLevel = 0;
     public int stockLevel = 0;
     public int houseLevel = 0;
-    int farmLevel = 0;
-    int sawmillLevel = 0;
-    int stoneQuarryLevel = 0;
+    public int farmLevel = 0;
+    public int sawmillLevel = 0;
+    public int minesLevel = 0;
     public int barracksLevel = 0;
-    int wallLevel = 0;
+    public int wallLevel = 0;
 
     public int goldPerMinute = 0;
     int foodPerMinute = 0;
@@ -93,7 +93,7 @@ public class BSMediator {
             } else if (s.contains(SAWMILL_SIGN)) {
                 parseSawmill(s);
             } else if (s.contains(STONE_QUARRY_SIGN)) {
-                parseStoneQuarry(s);
+                parseMines(s);
             } else if (s.contains(BARRACKS_SIGN)) {
                 parseBarracks(s);
             } else if (s.contains(WALL_SIGN)) {
@@ -172,7 +172,7 @@ public class BSMediator {
         }
     }
 
-    void parseStoneQuarry(String string) {
+    void parseMines(String string) {
         String[] digits = string.split(DIGIT_REGEX);
 
         for (String digit : digits) {
@@ -180,7 +180,7 @@ public class BSMediator {
                 continue;
             }
 
-            stoneQuarryLevel = Integer.valueOf(digit);
+            minesLevel = Integer.valueOf(digit);
             break;
         }
     }
@@ -393,7 +393,7 @@ public class BSMediator {
             case SAWMILL:
                 return sawmillLevel;
             case MINES:
-                return stoneQuarryLevel;
+                return minesLevel;
             case BARRACKS:
                 return barracksLevel;
             case WALL:

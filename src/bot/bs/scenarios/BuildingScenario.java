@@ -126,10 +126,14 @@ public class BuildingScenario implements RunningScenario {
             case CONTROL_BUILDINGS:
                 handleControlBuildings(message);
                 break;
-            case CONTROL_STOCK:
             case CONTROL_TOWN:
+            case CONTROL_STOCK:
             case CONTROL_HOUSE:
+            case CONTROL_FARM:
+            case CONTROL_SAWMILL:
+            case CONTROL_MINES:
             case CONTROL_BARRACKS:
+            case CONTROL_WALL:
                 sendMessage(CONTROL_UPGRADE);
                 break;
             case CONTROL_UPGRADE:
@@ -194,14 +198,22 @@ public class BuildingScenario implements RunningScenario {
                 parseBuildingsState(message);
                 break;
             case BUILDING: {
-                if (getMediator().nextBuildingToUpgrade == STOCK) {
-                    sendMessage(CONTROL_STOCK);
-                } else if (getMediator().nextBuildingToUpgrade == TOWN) {
+                if (getMediator().nextBuildingToUpgrade == TOWN) {
                     sendMessage(CONTROL_TOWN);
+                } else if (getMediator().nextBuildingToUpgrade == STOCK) {
+                    sendMessage(CONTROL_STOCK);
                 } else if (getMediator().nextBuildingToUpgrade == HOUSE) {
                     sendMessage(CONTROL_HOUSE);
+                } else if (getMediator().nextBuildingToUpgrade == FARM) {
+                    sendMessage(CONTROL_FARM);
+                } else if (getMediator().nextBuildingToUpgrade == SAWMILL) {
+                    sendMessage(CONTROL_SAWMILL);
+                } else if (getMediator().nextBuildingToUpgrade == MINES) {
+                    sendMessage(CONTROL_MINES);
                 } else if (getMediator().nextBuildingToUpgrade == BARRACKS) {
                     sendMessage(CONTROL_BARRACKS);
+                } else if (getMediator().nextBuildingToUpgrade == WALL) {
+                    sendMessage(CONTROL_WALL);
                 }
                 break;
             }
@@ -254,8 +266,16 @@ public class BuildingScenario implements RunningScenario {
                 getMediator().houseLevel++;
             } else if (getMediator().nextBuildingToUpgrade == STOCK) {
                 getMediator().stockLevel++;
+            } else if (getMediator().nextBuildingToUpgrade == FARM) {
+                getMediator().farmLevel++;
+            } else if (getMediator().nextBuildingToUpgrade == SAWMILL) {
+                getMediator().sawmillLevel++;
+            } else if (getMediator().nextBuildingToUpgrade == MINES) {
+                getMediator().minesLevel++;
             } else if (getMediator().nextBuildingToUpgrade == BARRACKS) {
                 getMediator().barracksLevel++;
+            } else if (getMediator().nextBuildingToUpgrade == WALL) {
+                getMediator().wallLevel++;
             }
         }
 
