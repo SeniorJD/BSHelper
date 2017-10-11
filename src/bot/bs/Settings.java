@@ -19,11 +19,13 @@ public class Settings {
     public static final String ALLY_ALLIANCES = "allyAlliances";
     public static final String ALLY_PLAYERS = "allyPlayers";
     public static final String BUILDING_SCENARIO = "building";
+    public static final String RISKY_ATTACK = "riskyAttack";
 
     private static int goldToChange = 100000;
     private static boolean autoAttack = true;
     private static boolean autoSearch = true;
     private static boolean autoBuild = true;
+    private static boolean riskyAttack = false;
     private static String buildingScenario = "0 2 1";
     private static String findOpponent = "";
     private static List<String> allyAlliances = new ArrayList<>();
@@ -109,6 +111,13 @@ public class Settings {
                         buildingScenario = arr[1];
                         break;
                     }
+                    case RISKY_ATTACK: {
+                        if (arr.length == 1) {
+                            break;
+                        }
+                        riskyAttack = Boolean.valueOf(arr[1]);
+                        break;
+                    }
                 }
             }
         } catch (IOException e) {
@@ -135,6 +144,7 @@ public class Settings {
                 AUTO_ATTACK_KEY + SPLITTER + autoAttack + "\n" +
                 AUTO_SEARCH_KEY + SPLITTER + autoSearch + "\n" +
                 AUTO_BUILD_KEY + SPLITTER + autoBuild + "\n" +
+                RISKY_ATTACK + SPLITTER + riskyAttack + "\n" +
                 FIND_KEY + SPLITTER + findOpponent + "\n" +
                 BUILDING_SCENARIO + SPLITTER + buildingScenario + "\n" +
                 generateAllyAlliancesValues() +
@@ -264,5 +274,14 @@ public class Settings {
 
     public static String getBuildingScenario() {
         return buildingScenario;
+    }
+
+    public static void setRiskyAttack(boolean riskyAttack) {
+        Settings.riskyAttack = riskyAttack;
+        saveSettings();
+    }
+
+    public static boolean isRiskyAttackEnabled() {
+        return riskyAttack;
     }
 }

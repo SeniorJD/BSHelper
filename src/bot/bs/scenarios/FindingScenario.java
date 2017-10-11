@@ -207,6 +207,8 @@ public class FindingScenario implements RunningScenario {
                 } else {
                     sendHelperMessage(originalMessage);
                 }
+            } else if (Settings.isRiskyAttackEnabled() && territory < 1000 && karma == 2) {
+                sender.pressAttackButton(tlMessage);
             } else {
                 sendMessage(CONTROL_FIND_ALL);
             }

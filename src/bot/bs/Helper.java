@@ -19,6 +19,7 @@ public class Helper {
     public static final String COMMAND_REMOVE_ALLY_ALLIANCE = "removeallyalliance";
     public static final String COMMAND_ADD_ALLY_PLAYER = "addallyplayer";
     public static final String COMMAND_REMOVE_ALLY_PLAYER = "removeallyplayer";
+    public static final String COMMAND_RISKY_ATTACK = "riskyattack";
 
     public static final String RESPONSE_HELP =
             "start - начать использовать бота \n" +
@@ -27,6 +28,7 @@ public class Helper {
             "stop - остановить бота \n" +
             "setgold X - установить минимальную сумму золота (X), после которой бот будет пытаться от золота избавиться, насколько хватит склада \n" +
             "autoattack true/false - атаковать противника сразу после нахождения \n" +
+            "riskyattack true/false - атаковать противника с 2 кармы если его территория < 1000 \n" +
             "recover - восстановить армию \n" +
             "autosearch true/false - искать противника каждых 10 минут \n" +
             "autobuild true/false - стройка сразу после восстановления армий \n" +
