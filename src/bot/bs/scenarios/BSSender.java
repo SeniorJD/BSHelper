@@ -167,4 +167,35 @@ public class BSSender {
             e.printStackTrace();
         }
     }
+
+    protected void pressAttackAllianceButton(TLMessage message) {
+        TLReplayInlineKeyboardMarkup replyMarkup = (TLReplayInlineKeyboardMarkup) message.getReplyMarkup();
+        if (replyMarkup.getRows().size() == 1) {
+            pressAttackButton(message);
+            return;
+        }
+        TLKeyboardButtonCallback button = (TLKeyboardButtonCallback) replyMarkup.getRows().get(1).buttons.get(0);
+        TLInputPeerUser peer = new TLInputPeerUser();
+        peer.setUserId(message.getFromId());
+        peer.setAccessHash(getUser().getUserHash());
+
+        TLRequestMessagesGetBotCallbackAnswer answer = new TLRequestMessagesGetBotCallbackAnswer() {
+            @Override
+            public void serializeBody(OutputStream stream) throws IOException {
+                StreamingUtils.writeInt(1, stream);
+                StreamingUtils.writeTLObject(peer, stream);
+                StreamingUtils.writeInt(message.getId(), stream);
+                StreamingUtils.writeTLBytes(button.getData(), stream);
+            }
+        };
+        answer.setData(button.getData());
+        answer.setPeer(peer);
+        answer.setMsgId(message.getId());
+        try {
+            TLMessagesBotCallbackAnswer tlMessagesBotCallbackAnswer = kernelComm.doRpcCallSync(answer);
+            System.out.println(tlMessagesBotCallbackAnswer.getMessage());
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
 }

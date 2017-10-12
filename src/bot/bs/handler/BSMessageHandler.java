@@ -296,6 +296,20 @@ public class BSMessageHandler extends MessageHandler {
             getSender().sendHelperMessage("search appropriate " + value);
 
             return;
+        } else if (message.startsWith(Helper.COMMAND_GIVE_IMMUN)) {
+            String valueS = message.substring(Helper.COMMAND_GIVE_IMMUN.length() + 1);
+            boolean value = false;
+            try {
+                value = Boolean.valueOf(valueS);
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+
+            Settings.setGiveImmun(value);
+
+            getSender().sendHelperMessage("give immun " + value);
+
+            return;
         }
 
         if (runningScenario != null) {

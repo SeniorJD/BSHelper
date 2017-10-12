@@ -178,6 +178,11 @@ public class RecoverScenario implements RunningScenario {
             getMediator().gold -= freeRecruits * 10;
             sendMessage(String.valueOf(freeRecruits), false);
         } else {
+            if (Settings.isGiveImmun()) {
+                finish();
+                return;
+            }
+
             createTimer();
             timer.schedule(new TimerTask() {
                 @Override

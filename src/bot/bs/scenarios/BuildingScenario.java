@@ -75,7 +75,7 @@ public class BuildingScenario implements RunningScenario {
                 messageHandler.setRunningScenario(scenario);
                 scenario.start();
             }
-        }, 11*1000*60);
+        }, (Settings.isGiveImmun() ? 60 : 11)*1000*60);
     }
 
     @Override

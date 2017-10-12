@@ -45,6 +45,14 @@ public class FindingScenario implements RunningScenario {
         sender.sendHelperMessage(message);
     }
 
+    protected void attack(TLMessage message) {
+        if (Settings.isGiveImmun()) {
+            sender.pressAttackAllianceButton(message);
+        } else {
+            sender.pressAttackButton(message);
+        }
+    }
+
     @Override
     public void start() {
         sendMessage(CONTROL_UP);
@@ -53,7 +61,7 @@ public class FindingScenario implements RunningScenario {
     @Override
     public void stop() {
         cancelTimer();
-        if (foundByName) {
+        if (foundByName && !Settings.isGiveImmun()) {
             Settings.setOpponent("");
         }
         messageHandler.setRunningScenario(null);
@@ -115,7 +123,7 @@ public class FindingScenario implements RunningScenario {
     }
 
     private void handleFindAll(@NotNull TLMessage tlMessage) {
-        if (searchCount == Settings.getMaxSearch() && Settings.getFindOpponent() != null && !Settings.getFindOpponent().isEmpty()) {
+        if (searchCount == Settings.getMaxSearch() && Settings.getFindOpponent() != null && !Settings.getFindOpponent().isEmpty() && !Settings.isGiveImmun()) {
             sendHelperMessage("maximum searches amount reached, switching to default");
             Settings.setOpponent("");
         }
@@ -174,7 +182,7 @@ public class FindingScenario implements RunningScenario {
             if (foundByName || playerAlliance.contains(Settings.getFindOpponent())) {
                 stop();
                 if (Settings.isAutoAttack()) {
-                    sender.pressAttackButton(tlMessage);
+                    attack(tlMessage);
                 } else {
                     sendHelperMessage(originalMessage);
                 }
@@ -212,19 +220,19 @@ public class FindingScenario implements RunningScenario {
             if (karma == 0 || karma == 1) {
                 stop();
                 if (Settings.isAutoAttack()) {
-                    sender.pressAttackButton(tlMessage);
+                    attack(tlMessage);
                 } else {
                     sendHelperMessage(originalMessage);
                 }
             } else if (Settings.isRiskyAttackEnabled() && territory < 1000 && karma == 2) {
-                sender.pressAttackButton(tlMessage);
+                attack(tlMessage);
             } else {
                 sendMessage(getFindMessage());
             }
         } else {
             stop();
             if (Settings.isAutoAttack()) {
-                sender.pressAttackButton(tlMessage);
+                attack(tlMessage);
             } else {
                 sendHelperMessage(originalMessage);
             }
