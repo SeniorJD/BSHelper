@@ -276,7 +276,7 @@ public class BSMessageHandler extends MessageHandler {
 
             Settings.setOpponent(task);
             if (task.isEmpty()) {
-                getSender().sendHelperMessage("next opponent could be weak any player");
+                getSender().sendHelperMessage("next opponent could be any weak player");
             } else {
                 getSender().sendHelperMessage("next opponent: " + task);
             }

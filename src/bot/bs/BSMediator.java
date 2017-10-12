@@ -404,6 +404,7 @@ public class BSMediator {
     }
 
     protected void processUpgrade(int stockCapacity, int nextBuildingToUpgrade, int goldRequired, int woodRequired, int stoneRequired) {
+        this.nextBuildingToUpgrade = nextBuildingToUpgrade;
         goldRequired -= gold;
         woodRequired -= wood;
         stoneRequired -= stone;
