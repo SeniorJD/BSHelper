@@ -20,6 +20,7 @@ public class Settings {
     public static final String ALLY_PLAYERS = "allyPlayers";
     public static final String BUILDING_SCENARIO = "building";
     public static final String RISKY_ATTACK = "riskyAttack";
+    public static final String SEARCH_APPROPRIATE = "searchAppropriate";
     public static final String MAX_SEARCH = "maxSearch";
 
     private static int goldToChange = 100000;
@@ -28,6 +29,7 @@ public class Settings {
     private static boolean autoSearch = true;
     private static boolean autoBuild = true;
     private static boolean riskyAttack = false;
+    private static boolean searchAppropriate = false;
     private static String buildingScenario = "0 2 1";
     private static String opponent = "";
     private static List<String> allyAlliances = new ArrayList<>();
@@ -127,6 +129,13 @@ public class Settings {
                         maxSearch = Integer.valueOf(arr[1]);
                         break;
                     }
+                    case SEARCH_APPROPRIATE: {
+                        if (arr.length == 1) {
+                            break;
+                        }
+                        searchAppropriate = Boolean.valueOf(arr[1]);
+                        break;
+                    }
                 }
             }
         } catch (IOException e) {
@@ -154,6 +163,7 @@ public class Settings {
                 AUTO_SEARCH_KEY + SPLITTER + autoSearch + "\n" +
                 AUTO_BUILD_KEY + SPLITTER + autoBuild + "\n" +
                 RISKY_ATTACK + SPLITTER + riskyAttack + "\n" +
+                SEARCH_APPROPRIATE + SPLITTER + searchAppropriate + "\n" +
                 OPPONENT_KEY + SPLITTER + opponent + "\n" +
                 MAX_SEARCH + SPLITTER + maxSearch + "\n" +
                 BUILDING_SCENARIO + SPLITTER + buildingScenario + "\n" +
@@ -301,5 +311,13 @@ public class Settings {
 
     public static int getMaxSearch() {
         return maxSearch;
+    }
+
+    public static void setSearchAppropriate(boolean searchAppropriate) {
+        Settings.searchAppropriate = searchAppropriate;
+    }
+
+    public static boolean isSearchAppropriate() {
+        return searchAppropriate;
     }
 }

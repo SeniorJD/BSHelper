@@ -92,6 +92,7 @@ public class FindingScenario implements RunningScenario {
                 handleWar();
                 break;
             case CONTROL_FIND_ALL:
+            case CONTROL_FIND_APPROPRIATE:
                 handleFindAll(tlMessage);
                 break;
         }
@@ -103,12 +104,12 @@ public class FindingScenario implements RunningScenario {
     }
 
     private void handleWar() {
-        lastSentMessage = Util.CONTROL_FIND_ALL;
+        lastSentMessage = getFindMessage();
         createTimer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                sendMessage(CONTROL_FIND_ALL);
+                sendMessage(getFindMessage());
             }
         }, 5000);
     }
@@ -129,7 +130,7 @@ public class FindingScenario implements RunningScenario {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    sendMessage(CONTROL_FIND_ALL);
+                    sendMessage(getFindMessage());
                 }
             }, 1000* 60);
             return;
@@ -138,7 +139,7 @@ public class FindingScenario implements RunningScenario {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    sendMessage(CONTROL_FIND_ALL);
+                    sendMessage(getFindMessage());
                 }
             }, 1000* 60);
             return;
@@ -164,7 +165,7 @@ public class FindingScenario implements RunningScenario {
         }
 
         if (isAllyOrFriend(playerAlliance, playerName)) {
-            sendMessage(CONTROL_FIND_ALL);
+            sendMessage(getFindMessage());
             return;
         }
 
@@ -179,13 +180,13 @@ public class FindingScenario implements RunningScenario {
                 }
                 return;
             } else {
-                sendMessage(CONTROL_FIND_ALL);
+                sendMessage(getFindMessage());
                 return;
             }
         }
 
         if (Battles.getInstance().getGoldPerUnit(playerName) < 100) {
-            sendMessage(CONTROL_FIND_ALL);
+            sendMessage(getFindMessage());
             return;
         }
 
@@ -196,7 +197,7 @@ public class FindingScenario implements RunningScenario {
         int territory = Integer.parseInt(territoryS);
 
         if (territory > Math.min(20000, getMediator().territory / 2)) {
-            sendMessage(CONTROL_FIND_ALL);
+            sendMessage(getFindMessage());
             return;
         }
 
@@ -218,7 +219,7 @@ public class FindingScenario implements RunningScenario {
             } else if (Settings.isRiskyAttackEnabled() && territory < 1000 && karma == 2) {
                 sender.pressAttackButton(tlMessage);
             } else {
-                sendMessage(CONTROL_FIND_ALL);
+                sendMessage(getFindMessage());
             }
         } else {
             stop();
@@ -239,7 +240,7 @@ public class FindingScenario implements RunningScenario {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    sendMessage(CONTROL_FIND_ALL);
+                    sendMessage(getFindMessage());
                 }
             }, 1000* 60);
             return;
@@ -248,7 +249,7 @@ public class FindingScenario implements RunningScenario {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    sendMessage(CONTROL_FIND_ALL);
+                    sendMessage(getFindMessage());
                 }
             }, 1000* 60);
             return;
@@ -275,5 +276,9 @@ public class FindingScenario implements RunningScenario {
         }
 
         return false;
+    }
+
+    protected String getFindMessage() {
+        return Settings.isSearchAppropriate() ? CONTROL_FIND_APPROPRIATE : CONTROL_FIND_ALL;
     }
 }

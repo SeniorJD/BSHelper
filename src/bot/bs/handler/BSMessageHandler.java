@@ -282,6 +282,20 @@ public class BSMessageHandler extends MessageHandler {
             }
 
             return;
+        } else if (message.startsWith(Helper.COMMAND_SEARCH_APPROPRIATE)) {
+            String valueS = message.substring(Helper.COMMAND_SEARCH_APPROPRIATE.length() + 1);
+            boolean value = false;
+            try {
+                value = Boolean.valueOf(valueS);
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+
+            Settings.setSearchAppropriate(value);
+
+            getSender().sendHelperMessage("search appropriate " + value);
+
+            return;
         }
 
         if (runningScenario != null) {

@@ -47,6 +47,7 @@ public class Util {
     public static final String CONTROL_UPGRADE = "⚒ Улучшить";
     public static final String CONTROL_WAR = "⚔ Война";
     public static final String CONTROL_FIND_ALL = ":mag_right: Всех";
+    public static final String CONTROL_FIND_APPROPRIATE = ":mag_right: Подходящих";
     public static final String CONTROL_RECRUIT = ":heavy_plus_sign: Обучить";
 
     public static final String DIGIT_REGEX = "\\D";
