@@ -382,6 +382,10 @@ public class BSMessageHandler extends MessageHandler {
         if (shouldIgnore(message.getMessage())) {
             if (shouldRecover(message.getMessage())) {
                 Battles.getInstance().addBattle(message.getMessage());
+                if (runningScenario != null) {
+                    runningScenario.stop();
+                }
+
                 runningScenario = new RecoverScenario(this);
                 runningScenario.start();
             }
