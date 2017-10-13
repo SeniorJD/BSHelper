@@ -14,7 +14,7 @@ public class Helper {
     public static final String COMMAND_AUTOATTACK = "autoattack";
     public static final String COMMAND_AUTOSEARCH = "autosearch";
     public static final String COMMAND_AUTOBUILD = "autobuild";
-    public static final String COMMAND_RECOVER = "recover";
+    public static final String COMMAND_RECOVER = "/recover";
     public static final String COMMAND_OPPONENT = "opponent";
     public static final String COMMAND_BUILDING_SCENARIO = "building";
     public static final String COMMAND_ADD_ALLY_ALLIANCE = "addallyalliance";
