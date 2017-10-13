@@ -70,12 +70,16 @@ public class BuildingScenario implements RunningScenario {
         findingTimer.schedule(new TimerTask() {
             @Override
             public void run() {
+                if (!Settings.isAutoSearch()) {
+                    return;
+                }
+
                 FindingScenario scenario = new FindingScenario(messageHandler);
                 stop();
                 messageHandler.setRunningScenario(scenario);
                 scenario.start();
             }
-        }, (Settings.isGiveImmun() ? 60 : 11)*1000*60);
+        }, (Settings.isGiveImmun() ? 60 : 11) * 1000 * 60);
     }
 
     @Override

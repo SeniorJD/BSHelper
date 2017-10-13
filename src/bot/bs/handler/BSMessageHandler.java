@@ -12,6 +12,7 @@ import org.telegram.api.updates.TLUpdateShortMessage;
 import org.telegram.bot.structure.Chat;
 import org.telegram.bot.structure.IUser;
 
+import static bot.bs.Helper.COMMAND_EXIT;
 import static bot.bs.Helper.COMMAND_RECOVER;
 import static bot.bs.Util.*;
 
@@ -54,7 +55,9 @@ public class BSMessageHandler extends MessageHandler {
             return;
         }
 
-        if (tlMessage.getMessage().startsWith("exit")) {
+        String message = tlMessage.getMessage().toLowerCase();
+
+        if (message.equals(COMMAND_EXIT)) {
             System.exit(0);
             return;
         }
@@ -64,9 +67,8 @@ public class BSMessageHandler extends MessageHandler {
             return;
         }
 
-        String message = tlMessage.getMessage().toLowerCase();
 
-        if (message.startsWith(Helper.COMMAND_STOP)) {
+        if (message.equals(Helper.COMMAND_STOP)) {
             if (runningScenario != null) {
                 try {
                     runningScenario.stop();
@@ -310,6 +312,9 @@ public class BSMessageHandler extends MessageHandler {
             getSender().sendHelperMessage("give immun " + value);
 
             return;
+        } else if (message.equals(Helper.COMMAND_HELP)) {
+            sendHelperMessage(Helper.RESPONSE_HELP);
+            return;
         }
 
         if (runningScenario != null) {
@@ -322,7 +327,7 @@ public class BSMessageHandler extends MessageHandler {
 //            return;
         }
 
-        if (message.startsWith(Helper.COMMAND_START)) {
+        if (message.equals(Helper.COMMAND_START)) {
             started = true;
 
             Settings.printSettings(sender);
@@ -334,11 +339,11 @@ public class BSMessageHandler extends MessageHandler {
             return;
         }
 
-        if (message.startsWith(Helper.COMMAND_FIND)) {
+        if (message.equals(Helper.COMMAND_FIND)) {
             runningScenario = new FindingScenario(this);
             runningScenario.start();
             return;
-        } else if (message.startsWith(Helper.COMMAND_BUILD)) {
+        } else if (message.equals(Helper.COMMAND_BUILD)) {
             if (mediator.inBattle) {
                 sendHelperMessage("Cannot build while the battle");
                 return;
@@ -347,12 +352,10 @@ public class BSMessageHandler extends MessageHandler {
             runningScenario = new BuildingScenario(this);
             runningScenario.start();
             return;
-        } else if (message.startsWith(COMMAND_RECOVER)) {
+        } else if (message.equals(COMMAND_RECOVER)) {
             runningScenario = new RecoverScenario(this);
             runningScenario.start();
             return;
-        } else if (message.startsWith(Helper.COMMAND_HELP)) {
-            sendHelperMessage(Helper.RESPONSE_HELP);
         }
     }
 
@@ -374,7 +377,26 @@ public class BSMessageHandler extends MessageHandler {
         if (shouldIgnore(message.getMessage())) {
             if (shouldRecover(message.getMessage())) {
                 Battles.getInstance().addBattle(message.getMessage());
+                if (runningScenario != null) {
+                    runningScenario.stop();
+                }
+
                 runningScenario = new RecoverScenario(this);
+                runningScenario.start();
+            } else if (campaignFinished(message.getMessage())) {
+                if (mediator.inBattle) {
+                    return;
+                }
+
+                if (!message.getMessage().contains(CAMPAIGN_SUCCESSFUL)) {
+                    return;
+                }
+
+                if (runningScenario != null) {
+                    runningScenario.stop();
+                }
+
+                runningScenario = new BuildingScenario(this);
                 runningScenario.start();
             }
             return;
@@ -384,8 +406,6 @@ public class BSMessageHandler extends MessageHandler {
             runningScenario.handleMessage(message);
             return;
         }
-
-        handleMessage(message.getMessage());
     }
 
     private boolean shouldRecover(String message) {
@@ -416,6 +436,21 @@ public class BSMessageHandler extends MessageHandler {
 
                 runningScenario = new RecoverScenario(this);
                 runningScenario.start();
+            } else if (campaignFinished(message.getMessage())) {
+                if (mediator.inBattle) {
+                    return;
+                }
+
+                if (!message.getMessage().contains(CAMPAIGN_SUCCESSFUL)) {
+                    return;
+                }
+
+                if (runningScenario != null) {
+                    runningScenario.stop();
+                }
+
+                runningScenario = new BuildingScenario(this);
+                runningScenario.start();
             }
             return;
         }
@@ -428,8 +463,6 @@ public class BSMessageHandler extends MessageHandler {
             }
             return;
         }
-
-        handleMessage(message.getMessage());
     }
 
     protected boolean shouldIgnore(String message) {
@@ -459,12 +492,17 @@ public class BSMessageHandler extends MessageHandler {
             return true;
         } else if (message.contains(HINT)) {
             return true;
+        } else if (message.contains(REPORT_SENT)) {
+            return true;
+        } else if (message.startsWith(CAMPAIGN_FINISHED)) {
+            return true;
         }
 
         return false;
     }
 
-    protected void handleMessage(@NotNull String message) {
+    protected boolean campaignFinished(String message) {
+        return message.startsWith(CAMPAIGN_FINISHED);
     }
 
     public void setRunningScenario(RunningScenario runningScenario) {

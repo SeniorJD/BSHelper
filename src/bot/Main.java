@@ -1,5 +1,6 @@
 package bot;
 
+import bot.bs.Helper;
 import bot.bs.Settings;
 import bot.bs.handler.*;
 import bot.bs.scenarios.BSSender;
@@ -71,6 +72,8 @@ public class Main {
                 kernel.startBot();
                 BSSender sender = new BSSender(messageHandler, kernel.getKernelComm());
                 messageHandler.setSender(sender);
+
+                sender.sendHelperMessage(Helper.RESPONSE_HELP);
             } else {
                 throw new Exception("Failed to log in: " + status);
             }

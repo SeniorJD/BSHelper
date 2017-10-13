@@ -27,6 +27,9 @@ public class Util {
     public static final String NO_MONEY = "Чтобы организовать хорошую разведку, нужно";
     public static final String NO_FOOD = "Отправить солдат в дозор без";
     public static final String RECRUITING_ARMY_DONE_WELL = "⚔Армии";
+    public static final String REPORT_SENT = "Почтовый голубь отправлен Создателю.";
+    public static final String CAMPAIGN_FINISHED = "⚔ ";
+    public static final String CAMPAIGN_SUCCESSFUL = "Твоя казна пополнилась на";
 
     public static final String CONTROL_UP = ":arrow_up: Наверх";
     public static final String CONTROL_BACK = ":arrow_left: Назад";

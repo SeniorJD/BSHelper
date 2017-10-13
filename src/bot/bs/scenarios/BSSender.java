@@ -135,7 +135,7 @@ public class BSSender {
         messageHandler.setIgnoreHelperMessage(true);
 
         try {
-            kernelComm.sendChannelMessage(getHelperChat(), message, false);
+            kernelComm.sendChannelMessageWithMarkdown(getHelperChat(), message, false);
         } catch (RpcException e) {
             e.printStackTrace();
         }
