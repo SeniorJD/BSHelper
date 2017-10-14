@@ -30,6 +30,7 @@ public class Util {
     public static final String REPORT_SENT = "Почтовый голубь отправлен Создателю.";
     public static final String CAMPAIGN_FINISHED = "⚔ ";
     public static final String CAMPAIGN_SUCCESSFUL = "Твоя казна пополнилась на";
+    public static final String REPAIR_WALL = "Чинить";
 
     public static final String CONTROL_UP = ":arrow_up: Наверх";
     public static final String CONTROL_BACK = ":arrow_left: Назад";
@@ -52,6 +53,7 @@ public class Util {
     public static final String CONTROL_FIND_ALL = ":mag_right: Всех";
     public static final String CONTROL_FIND_APPROPRIATE = ":mag_right: Подходящих";
     public static final String CONTROL_RECRUIT = ":heavy_plus_sign: Обучить";
+    public static final String CONTROL_REPAIR = "⚒ Чинить";
 
     public static final String DIGIT_REGEX = "\\D";
 

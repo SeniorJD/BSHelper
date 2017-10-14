@@ -130,6 +130,12 @@ public class BuildingScenario implements RunningScenario {
             case CONTROL_BUILDINGS:
                 handleControlBuildings(message);
                 break;
+            case CONTROL_WALL: {
+                if (message.contains(REPAIR_WALL)) {
+                    sendMessage(CONTROL_REPAIR);
+                    return;
+                } // else upgrade
+            }
             case CONTROL_TOWN:
             case CONTROL_STOCK:
             case CONTROL_HOUSE:
@@ -137,7 +143,6 @@ public class BuildingScenario implements RunningScenario {
             case CONTROL_SAWMILL:
             case CONTROL_MINES:
             case CONTROL_BARRACKS:
-            case CONTROL_WALL:
                 sendMessage(CONTROL_UPGRADE);
                 break;
             case CONTROL_UPGRADE:
@@ -158,7 +163,10 @@ public class BuildingScenario implements RunningScenario {
             case CONTROL_BUY_FOOD:
                 handleBuyFood(message);
                 break;
-
+            case CONTROL_REPAIR:
+                stage = RETRIEVING;
+                sendMessage(CONTROL_UP);
+                break;
         }
     }
 
