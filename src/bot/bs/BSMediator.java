@@ -22,6 +22,7 @@ public class BSMediator {
     public int wood = 0;
     public int stone = 0;
     int food = 0;
+    public int archers = 0;
 
     public int townLevel = 0;
     public int stockLevel = 0;
@@ -201,13 +202,20 @@ public class BSMediator {
     void parseWall(String string) {
         String[] digits = string.split(DIGIT_REGEX);
 
+        wallLevel = 0;
+        archers = 0;
+
         for (String digit : digits) {
             if (digit.isEmpty()) {
                 continue;
             }
 
-            wallLevel = Integer.valueOf(digit);
-            break;
+            if (wallLevel == 0) {
+                wallLevel = Integer.valueOf(digit);
+            } else if (archers == 0) {
+                archers = Integer.valueOf(digit);
+                break;
+            }
         }
     }
 

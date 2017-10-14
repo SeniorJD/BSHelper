@@ -12,8 +12,7 @@ import org.telegram.api.updates.TLUpdateShortMessage;
 import org.telegram.bot.structure.Chat;
 import org.telegram.bot.structure.IUser;
 
-import static bot.bs.Helper.COMMAND_EXIT;
-import static bot.bs.Helper.COMMAND_RECOVER;
+import static bot.bs.Helper.*;
 import static bot.bs.Util.*;
 
 /**
@@ -357,6 +356,16 @@ public class BSMessageHandler extends MessageHandler {
             runningScenario.start();
             return;
         }
+
+        sendHelperMessage("Unknown command. Try one of next:" +
+                COMMAND_START + " " +
+                COMMAND_STOP + " " +
+                COMMAND_BUILD + " " +
+                COMMAND_FIND + " " +
+                COMMAND_HELP + " " +
+                COMMAND_RECOVER + " " +
+                COMMAND_EXIT
+        );
     }
 
     @Override

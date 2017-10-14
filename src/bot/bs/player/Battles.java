@@ -204,6 +204,10 @@ public class Battles {
             return 0;
         }
 
+        if (battleList.size() < 3) {
+            return 200;
+        }
+
         return sum / battlesWon;
     }
 }

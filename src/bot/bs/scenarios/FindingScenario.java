@@ -204,10 +204,10 @@ public class FindingScenario implements RunningScenario {
         String territoryS = message.substring(0, message.indexOf(Util.TERRITORY_SIGN));
         int territory = Integer.parseInt(territoryS);
 
-        if (territory > Math.min(20000, getMediator().territory / 2)) {
-            sendMessage(getFindMessage());
-            return;
-        }
+//        if (territory > Math.min(20000, getMediator().territory / 2)) {
+//            sendMessage(getFindMessage());
+//            return;
+//        }
 
         index = message.indexOf(Helper.EXPLORING_4);
 
@@ -230,6 +230,11 @@ public class FindingScenario implements RunningScenario {
                 sendMessage(getFindMessage());
             }
         } else {
+            if (territory > Math.min(20000, getMediator().territory / 2)) {
+                sendMessage(getFindMessage());
+                return;
+            }
+
             stop();
             if (Settings.isAutoAttack()) {
                 attack(tlMessage);

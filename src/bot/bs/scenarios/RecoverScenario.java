@@ -117,12 +117,16 @@ public class RecoverScenario implements RunningScenario {
                 break;
             case CONTROL_BUILDINGS:
                 getMediator().parseBuildingsState(message);
-                if (getMediator().army == getMediator().barracksLevel * 40) {
-                    finish();
-                    return;
-                }
-                sendMessage(CONTROL_BARRACKS);
-                break;
+                if (getMediator().army < getMediator().barracksLevel * 40) {
+                    sendMessage(CONTROL_BARRACKS);
+                    break;
+                }/* else if (getMediator().archers < getMediator().wallLevel * 10) {
+                    sendMessage(CONTROL_WALL);
+                    break;
+                }*/
+
+                finish();
+                return;
             case CONTROL_BARRACKS:
                 sendMessage(CONTROL_RECRUIT);
                 break;
