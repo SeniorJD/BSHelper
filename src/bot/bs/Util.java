@@ -31,6 +31,7 @@ public class Util {
     public static final String CAMPAIGN_FINISHED = "⚔ ";
     public static final String CAMPAIGN_SUCCESSFUL = "Твоя казна пополнилась на";
     public static final String REPAIR_WALL = "Чинить";
+    public static final String ALREADY_IN_BATTLE = "Воевать на два фронта слишком накладно.";
 
     public static final String CONTROL_UP = ":arrow_up: Наверх";
     public static final String CONTROL_BACK = ":arrow_left: Назад";

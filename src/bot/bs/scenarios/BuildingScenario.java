@@ -20,6 +20,7 @@ public class BuildingScenario implements RunningScenario {
     protected static final int TRADING = 2;
     protected static final int BUILDING = 3;
     protected static final int WAITING = 4;
+    protected static final int TRADING_NO_REFRESH = 5;
 
     protected BSSender sender;
     protected String lastSentMessage;
@@ -132,7 +133,7 @@ public class BuildingScenario implements RunningScenario {
                 break;
             case CONTROL_WALL: {
                 if (message.contains(REPAIR_WALL)) {
-                    sendMessage(CONTROL_REPAIR);
+                    repairWalls(message);
                     return;
                 } // else upgrade
             }
@@ -179,6 +180,10 @@ public class BuildingScenario implements RunningScenario {
                 getMediator().parseMainState(message);
                 getMediator().refreshUpgradeList();
 
+                sendMessage(CONTROL_TRADE);
+                break;
+            case TRADING_NO_REFRESH:
+                getMediator().parseMainState(message);
                 sendMessage(CONTROL_TRADE);
                 break;
         }
@@ -451,5 +456,68 @@ public class BuildingScenario implements RunningScenario {
         getMediator().gold -= amount * 2;
 
         sendMessage(String.valueOf(amount), false);
+    }
+
+    private void repairWalls(String message) {
+        int index = message.indexOf(REPAIR_WALL);
+
+        if (index == -1) {
+            sendMessage(CONTROL_UPGRADE);
+            return;
+        }
+
+        String substring = message.substring(index + 1);
+
+        String[] digits = substring.split("\\D+");
+
+        int goldRequired = -1;
+        int woodRequired = -1;
+        int stoneRequired = -1;
+
+        for (String digit : digits) {
+            if (digit.isEmpty()) {
+                continue;
+            }
+
+            if (goldRequired == -1) {
+                goldRequired = Integer.parseInt(digit);
+            } else if (woodRequired == -1) {
+                woodRequired = Integer.parseInt(digit);
+            } else if (stoneRequired == -1) {
+                stoneRequired = Integer.parseInt(digit);
+            }
+        }
+
+        if (getMediator().gold >= goldRequired && getMediator().wood >= woodRequired && getMediator().stone >= stoneRequired) {
+            sendMessage(CONTROL_REPAIR);
+            return;
+        } else {
+            int goldDiff = goldRequired - getMediator().gold;
+            int woodDiff = woodRequired - getMediator().wood;
+            int stoneDiff = stoneRequired - getMediator().stone;
+
+            goldDiff += (woodDiff > 0) ? woodDiff * 2 : 0;
+            goldDiff += (stoneDiff > 0) ? stoneDiff * 2 : 0;
+
+            getMediator().woodRequired = woodRequired;
+            getMediator().stoneRequired = stoneRequired;
+
+            if (goldDiff <= 0) {
+                stage = TRADING_NO_REFRESH;
+                sendMessage(CONTROL_UP);
+            } else {
+                sendHelperMessage("Waiting for wall repair...");
+
+                int waitingTime = ((goldDiff / getMediator().goldPerMinute) + 1) * 1000 * 60;
+                createTimer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        stage = TRADING_NO_REFRESH;
+                        sendMessage(CONTROL_UP);
+                    }
+                }, waitingTime);
+            }
+        }
     }
 }

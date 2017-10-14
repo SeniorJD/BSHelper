@@ -496,6 +496,13 @@ public class BSMessageHandler extends MessageHandler {
             return true;
         } else if (message.startsWith(CAMPAIGN_FINISHED)) {
             return true;
+        } else if (message.startsWith(ALREADY_IN_BATTLE)) {
+            mediator.inBattle = true;
+            if (runningScenario != null) {
+                runningScenario.stop();
+                runningScenario = null;
+            }
+            return true;
         }
 
         return false;
