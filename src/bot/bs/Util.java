@@ -29,7 +29,7 @@ public class Util {
     public static final String RECRUITING_ARMY_DONE_WELL = "⚔Армии";
     public static final String REPORT_SENT = "Почтовый голубь отправлен Создателю.";
     public static final String CAMPAIGN_FINISHED = "⚔ ";
-    public static final String CAMPAIGN_SUCCESSFUL = "Твоя казна пополнилась на";
+    public static final String CAMPAIGN_SUCCESSFUL = "казна пополнилась на";
     public static final String REPAIR_WALL = "Чинить";
     public static final String ALREADY_IN_BATTLE = "Воевать на два фронта слишком накладно.";
 
