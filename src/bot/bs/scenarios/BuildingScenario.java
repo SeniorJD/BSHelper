@@ -137,6 +137,19 @@ public class BuildingScenario implements RunningScenario {
                     return;
                 } // else upgrade
             }
+            case CONTROL_WORKSHOP: {
+                getMediator().parseTrebuchetState(message);
+                if (stage == RETRIEVING) {
+                    sendMessage(CONTROL_UP);
+                    return;
+                }
+                sendMessage(CONTROL_TREBUCHET);
+                break;
+            }
+            case CONTROL_TREBUCHET: {
+                sendMessage(CONTROL_UPGRADE);
+                break;
+            }
             case CONTROL_TOWN:
             case CONTROL_STOCK:
             case CONTROL_HOUSE:
@@ -206,6 +219,13 @@ public class BuildingScenario implements RunningScenario {
 
         getMediator().parseMainState(message);
 
+        if (stage == BUILDING && getMediator().nextBuildingToUpgrade == TREBUCHET) {
+            sendMessage(CONTROL_WORKSHOP);
+            return;
+        } else if (stage == RETRIEVING && getMediator().trebuchetLevel == -1) {
+            sendMessage(CONTROL_WORKSHOP);
+            return;
+        }
         sendMessage(CONTROL_BUILDINGS);
     }
 
@@ -231,6 +251,8 @@ public class BuildingScenario implements RunningScenario {
                     sendMessage(CONTROL_BARRACKS);
                 } else if (getMediator().nextBuildingToUpgrade == WALL) {
                     sendMessage(CONTROL_WALL);
+                } else if (getMediator().nextBuildingToUpgrade == TREBUCHET) {
+                    sendMessage(CONTROL_UP);
                 }
                 break;
             }
@@ -293,6 +315,8 @@ public class BuildingScenario implements RunningScenario {
                 getMediator().barracksLevel++;
             } else if (getMediator().nextBuildingToUpgrade == WALL) {
                 getMediator().wallLevel++;
+            } else if (getMediator().nextBuildingToUpgrade == TREBUCHET) {
+                getMediator().trebuchetLevel++;
             }
         }
 

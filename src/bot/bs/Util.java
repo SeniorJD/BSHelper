@@ -36,6 +36,8 @@ public class Util {
     public static final String CONTROL_UP = ":arrow_up: Наверх";
     public static final String CONTROL_BACK = ":arrow_left: Назад";
     public static final String CONTROL_BUILDINGS = "\uD83C\uDFD8 Постройки";
+    public static final String CONTROL_WORKSHOP = "⚒ Мастерская";
+    public static final String CONTROL_TREBUCHET = "⚔Требушет";
     public static final String CONTROL_TOWN = ":european_post_office: Ратуша";
     public static final String CONTROL_TRADE = ":circus_tent: Торговля";
     public static final String CONTROL_BUY = ":moneybag: Купить";
@@ -90,6 +92,7 @@ public class Util {
     public static final String STONE_QUARRY_SIGN = "⛏";
     public static final String BARRACKS_SIGN = "\uD83D\uDEE1";
     public static final String WALL_SIGN = "\uD83C\uDFF0";
+    public static final String TREBUCHET_SIGN = "⚔Требушет";
 
     public static final String KARMA_SIGN = "☯";
 

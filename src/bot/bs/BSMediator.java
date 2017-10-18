@@ -32,6 +32,7 @@ public class BSMediator {
     public int minesLevel = 0;
     public int barracksLevel = 0;
     public int wallLevel = 0;
+    public int trebuchetLevel = -1;
 
     public int goldPerMinute = 0;
     int foodPerMinute = 0;
@@ -406,6 +407,8 @@ public class BSMediator {
                 return barracksLevel;
             case WALL:
                 return wallLevel;
+            case TREBUCHET:
+                return trebuchetLevel;
         }
 
         return -1;
@@ -459,5 +462,25 @@ public class BSMediator {
         this.goldRequired = goldRequired;
         this.woodRequired = woodRequired;
         this.stoneRequired = stoneRequired;
+    }
+
+    public void parseTrebuchetState(String message) {
+        trebuchetLevel = 0;
+        String[] splitted = message.split("\n");
+
+        for (String s : splitted) {
+            if (s.contains(TREBUCHET_SIGN)) {
+                String[] digits = s.split(DIGIT_REGEX);
+
+                for (String digit : digits) {
+                    if (digit.isEmpty()) {
+                        continue;
+                    }
+
+                    trebuchetLevel = Integer.valueOf(digit);
+                    break;
+                }
+            }
+        }
     }
 }

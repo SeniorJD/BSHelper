@@ -229,8 +229,8 @@ public class BSMessageHandler extends MessageHandler {
                     value = -1;
                 }
 
-                if (value < 0 || value > 7) {
-                    getSender().sendHelperMessage("only values 0-7 are OK");
+                if (value < 0 || value > 8) {
+                    getSender().sendHelperMessage("only values 0-8 are OK");
                     return;
                 }
             }
