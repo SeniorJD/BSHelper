@@ -199,6 +199,9 @@ public class BuildingScenario implements RunningScenario {
                 getMediator().parseMainState(message);
                 sendMessage(CONTROL_TRADE);
                 break;
+            case BUILDING:
+                sendMessage(CONTROL_WORKSHOP);
+                break;
         }
     }
 
