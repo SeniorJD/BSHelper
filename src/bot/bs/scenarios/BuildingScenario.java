@@ -135,7 +135,10 @@ public class BuildingScenario implements RunningScenario {
                 if (message.contains(REPAIR_WALL)) {
                     repairWalls(message);
                     return;
-                } // else upgrade
+                } else {
+                    sendMessage(CONTROL_UPGRADE);
+                    break;
+                }
             }
             case CONTROL_WORKSHOP: {
                 getMediator().parseTrebuchetState(message);
