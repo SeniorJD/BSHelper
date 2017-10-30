@@ -59,5 +59,7 @@ public class Helper {
     public static final String EXPLORING_2 = " в своих владениях ";
     public static final String EXPLORING_3 = " размером ";
     public static final String EXPLORING_4 = ". За победу ты получишь ";
+    public static final String EXPLORING_5 = "\uD83D\uDDE1"; // завоеватель
+    public static final String EXPLORING_6 = "\uD83D\uDE08"; // карма < 0
 
 }

@@ -77,6 +77,7 @@ public class BSMessageHandler extends MessageHandler {
                 runningScenario = null;
             }
             started = false;
+            mediator.inBattle = false;
             return;
         }
 
@@ -279,7 +280,7 @@ public class BSMessageHandler extends MessageHandler {
             if (task.isEmpty()) {
                 getSender().sendHelperMessage("next opponent could be any weak player");
             } else {
-                getSender().sendHelperMessage("next opponent: " + task);
+                getSender().sendHelperMessage("next opponent(s): " + task);
             }
 
             return;

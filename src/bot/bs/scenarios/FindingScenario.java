@@ -61,9 +61,9 @@ public class FindingScenario implements RunningScenario {
     @Override
     public void stop() {
         cancelTimer();
-        if (foundByName && !Settings.isGiveImmun()) {
-            Settings.setOpponent("");
-        }
+//        if (foundByName && !Settings.isGiveImmun()) {
+//            Settings.setOpponent("");
+//        }
         messageHandler.setRunningScenario(null);
         messageHandler = null;
     }
@@ -125,7 +125,6 @@ public class FindingScenario implements RunningScenario {
     private void handleFindAll(@NotNull TLMessage tlMessage) {
         if (searchCount == Settings.getMaxSearch() && Settings.getFindOpponent() != null && !Settings.getFindOpponent().isEmpty() && !Settings.isGiveImmun()) {
             sendHelperMessage("maximum searches amount reached, switching to default");
-            Settings.setOpponent("");
         }
         searchCount++;
 
@@ -165,6 +164,12 @@ public class FindingScenario implements RunningScenario {
 
         String playerName = message.substring(0, index);
         String playerAlliance;
+        if (playerName.startsWith(Helper.EXPLORING_5)) {
+            playerName = playerName.substring(playerName.indexOf(Helper.EXPLORING_5) + Helper.EXPLORING_5.length());
+        } else if (playerName.startsWith(Helper.EXPLORING_6)) {
+            playerName = playerName.substring(playerName.indexOf(Helper.EXPLORING_6) + Helper.EXPLORING_6.length());
+        }
+
         if (playerName.startsWith("[")) {
             playerAlliance = playerName.substring(playerName.indexOf("[") + 1, playerName.indexOf("]"));
             playerName = playerName.substring(playerAlliance.length() + 2);
@@ -177,9 +182,10 @@ public class FindingScenario implements RunningScenario {
             return;
         }
 
-        if (!Settings.getFindOpponent().isEmpty()) {
-            foundByName = playerName.contains(Settings.getFindOpponent());
-            if (foundByName || playerAlliance.contains(Settings.getFindOpponent())) {
+        if (!Settings.getFindOpponent().isEmpty() && (searchCount < Settings.getMaxSearch() || Settings.getMaxSearch() > -1)) {
+            foundByName = isEnemyByName(playerName);
+            boolean foundByAlliance = isEnemyByAlliance(playerAlliance);
+            if (foundByName || foundByAlliance) {
                 stop();
                 if (Settings.isAutoAttack()) {
                     attack(tlMessage);
@@ -224,7 +230,7 @@ public class FindingScenario implements RunningScenario {
                 } else {
                     sendHelperMessage(originalMessage);
                 }
-            } else if (Settings.isRiskyAttackEnabled() && territory < 1000 && karma == 2) {
+            } else if (Settings.isRiskyAttackEnabled() && territory < 4000) {
                 attack(tlMessage);
             } else {
                 sendMessage(getFindMessage());
@@ -284,6 +290,32 @@ public class FindingScenario implements RunningScenario {
         playerName = playerName.toLowerCase();
         for (String s : Settings.getAllyPlayers()) {
             if (playerName.contains(s)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isEnemyByName(String playerName) {
+        String opponentS = Settings.getFindOpponent();
+
+        String[] opponents = opponentS.split(";");
+        for (String opponent : opponents) {
+            if (playerName.equals(opponent)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isEnemyByAlliance(String playerAlliance) {
+        String opponentS = Settings.getFindOpponent();
+
+        String[] opponents = opponentS.split(";");
+        for (String opponent : opponents) {
+            if (playerAlliance.equals(opponent)) {
                 return true;
             }
         }
