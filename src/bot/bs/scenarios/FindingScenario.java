@@ -182,7 +182,7 @@ public class FindingScenario implements RunningScenario {
             return;
         }
 
-        if (!Settings.getFindOpponent().isEmpty() && (searchCount < Settings.getMaxSearch() || Settings.getMaxSearch() > -1)) {
+        if (!Settings.getFindOpponent().isEmpty() && (searchCount < Settings.getMaxSearch() || Settings.getMaxSearch() < 0)) {
             foundByName = isEnemyByName(playerName);
             boolean foundByAlliance = isEnemyByAlliance(playerAlliance);
             if (foundByName || foundByAlliance) {
@@ -248,7 +248,6 @@ public class FindingScenario implements RunningScenario {
                 sendHelperMessage(originalMessage);
             }
         }
-
     }
 
     @Override
@@ -298,6 +297,7 @@ public class FindingScenario implements RunningScenario {
     }
 
     private boolean isEnemyByName(String playerName) {
+        playerName = playerName.toLowerCase();
         String opponentS = Settings.getFindOpponent();
 
         String[] opponents = opponentS.split(";");
