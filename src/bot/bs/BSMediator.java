@@ -444,7 +444,7 @@ public class BSMediator {
 
         int foodLeftTime = foodPerMinute >= 0 ? Integer.MAX_VALUE : (food / -foodPerMinute) * 1000 * 60;
 
-        if (timeToWait > foodLeftTime || foodLeftTime < 60 * 1000 * 60) {
+        if (timeToWait > foodLeftTime || foodLeftTime < 60 * 1000 * 30) {
             this.foodRequired = (int) (stockCapacity * 0.8 - food);
             if (foodRequired <= 0) {
                 foodRequired = stockCapacity - food;
