@@ -46,11 +46,12 @@ public class FindingScenario implements RunningScenario {
     }
 
     protected void attack(TLMessage message) {
-        if (Settings.isGiveImmun()) {
-            sender.pressAttackAllianceButton(message);
-        } else {
-            sender.pressAttackButton(message);
-        }
+//        if (Settings.isGiveImmun()) {
+//            sender.pressAttackAllianceButton(message);
+//        } else {
+//            sender.pressAttackButton(message);
+//        }
+        sender.pressAttackButton(message);
     }
 
     @Override

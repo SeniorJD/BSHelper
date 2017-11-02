@@ -118,6 +118,10 @@ public class RecoverScenario implements RunningScenario {
             case CONTROL_BUILDINGS:
                 getMediator().parseBuildingsState(message);
                 if (getMediator().army < getMediator().barracksLevel * 40) {
+                    if (Settings.isGiveImmun() && getMediator().army == 1) {
+                        finish();
+                        return;
+                    }
                     sendMessage(CONTROL_BARRACKS);
                     break;
                 }/* else if (getMediator().archers < getMediator().wallLevel * 10) {
@@ -149,7 +153,16 @@ public class RecoverScenario implements RunningScenario {
         int freeRecruits = getMediator().population;
         int recruitsToCall = barracksCapacity - army;
 
-        if (recruitsToCall == 0) {
+        if (Settings.isGiveImmun()) {
+            if (army > 1) {
+                finish();
+                return;
+            } else if (recruitsToCall > 0) {
+                recruitsToCall = 1;
+            }
+        }
+
+        if (recruitsToCall <= 0) {
             finish();
             return;
         }

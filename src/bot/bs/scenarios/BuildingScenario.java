@@ -6,6 +6,7 @@ import bot.bs.handler.BSMessageHandler;
 import org.telegram.api.message.TLMessage;
 import org.telegram.api.updates.TLUpdateShortMessage;
 
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -36,6 +37,8 @@ public class BuildingScenario implements RunningScenario {
 
     protected Timer findingTimer = new Timer();
 
+    private static Random random = new Random();
+
     public BuildingScenario(BSMessageHandler messageHandler) {
         this.messageHandler = messageHandler;
         this.sender = messageHandler.getSender();
@@ -64,6 +67,25 @@ public class BuildingScenario implements RunningScenario {
 
         BSMessageHandler messageHandler = this.messageHandler;
 
+        int delayMultiplier;
+        if (Settings.isGiveImmun()) {
+            if (Settings.getFindOpponent().isEmpty()) {
+                delayMultiplier = 10;
+            } else {
+                String[] arr = Settings.getFindOpponent().split(";");
+                delayMultiplier = (60 / arr.length);
+                if (delayMultiplier < 10) {
+                    delayMultiplier = 10;
+                }
+            }
+        } else {
+            delayMultiplier = 10;
+        }
+
+        delayMultiplier *= 1000 * 60;
+
+        delayMultiplier += (1 + random.nextInt(60) * 1000);
+
         findingTimer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -83,7 +105,7 @@ public class BuildingScenario implements RunningScenario {
                 messageHandler.setRunningScenario(scenario);
                 scenario.start();
             }
-        }, (Settings.isGiveImmun() ? 60 : 11) * 1000 * 60);
+        }, delayMultiplier);
     }
 
     @Override
