@@ -62,10 +62,6 @@ public class BuildingScenario implements RunningScenario {
         stage = RETRIEVING;
         sendMessage(CONTROL_UP);
 
-        if (!Settings.isAutoSearch()) {
-            return;
-        }
-
         BSMessageHandler messageHandler = this.messageHandler;
 
         findingTimer.schedule(new TimerTask() {
@@ -77,6 +73,13 @@ public class BuildingScenario implements RunningScenario {
 
                 FindingScenario scenario = new FindingScenario(messageHandler);
                 stop();
+
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 messageHandler.setRunningScenario(scenario);
                 scenario.start();
             }
@@ -342,7 +345,7 @@ public class BuildingScenario implements RunningScenario {
         int woodRequired = getMediator().woodRequired;
         int stoneRequired = getMediator().stoneRequired;
 
-        if (woodRequired <= 0 && stoneRequired <= 0) {
+        if ((woodRequired <= 0 && stoneRequired <= 0) || getMediator().gold < 2) {
             stage = RETRIEVING;
             sendMessage(CONTROL_UP);
             return;
@@ -368,13 +371,13 @@ public class BuildingScenario implements RunningScenario {
 
         if (woodRequired <= 0) {
             woodToBuy = 0;
-            stoneToBuy = gold / 4;
+            stoneToBuy = gold / 2;
             sendMessage(CONTROL_BUY_STONE);
             return;
         }
 
         if (stoneRequired <= 0) {
-            woodToBuy = gold / 4;
+            woodToBuy = gold / 2;
             stoneToBuy = 0;
             sendMessage(CONTROL_BUY_WOOD);
             return;

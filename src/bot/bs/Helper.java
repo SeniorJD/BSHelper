@@ -4,17 +4,17 @@ package bot.bs;
  * @author SeniorJD
  */
 public class Helper {
-    public static final String COMMAND_FIND = "/find";
-    public static final String COMMAND_BUILD = "/build";
-    public static final String COMMAND_STOP = "/stop";
-    public static final String COMMAND_START = "/start";
-    public static final String COMMAND_HELP = "/help";
-    public static final String COMMAND_EXIT = "/exit";
+    public static final String COMMAND_FIND = "find";
+    public static final String COMMAND_BUILD = "build";
+    public static final String COMMAND_STOP = "stop";
+    public static final String COMMAND_START = "start";
+    public static final String COMMAND_HELP = "help";
+    public static final String COMMAND_EXIT = "exit";
     public static final String COMMAND_SETGOLD = "setgold";
     public static final String COMMAND_AUTOATTACK = "autoattack";
     public static final String COMMAND_AUTOSEARCH = "autosearch";
     public static final String COMMAND_AUTOBUILD = "autobuild";
-    public static final String COMMAND_RECOVER = "/recover";
+    public static final String COMMAND_RECOVER = "recover";
     public static final String COMMAND_OPPONENT = "opponent";
     public static final String COMMAND_BUILDING_SCENARIO = "building";
     public static final String COMMAND_ADD_ALLY_ALLIANCE = "addallyalliance";
@@ -35,7 +35,7 @@ public class Helper {
             "*opponent* - задать имя ИЛИ альянс противника для поиска. имя обнулится после атаки\n" +
             "*setgold X* - установить минимальную сумму золота (X), после которой бот будет пытаться от золота избавиться, насколько хватит склада\n" +
             "*autoattack true/false* - атаковать противника сразу после нахождения\n" +
-            "*riskyattack true/false* - атаковать противника с 2 кармы если его территория < 1000\n" +
+            "*riskyattack true/false* - атаковать противника с любой кармой если его территория < 4000\n" +
             "*giveimmun true/false* - атаковать противника с целью дать ему иммун. атака будет раз в час\n" +
             "*searchappropriate true/false* - искать среди Подходящих\n" +
             "*maxsearch X* - максимальное кол-во поисков противника по имени/альянсу, затем переключение на дефолтный поиск\n" +

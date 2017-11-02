@@ -20,7 +20,7 @@ import static bot.bs.Util.*;
  */
 public class BSMessageHandler extends MessageHandler {
 
-    boolean ignoreHelperMessage = false;
+    private boolean ignoreHelperMessage = false;
     private boolean started = false;
     private BSMediator mediator = BSMediator.getInstance();
     private BSSender sender;
@@ -55,6 +55,10 @@ public class BSMessageHandler extends MessageHandler {
         }
 
         String message = tlMessage.getMessage().toLowerCase();
+
+        if (message.startsWith("/")) {
+            message = message.substring(1);
+        }
 
         if (message.equals(COMMAND_EXIT)) {
             System.exit(0);
@@ -94,15 +98,18 @@ public class BSMessageHandler extends MessageHandler {
                     value = Integer.parseInt(s);
                 } catch (Throwable t) {
                     t.printStackTrace();
-                }
-
-                if (value <= 0) {
                     return;
                 }
 
-                Settings.setGoldToChange(value);
+                if (value <= 0) {
+                    getSender().sendHelperMessage("wrong value: " + value);
+                    return;
+                }
+
                 break;
             }
+
+            Settings.setGoldToChange(value);
 
             getSender().sendHelperMessage("new gold value: " + value);
             return;
@@ -119,11 +126,13 @@ public class BSMessageHandler extends MessageHandler {
                     value = Boolean.parseBoolean(s);
                 } catch (Throwable t) {
                     t.printStackTrace();
+                    return;
                 }
 
-                Settings.setAutoAttack(value);
                 break;
             }
+
+            Settings.setAutoAttack(value);
 
             getSender().sendHelperMessage("auto attack: " + value);
             return;
@@ -140,11 +149,13 @@ public class BSMessageHandler extends MessageHandler {
                     value = Boolean.parseBoolean(s);
                 } catch (Throwable t) {
                     t.printStackTrace();
+                    return;
                 }
 
-                Settings.setAutoSearch(value);
                 break;
             }
+
+            Settings.setAutoSearch(value);
 
             getSender().sendHelperMessage("auto search: " + value);
             return;
@@ -161,11 +172,13 @@ public class BSMessageHandler extends MessageHandler {
                     value = Boolean.parseBoolean(s);
                 } catch (Throwable t) {
                     t.printStackTrace();
+                    return;
                 }
 
-                Settings.setAutoBuild(value);
                 break;
             }
+
+            Settings.setAutoBuild(value);
 
             getSender().sendHelperMessage("auto build: " + value);
             return;
@@ -214,6 +227,10 @@ public class BSMessageHandler extends MessageHandler {
 
             return;
         } else if (message.startsWith(Helper.COMMAND_BUILDING_SCENARIO)) {
+            if (message.equals(Helper.COMMAND_BUILDING_SCENARIO)) {
+                getSender().sendHelperMessage("building scenario: " + Settings.getBuildingScenario());
+                return;
+            }
             String scenario = message.substring(Helper.COMMAND_BUILDING_SCENARIO.length() + 1);
             String[] parsed = scenario.split("\\D+");
 
@@ -241,12 +258,17 @@ public class BSMessageHandler extends MessageHandler {
             getSender().sendHelperMessage("building scenario: " + scenario);
             return;
         } else if (message.startsWith(Helper.COMMAND_RISKY_ATTACK)) {
+            if (message.equals(Helper.COMMAND_RISKY_ATTACK)) {
+                getSender().sendHelperMessage("risky attack " + Settings.isRiskyAttackEnabled());
+                return;
+            }
             String valueS = message.substring(Helper.COMMAND_RISKY_ATTACK.length() + 1);
             boolean value = false;
             try {
                 value = Boolean.valueOf(valueS);
             } catch (Throwable t) {
                 t.printStackTrace();
+                return;
             }
 
             Settings.setRiskyAttack(value);
@@ -255,12 +277,19 @@ public class BSMessageHandler extends MessageHandler {
 
             return;
         } else if (message.startsWith(Helper.COMMAND_MAX_SEARCH)) {
+
+            if (message.equals(Helper.COMMAND_MAX_SEARCH)) {
+                getSender().sendHelperMessage("max search " + Settings.getMaxSearch());
+                return;
+            }
+
             String valueS = message.substring(Helper.COMMAND_MAX_SEARCH.length() + 1);
             int value = 100;
             try {
                 value = Integer.valueOf(valueS);
             } catch (Throwable t) {
                 t.printStackTrace();
+                return;
             }
 
             Settings.setMaxSearch(value);
@@ -287,12 +316,18 @@ public class BSMessageHandler extends MessageHandler {
 
             return;
         } else if (message.startsWith(Helper.COMMAND_SEARCH_APPROPRIATE)) {
+            if (message.equals(Helper.COMMAND_SEARCH_APPROPRIATE)) {
+                getSender().sendHelperMessage("search appropriate " + Settings.isSearchAppropriate());
+                return;
+            }
+
             String valueS = message.substring(Helper.COMMAND_SEARCH_APPROPRIATE.length() + 1);
             boolean value = false;
             try {
                 value = Boolean.valueOf(valueS);
             } catch (Throwable t) {
                 t.printStackTrace();
+                return;
             }
 
             Settings.setSearchAppropriate(value);
@@ -301,12 +336,18 @@ public class BSMessageHandler extends MessageHandler {
 
             return;
         } else if (message.startsWith(Helper.COMMAND_GIVE_IMMUN)) {
+            if (message.equals(Helper.COMMAND_GIVE_IMMUN)) {
+                getSender().sendHelperMessage("give immun " + Settings.isGiveImmun());
+                return;
+            }
+
             String valueS = message.substring(Helper.COMMAND_GIVE_IMMUN.length() + 1);
             boolean value = false;
             try {
                 value = Boolean.valueOf(valueS);
             } catch (Throwable t) {
                 t.printStackTrace();
+                return;
             }
 
             Settings.setGiveImmun(value);
@@ -336,16 +377,18 @@ public class BSMessageHandler extends MessageHandler {
             return;
         }
 
-        if (!started) {
-            sendHelperMessage("use start command in order to start the bot");
-            return;
-        }
+//        if (!started) {
+//            sendHelperMessage("use start command in order to start the bot");
+//            return;
+//        }
 
         if (message.equals(Helper.COMMAND_FIND)) {
+            started = true;
             runningScenario = new FindingScenario(this);
             runningScenario.start();
             return;
         } else if (message.equals(Helper.COMMAND_BUILD)) {
+            started = true;
             if (mediator.inBattle) {
                 sendHelperMessage("Cannot build while the battle");
                 return;
@@ -355,18 +398,19 @@ public class BSMessageHandler extends MessageHandler {
             runningScenario.start();
             return;
         } else if (message.equals(COMMAND_RECOVER)) {
+            started = true;
             runningScenario = new RecoverScenario(this);
             runningScenario.start();
             return;
         }
 
-        sendHelperMessage("Unknown command. Try one of next:" +
-                COMMAND_START + " " +
-                COMMAND_STOP + " " +
-                COMMAND_BUILD + " " +
-                COMMAND_FIND + " " +
-                COMMAND_HELP + " " +
-                COMMAND_RECOVER + " " +
+        sendHelperMessage("Unknown command. Try one of next:\n" +
+                COMMAND_START + "\n" +
+                COMMAND_STOP + "\n" +
+                COMMAND_BUILD + "\n" +
+                COMMAND_FIND + "\n" +
+                COMMAND_HELP + "\n" +
+                COMMAND_RECOVER + "\n" +
                 COMMAND_EXIT
         );
     }
