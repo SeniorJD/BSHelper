@@ -1,7 +1,6 @@
 package bot.bs.scenarios;
 
 import bot.bs.BSMediator;
-import bot.bs.Settings;
 import bot.bs.handler.BSMessageHandler;
 import org.telegram.api.message.TLMessage;
 import org.telegram.api.updates.TLUpdateShortMessage;
@@ -65,47 +64,47 @@ public class BuildingScenario implements RunningScenario {
         stage = RETRIEVING;
         sendMessage(CONTROL_UP);
 
-        BSMessageHandler messageHandler = this.messageHandler;
-
-        int delayMultiplier;
-        if (Settings.isGiveImmun()) {
-            if (Settings.getFindOpponent().isEmpty()) {
-                delayMultiplier = 10;
-            } else {
-                String[] arr = Settings.getFindOpponent().split(";");
-                delayMultiplier = (60 / arr.length);
-                if (delayMultiplier < 10) {
-                    delayMultiplier = 10;
-                }
-            }
-        } else {
-            delayMultiplier = 10;
-        }
-
-        delayMultiplier *= 1000 * 60;
-
-        delayMultiplier += (1 + random.nextInt(60) * 1000);
-
-        findingTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (!Settings.isAutoSearch()) {
-                    return;
-                }
-
-                FindingScenario scenario = new FindingScenario(messageHandler);
-                stop();
-
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                messageHandler.setRunningScenario(scenario);
-                scenario.start();
-            }
-        }, delayMultiplier);
+//        BSMessageHandler messageHandler = this.messageHandler;
+//
+//        int delayMultiplier;
+//        if (Settings.isGiveImmun()) {
+//            if (Settings.getFindOpponent().isEmpty()) {
+//                delayMultiplier = 10;
+//            } else {
+//                String[] arr = Settings.getFindOpponent().split(";");
+//                delayMultiplier = (60 / arr.length) - arr.length;
+//                if (delayMultiplier < 10) {
+//                    delayMultiplier = 10;
+//                }
+//            }
+//        } else {
+//            delayMultiplier = 10;
+//        }
+//
+//        delayMultiplier *= 1000 * 60;
+//
+//        delayMultiplier += (1 + random.nextInt(60) * 1000);
+//
+//        findingTimer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                if (!Settings.isAutoSearch()) {
+//                    return;
+//                }
+//
+//                FindingScenario scenario = new FindingScenario(messageHandler);
+//                stop();
+//
+//                try {
+//                    Thread.sleep(5000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                messageHandler.setRunningScenario(scenario);
+//                scenario.start();
+//            }
+//        }, delayMultiplier);
     }
 
     @Override

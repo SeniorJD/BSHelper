@@ -5,8 +5,7 @@ import bot.bs.BSMediator;
 import java.io.*;
 import java.util.*;
 
-import static bot.bs.Util.BATTLE_FINISHED;
-import static bot.bs.Util.BATTLE_FINISHED_ALLIANCE;
+import static bot.bs.Util.*;
 
 /**
  * @author SeniorJD
@@ -104,9 +103,6 @@ public class Battles {
         }
     }
 
-    static final String FINISHED = "окончена. ";
-    static final String WON = "Поздравляю";
-    static final String AWARD = " Твоя награда составила ";
     public void addBattle(String message) {
         if (message.contains(BATTLE_FINISHED_ALLIANCE)) {
             return;
@@ -115,7 +111,7 @@ public class Battles {
         String originalMessage = message;
 
         message = message.substring(message.indexOf(BATTLE_FINISHED) + BATTLE_FINISHED.length() + 1);
-        if (message.startsWith("[")) {
+        if (message.contains("[")) {
             message = message.substring(message.indexOf("]") + 1);
         }
 

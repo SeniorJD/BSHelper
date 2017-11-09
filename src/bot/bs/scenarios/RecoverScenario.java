@@ -62,10 +62,27 @@ public class RecoverScenario implements RunningScenario {
 
     private void finish() {
         if (!Settings.isAutoBuild()) {
+            if (messageHandler.getAttackManager().isWaitingForRecover()) {
+                FindingScenario findingScenario = new FindingScenario(messageHandler);
+                messageHandler.setRunningScenario(findingScenario);
+                messageHandler.getAttackManager().setWaitingForRecover(false);
+                findingScenario.start();
+                messageHandler = null;
+                return;
+            }
             stop();
         } else {
             cancelTimer();
             messageHandler.setRunningScenario(null);
+
+            if (messageHandler.getAttackManager().isWaitingForRecover()) {
+                FindingScenario findingScenario = new FindingScenario(messageHandler);
+                messageHandler.setRunningScenario(findingScenario);
+                messageHandler.getAttackManager().setWaitingForRecover(false);
+                findingScenario.start();
+                messageHandler = null;
+                return;
+            }
 
             BuildingScenario buildingScenario = new BuildingScenario(messageHandler);
             messageHandler.setRunningScenario(buildingScenario);
@@ -146,6 +163,15 @@ public class RecoverScenario implements RunningScenario {
                 finish();
                 return;
             }
+        } else if (message.startsWith(RECRUITING_NO_PEOPLE)) {
+            createTimer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    sendMessage(CONTROL_UP);
+                }
+            }, 60*1000);
+            return;
         }
 
         int army = getMediator().army;

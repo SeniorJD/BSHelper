@@ -27,11 +27,22 @@ public class Util {
     public static final String NO_MONEY = "Чтобы организовать хорошую разведку, нужно";
     public static final String NO_FOOD = "Отправить солдат в дозор без";
     public static final String RECRUITING_ARMY_DONE_WELL = "⚔Армии";
+    public static final String RECRUITING_NO_PEOPLE = "У тебя не хватает свободных людей. Улучшай Дома, чтобы иметь больше людей.";
     public static final String REPORT_SENT = "Почтовый голубь отправлен Создателю.";
     public static final String CAMPAIGN_FINISHED = "⚔ ";
     public static final String CAMPAIGN_SUCCESSFUL = "казна пополнилась на";
     public static final String REPAIR_WALL = "Чинить";
     public static final String ALREADY_IN_BATTLE = "Воевать на два фронта слишком накладно.";
+    public static final String ALLIANCE_DEFENCE_JOINED = "\uD83D\uDD4A\uD83D\uDEE1Твоя армия присоединилась к атаке.";
+    public static final String ALLIANCE_ATTACK_JOINED = "\uD83D\uDD4A⚔Твоя армия присоединилась к атаке.";
+    public static final String ARMY_JOINED_DEFENCE = "присоединилась к защите!";
+    public static final String ARMY_JOINED_ATTACK = "присоединилась к атаке!";
+    public static final String FINISHED = "окончена. ";
+    public static final String WON = "Поздравляю";
+    public static final String AWARD = " Твоя награда составила ";
+    public static final String NEXT_ATTACK = "Следующая атака";
+    public static final String NEXT_ATTACK_MINS = "мин.";
+    public static final String NEXT_ATTACK_SECS = "сек.";
 
     public static final String CONTROL_UP = ":arrow_up: Наверх";
     public static final String CONTROL_BACK = ":arrow_left: Назад";

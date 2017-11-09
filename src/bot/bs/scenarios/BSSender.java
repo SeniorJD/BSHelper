@@ -121,7 +121,7 @@ public class BSSender {
         }
     }
 
-    public void sendHelperMessage(String message) {
+    public synchronized void sendHelperMessage(String message) {
         if (getHelperChat() == null) {
             return;
         }

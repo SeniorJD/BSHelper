@@ -50,7 +50,11 @@ public class CustomUpdatesHandler extends DefaultUpdatesHandler {
     @Override
     public void onTLUpdateShortMessageCustom(TLUpdateShortMessage update) {
         BotLogger.info(LOGTAG, "Received message from: " + update.getUserId());
-        messageHandler.handleMessage(update);
+        try {
+            messageHandler.handleMessage(update);
+        } catch (Throwable t) {
+            BotLogger.error(t.getLocalizedMessage(), t);
+        }
     }
 
     @Override
@@ -62,7 +66,11 @@ public class CustomUpdatesHandler extends DefaultUpdatesHandler {
     protected void onTLAbsMessageCustom(TLAbsMessage message) {
         if (message instanceof TLMessage) {
             BotLogger.debug(LOGTAG, "Received TLMessage");
-            onTLMessage((TLMessage) message);
+            try {
+                onTLMessage((TLMessage) message);
+            } catch (Throwable t) {
+                BotLogger.error(t.getLocalizedMessage(), t);
+            }
         } else {
             BotLogger.debug(LOGTAG, "Unsupported TLAbsMessage -> " + message.toString());
         }
@@ -70,12 +78,20 @@ public class CustomUpdatesHandler extends DefaultUpdatesHandler {
 
     @Override
     protected void onUsersCustom(List<TLAbsUser> users) {
-        usersHandler.onUsers(users);
+        try {
+            usersHandler.onUsers(users);
+        } catch (Throwable t) {
+            BotLogger.error(t.getLocalizedMessage(), t);
+        }
     }
 
     @Override
     protected void onChatsCustom(List<TLAbsChat> chats) {
-        chatsHandler.onChats(chats);
+        try {
+            chatsHandler.onChats(chats);
+        } catch (Throwable t) {
+            BotLogger.error(t.getLocalizedMessage(), t);
+        }
     }
 
     /**
@@ -83,8 +99,12 @@ public class CustomUpdatesHandler extends DefaultUpdatesHandler {
      * @param message Message to handle
      */
     private void onTLMessage(@NotNull TLMessage message) {
-        if (message.hasFromId()) {
-            this.tlMessageHandler.onTLMessage(message);
+        try {
+            if (message.hasFromId()) {
+                this.tlMessageHandler.onTLMessage(message);
+            }
+        } catch (Throwable t) {
+            BotLogger.error(t.getLocalizedMessage(), t);
         }
     }
 }

@@ -1,5 +1,6 @@
 package bot.bs.handler;
 
+import bot.bs.AttackManager;
 import bot.bs.BSMediator;
 import bot.bs.Helper;
 import bot.bs.Settings;
@@ -23,11 +24,14 @@ public class BSMessageHandler extends MessageHandler {
     private boolean ignoreHelperMessage = false;
     private boolean started = false;
     private BSMediator mediator = BSMediator.getInstance();
+    private AttackManager attackManager = new AttackManager(this);
     private BSSender sender;
 
     private RunningScenario runningScenario;
 
-    public BSMessageHandler() { }
+    public BSMessageHandler() {
+        attackManager.start();
+    }
 
     public void setSender(BSSender sender) {
         this.sender = sender;
@@ -80,6 +84,7 @@ public class BSMessageHandler extends MessageHandler {
                 }
                 runningScenario = null;
             }
+            attackManager.stop();
             started = false;
             mediator.inBattle = false;
             return;
@@ -198,6 +203,7 @@ public class BSMessageHandler extends MessageHandler {
                 getSender().sendHelperMessage(Settings.generateAllyAlliancesValues());
             } else {
                 String alliance = message.substring(Helper.COMMAND_REMOVE_ALLY_ALLIANCE.length() + 1);
+                alliance = alliance.toLowerCase();
                 Settings.removeAllyAlliance(alliance);
 
                 getSender().sendHelperMessage(Settings.generateAllyAlliancesValues());
@@ -209,6 +215,7 @@ public class BSMessageHandler extends MessageHandler {
                 getSender().sendHelperMessage(Settings.generateAllyPlayersValues());
             } else {
                 String alliance = message.substring(Helper.COMMAND_ADD_ALLY_PLAYER.length() + 1);
+                alliance = alliance.toLowerCase();
                 Settings.addAllyPlayer(alliance);
 
                 getSender().sendHelperMessage(Settings.generateAllyPlayersValues());
@@ -308,6 +315,7 @@ public class BSMessageHandler extends MessageHandler {
             task = task.toLowerCase();
 
             Settings.setOpponent(task);
+            attackManager.clearBattlesList();
             if (task.isEmpty()) {
                 getSender().sendHelperMessage("next opponent could be any weak player");
             } else {
@@ -367,11 +375,15 @@ public class BSMessageHandler extends MessageHandler {
                 t.printStackTrace();
             }
             runningScenario = null;
+            if (attackManager.isWaitingForRecover()) {
+                attackManager.start();
+            }
 //            return;
         }
 
         if (message.equals(Helper.COMMAND_START)) {
             started = true;
+            attackManager.start();
 
             Settings.printSettings(sender);
             return;
@@ -454,6 +466,10 @@ public class BSMessageHandler extends MessageHandler {
 
                 runningScenario = new BuildingScenario(this);
                 runningScenario.start();
+
+                if (attackManager.isWaitingForRecover()) {
+                    attackManager.start();
+                }
             }
             return;
         }
@@ -507,6 +523,10 @@ public class BSMessageHandler extends MessageHandler {
 
                 runningScenario = new BuildingScenario(this);
                 runningScenario.start();
+
+                if (attackManager.isWaitingForRecover()) {
+                    attackManager.start();
+                }
             }
             return;
         }
@@ -530,17 +550,28 @@ public class BSMessageHandler extends MessageHandler {
             return true;
         } else if (message.contains(DEFENCE_STARTED)) {
             mediator.inBattle = true;
+            attackManager.battleStarted(message);
             return true;
         } else if (message.contains(ATTACK_STARTED)) {
             mediator.inBattle = true;
+            attackManager.battleStarted(message);
+            return true;
+        } else if (message.contains(ALLIANCE_ATTACK_JOINED)) {
+            mediator.inBattle = true;
+            attackManager.battleStarted(message);
+            return true;
+        } else if (message.contains(ALLIANCE_DEFENCE_JOINED)) {
+            mediator.inBattle = true;
+            attackManager.battleStarted(message);
+            return true;
+        } else if (message.contains(BATTLE_FINISHED)) {
+            mediator.inBattle = false;
+            attackManager.battleFinished(message);
             return true;
         } else if (message.contains(YOU_WIN)) {
             mediator.inBattle = false;
             return true;
         } else if (message.contains(YOU_LOST)) {
-            mediator.inBattle = false;
-            return true;
-        } else if (message.contains(BATTLE_FINISHED)) {
             mediator.inBattle = false;
             return true;
         } else if (message.contains(BATTLE_UNFINISHED)) {
@@ -558,6 +589,15 @@ public class BSMessageHandler extends MessageHandler {
                 runningScenario.stop();
                 runningScenario = null;
             }
+            if (attackManager.isWaitingForRecover()) {
+                attackManager.start();
+            }
+            return true;
+        } else if (message.contains(ARMY_JOINED_DEFENCE)) {
+            mediator.inBattle = true;
+            return true;
+        } else if (message.contains(ARMY_JOINED_ATTACK)) {
+            mediator.inBattle = true;
             return true;
         }
 
@@ -578,5 +618,9 @@ public class BSMessageHandler extends MessageHandler {
 
     public BSSender getSender() {
         return sender;
+    }
+
+    public AttackManager getAttackManager() {
+        return attackManager;
     }
 }

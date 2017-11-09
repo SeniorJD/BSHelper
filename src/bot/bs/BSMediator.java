@@ -103,7 +103,7 @@ public class BSMediator {
             }
         }
 
-        foodPerMinute = farmLevel * 10 - houseLevel * 10;
+        foodPerMinute = (Math.min(farmLevel, stockLevel)) * 10 - houseLevel * 10;
         goldPerMinute = (int) (houseLevel * 10 + (townLevel * houseLevel * 2));
 
         refreshUpgradeList();

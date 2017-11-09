@@ -98,7 +98,7 @@ public class FindingScenario implements RunningScenario {
                 handleControlUp(tlMessage.getMessage());
                 break;
             case CONTROL_WAR:
-                handleWar();
+                handleWar(tlMessage.getMessage());
                 break;
             case CONTROL_FIND_ALL:
             case CONTROL_FIND_APPROPRIATE:
@@ -112,7 +112,45 @@ public class FindingScenario implements RunningScenario {
         sendMessage(CONTROL_WAR);
     }
 
-    private void handleWar() {
+    private void handleWar(String message) {
+        if (message.contains(NEXT_ATTACK)) {
+            String[] lines = message.split("\n");
+            for (String line : lines) {
+                if (!line.contains(NEXT_ATTACK)) {
+                    continue;
+                }
+
+                String[] split = line.split("\\D+");
+
+                int waitTime = Integer.valueOf(split[1]);
+
+                String s = line.substring(line.indexOf(split[1]) + split[1].length() + 1);
+
+                if (s.equalsIgnoreCase(NEXT_ATTACK_MINS)) {
+                    // is ok
+                } else if (s.equalsIgnoreCase(NEXT_ATTACK_SECS)) {
+                    waitTime = 1;
+                } else {
+                    sendHelperMessage("smth gone wrong, attack delayed for 10 minutes");
+                    waitTime = 10;
+                }
+
+                messageHandler.getAttackManager().schedule(waitTime);
+                if (Settings.isAutoBuild() && waitTime > 0) {
+                    BSMessageHandler messageHandler = this.messageHandler;
+                    stop();
+
+                    BuildingScenario buildingScenario = new BuildingScenario(messageHandler);
+                    messageHandler.setRunningScenario(buildingScenario);
+                    buildingScenario.start();
+                } else {
+                    stop();
+                }
+
+                break;
+            }
+            return;
+        }
         lastSentMessage = getFindMessage();
         createTimer();
         timer.schedule(new TimerTask() {
@@ -231,7 +269,7 @@ public class FindingScenario implements RunningScenario {
                 } else {
                     sendHelperMessage(originalMessage);
                 }
-            } else if (Settings.isRiskyAttackEnabled() && territory < 4000) {
+            } else if (Settings.isRiskyAttackEnabled() && territory < 4000 && karma >= 0) {
                 attack(tlMessage);
             } else {
                 sendMessage(getFindMessage());
@@ -281,15 +319,14 @@ public class FindingScenario implements RunningScenario {
     private boolean isAllyOrFriend(String playerAlliance, String playerName) {
         if (!playerAlliance.isEmpty()) {
             for (String s : Settings.getAllyAlliances()) {
-                if (playerAlliance.contains(s)) {
+                if (playerAlliance.equals(s)) {
                     return true;
                 }
             }
         }
 
-        playerName = playerName.toLowerCase();
         for (String s : Settings.getAllyPlayers()) {
-            if (playerName.contains(s)) {
+            if (playerName.equalsIgnoreCase(s)) {
                 return true;
             }
         }
