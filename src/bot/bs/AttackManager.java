@@ -16,9 +16,9 @@ import static bot.bs.Util.*;
  * @author SeniorJD
  */
 public class AttackManager {
-    static final long HOUR_IN_MILLIS = 60 * 60 * 1000;
-    static final long TEN_MINUTES_IN_MILLIS = 10 * 60 * 1000;
-    static final long MINUTE_IN_MILLIS = 60 * 1000;
+    public static final long HOUR_IN_MILLIS = 60 * 60 * 1000;
+    public static final long TEN_MINUTES_IN_MILLIS = 10 * 60 * 1000;
+    public static final long MINUTE_IN_MILLIS = 60 * 1000;
 
     private Map<String, Long> battlesTime = new HashMap<>();
 
@@ -206,5 +206,13 @@ public class AttackManager {
     public void stop() {
         cancelTimer();
         waitingForRecover = false;
+    }
+
+    public long getLastAttackTime() {
+        return lastBattleTime;
+    }
+
+    public void setLastAttackTime(long lastBattleTime) {
+        this.lastBattleTime = lastBattleTime;
     }
 }

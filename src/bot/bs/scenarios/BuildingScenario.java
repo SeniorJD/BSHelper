@@ -5,7 +5,6 @@ import bot.bs.handler.BSMessageHandler;
 import org.telegram.api.message.TLMessage;
 import org.telegram.api.updates.TLUpdateShortMessage;
 
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,9 +33,9 @@ public class BuildingScenario implements RunningScenario {
 
     protected Timer timer;
 
-    protected Timer findingTimer = new Timer();
+//    protected Timer findingTimer = new Timer();
 
-    private static Random random = new Random();
+//    private static Random random = new Random();
 
     public BuildingScenario(BSMessageHandler messageHandler) {
         this.messageHandler = messageHandler;
@@ -110,7 +109,7 @@ public class BuildingScenario implements RunningScenario {
     @Override
     public void stop() {
         cancelTimer();
-        findingTimer.cancel();
+//        findingTimer.cancel();
         messageHandler.setRunningScenario(null);
         messageHandler = null;
     }

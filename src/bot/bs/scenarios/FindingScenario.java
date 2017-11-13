@@ -1,9 +1,6 @@
 package bot.bs.scenarios;
 
-import bot.bs.BSMediator;
-import bot.bs.Helper;
-import bot.bs.Settings;
-import bot.bs.Util;
+import bot.bs.*;
 import bot.bs.handler.BSMessageHandler;
 import bot.bs.player.Battles;
 import org.jetbrains.annotations.NotNull;
@@ -52,6 +49,26 @@ public class FindingScenario implements RunningScenario {
 //            sender.pressAttackButton(message);
 //        }
         sender.pressAttackButton(message);
+    }
+
+    protected void delayAttack(TLMessage tlMessage) {
+        long lastAttackTime = messageHandler.getAttackManager().getLastAttackTime();
+        long difference = System.currentTimeMillis() - lastAttackTime;
+        createTimer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                stop();
+                attack(tlMessage);
+            }
+        }, AttackManager.TEN_MINUTES_IN_MILLIS - difference);
+    }
+
+    protected boolean canAttack() {
+        long lastAttackTime = messageHandler.getAttackManager().getLastAttackTime();
+        long difference = System.currentTimeMillis() - lastAttackTime;
+
+        return difference >= AttackManager.TEN_MINUTES_IN_MILLIS;
     }
 
     @Override
@@ -122,7 +139,7 @@ public class FindingScenario implements RunningScenario {
 
                 String[] split = line.split("\\D+");
 
-                int waitTime = Integer.valueOf(split[1]);
+                long waitTime = Integer.valueOf(split[1]);
 
                 String s = line.substring(line.indexOf(split[1]) + split[1].length() + 1);
 
@@ -135,22 +152,15 @@ public class FindingScenario implements RunningScenario {
                     waitTime = 10;
                 }
 
-                messageHandler.getAttackManager().schedule(waitTime);
-                if (Settings.isAutoBuild() && waitTime > 0) {
-                    BSMessageHandler messageHandler = this.messageHandler;
-                    stop();
+                waitTime *= AttackManager.MINUTE_IN_MILLIS;
+                waitTime = AttackManager.TEN_MINUTES_IN_MILLIS - waitTime;
+                waitTime = System.currentTimeMillis() - waitTime;
 
-                    BuildingScenario buildingScenario = new BuildingScenario(messageHandler);
-                    messageHandler.setRunningScenario(buildingScenario);
-                    buildingScenario.start();
-                } else {
-                    stop();
-                }
-
+                messageHandler.getAttackManager().setLastAttackTime(waitTime);
                 break;
             }
-            return;
         }
+
         lastSentMessage = getFindMessage();
         createTimer();
         timer.schedule(new TimerTask() {
@@ -225,10 +235,15 @@ public class FindingScenario implements RunningScenario {
             foundByName = isEnemyByName(playerName);
             boolean foundByAlliance = isEnemyByAlliance(playerAlliance);
             if (foundByName || foundByAlliance) {
-                stop();
                 if (Settings.isAutoAttack()) {
-                    attack(tlMessage);
+                    if (canAttack()) {
+                        stop();
+                        attack(tlMessage);
+                    } else {
+                        delayAttack(tlMessage);
+                    }
                 } else {
+                    stop();
                     sendHelperMessage(originalMessage);
                 }
                 return;
@@ -263,14 +278,26 @@ public class FindingScenario implements RunningScenario {
             int karma = Integer.parseInt(karmaS);
 
             if (karma == 0 || karma == 1) {
-                stop();
                 if (Settings.isAutoAttack()) {
-                    attack(tlMessage);
+                    if (canAttack()) {
+                        stop();
+                        attack(tlMessage);
+                    } else {
+                        delayAttack(tlMessage);
+                    }
                 } else {
+                    stop();
                     sendHelperMessage(originalMessage);
                 }
+                return;
             } else if (Settings.isRiskyAttackEnabled() && territory < 4000 && karma >= 0) {
-                attack(tlMessage);
+                if (canAttack()) {
+                    stop();
+                    attack(tlMessage);
+                } else {
+                    delayAttack(tlMessage);
+                }
+                return;
             } else {
                 sendMessage(getFindMessage());
             }
@@ -280,12 +307,18 @@ public class FindingScenario implements RunningScenario {
                 return;
             }
 
-            stop();
             if (Settings.isAutoAttack()) {
-                attack(tlMessage);
+                if (canAttack()) {
+                    stop();
+                    attack(tlMessage);
+                } else {
+                    delayAttack(tlMessage);
+                }
             } else {
+                stop();
                 sendHelperMessage(originalMessage);
             }
+            return;
         }
     }
 
