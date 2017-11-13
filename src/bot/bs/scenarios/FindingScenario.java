@@ -159,6 +159,8 @@ public class FindingScenario implements RunningScenario {
                 messageHandler.getAttackManager().setLastAttackTime(waitTime);
                 break;
             }
+        } else {
+            messageHandler.getAttackManager().setLastAttackTime(System.currentTimeMillis() - AttackManager.TEN_MINUTES_IN_MILLIS - AttackManager.MINUTE_IN_MILLIS);
         }
 
         lastSentMessage = getFindMessage();
