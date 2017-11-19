@@ -25,6 +25,7 @@ public class Helper {
     public static final String COMMAND_SEARCH_APPROPRIATE = "searchappropriate";
     public static final String COMMAND_GIVE_IMMUN = "giveimmun";
     public static final String COMMAND_MAX_SEARCH = "maxsearch";
+    public static final String COMMAND_ATTACK_CONQUEROR = "attackConqueror";
 
     public static final String RESPONSE_HELP =
             "/start - старт. нужно юзать после /stop\n" +
@@ -43,6 +44,7 @@ public class Helper {
             "*autobuild true/false* - стройка сразу после восстановления армий\n" +
             "*addallyalliance/removeallyalliance X* - добавить/удалить дружественный альянс в список\n" +
             "*addallyplayer/removeallyplayer X* - добавить/удалить дружественного игрока в список\n" +
+            "*attackConqueror true/false* - атаковать завоевателя, если попадется (но не искать специально)\n" +
             "*building X1 .. Xn* - приоритет стройки. индексы:\n" +
                     "\t0 - ратуша\n" +
                     "\t1 - склад\n" +
@@ -59,7 +61,7 @@ public class Helper {
     public static final String EXPLORING_2 = " в своих владениях ";
     public static final String EXPLORING_3 = " размером ";
     public static final String EXPLORING_4 = ". За победу ты получишь ";
-    public static final String EXPLORING_5 = "\uD83D\uDDE1"; // завоеватель
+    public static final String CONQUEROR = "\uD83D\uDDE1"; // завоеватель
     public static final String EXPLORING_6 = "\uD83D\uDE08"; // карма < 0
 
 }

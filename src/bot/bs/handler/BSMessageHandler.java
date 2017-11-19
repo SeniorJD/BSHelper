@@ -366,6 +366,26 @@ public class BSMessageHandler extends MessageHandler {
         } else if (message.equals(Helper.COMMAND_HELP)) {
             sendHelperMessage(Helper.RESPONSE_HELP);
             return;
+        } else if (message.startsWith(Helper.COMMAND_ATTACK_CONQUEROR)) {
+            if (message.equals(Helper.COMMAND_ATTACK_CONQUEROR)) {
+                getSender().sendHelperMessage("attackConqueror " + Settings.isAttackConqueror());
+                return;
+            }
+
+            String valueS = message.substring(Helper.COMMAND_ATTACK_CONQUEROR.length() + 1);
+            boolean value = false;
+            try {
+                value = Boolean.valueOf(valueS);
+            } catch (Throwable t) {
+                t.printStackTrace();
+                return;
+            }
+
+            Settings.setAttackConqueror(value);
+
+            getSender().sendHelperMessage("attackConqueror " + value);
+
+            return;
         }
 
         if (runningScenario != null) {
@@ -444,7 +464,10 @@ public class BSMessageHandler extends MessageHandler {
 
         if (shouldIgnore(message.getMessage())) {
             if (shouldRecover(message.getMessage())) {
-                Battles.getInstance().addBattle(message.getMessage());
+                if (message.getMessage().contains(BATTLE_FINISHED)) {
+                    Battles.getInstance().addBattle(message.getMessage());
+                }
+
                 if (runningScenario != null) {
                     runningScenario.stop();
                 }
@@ -481,7 +504,7 @@ public class BSMessageHandler extends MessageHandler {
     }
 
     private boolean shouldRecover(String message) {
-        return message.contains(BATTLE_FINISHED);
+        return message.contains(BATTLE_FINISHED) || message.contains(DEFENCE_STARTED);
     }
 
     @Override
@@ -501,7 +524,10 @@ public class BSMessageHandler extends MessageHandler {
 
         if (shouldIgnore(message.getMessage())) {
             if (shouldRecover(message.getMessage())) {
-                Battles.getInstance().addBattle(message.getMessage());
+                if (message.getMessage().contains(BATTLE_FINISHED)) {
+                    Battles.getInstance().addBattle(message.getMessage());
+                }
+
                 if (runningScenario != null) {
                     runningScenario.stop();
                 }

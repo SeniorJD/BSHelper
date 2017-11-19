@@ -215,8 +215,17 @@ public class FindingScenario implements RunningScenario {
 
         String playerName = message.substring(0, index);
         String playerAlliance;
-        if (playerName.startsWith(Helper.EXPLORING_5)) {
-            playerName = playerName.substring(playerName.indexOf(Helper.EXPLORING_5) + Helper.EXPLORING_5.length());
+        if (playerName.startsWith(Helper.CONQUEROR)) {
+            if (Settings.isAttackConqueror()) {
+                if (canAttack()) {
+                    stop();
+                    attack(tlMessage);
+                } else {
+                    delayAttack(tlMessage);
+                }
+                return;
+            }
+            playerName = playerName.substring(playerName.indexOf(Helper.CONQUEROR) + Helper.CONQUEROR.length());
         } else if (playerName.startsWith(Helper.EXPLORING_6)) {
             playerName = playerName.substring(playerName.indexOf(Helper.EXPLORING_6) + Helper.EXPLORING_6.length());
         }

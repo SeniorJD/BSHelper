@@ -3,7 +3,6 @@ package bot.bs.scenarios;
 import bot.bs.BSMediator;
 import bot.bs.Settings;
 import bot.bs.handler.BSMessageHandler;
-import bot.bs.Util;
 import org.telegram.api.message.TLMessage;
 import org.telegram.api.updates.TLUpdateShortMessage;
 
@@ -46,9 +45,10 @@ public class RecoverScenario implements RunningScenario {
 
     @Override
     public void start() {
-        if (getMediator().inBattle) {
-            return;
-        }
+//        if (getMediator().inBattle) {
+//            finish();
+//            return;
+//        }
 
         sendMessage(CONTROL_UP);
     }
@@ -118,14 +118,14 @@ public class RecoverScenario implements RunningScenario {
     }
 
     protected void handleMessage(String message) {
-        if (getMediator().inBattle) {
-            if (message.contains(Util.BATTLE_FINISHED)) {
-                getMediator().inBattle = false;
-                sendMessage(CONTROL_UP);
-            }
-
-            return;
-        }
+//        if (getMediator().inBattle) {
+//            if (message.contains(Util.BATTLE_FINISHED)) {
+//                getMediator().inBattle = false;
+//                sendMessage(CONTROL_UP);
+//            }
+//
+//            return;
+//        }
 
         switch (lastSentMessage) {
             case CONTROL_UP:

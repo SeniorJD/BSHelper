@@ -23,6 +23,7 @@ public class Settings {
     public static final String SEARCH_APPROPRIATE = "searchAppropriate";
     public static final String GIVE_IMMUN = "giveImmun";
     public static final String MAX_SEARCH = "maxSearch";
+    public static final String ATTACK_CONQUEROR = "attackConqueror";
 
     private static int goldToChange = 100000;
     private static int maxSearch = 100;
@@ -32,6 +33,7 @@ public class Settings {
     private static boolean riskyAttack = false;
     private static boolean searchAppropriate = false;
     private static boolean giveImmun = false;
+    private static boolean attackConqueror = false;
     private static String buildingScenario = "0 2 1";
     private static String opponent = "";
     private static List<String> allyAlliances = new ArrayList<>();
@@ -145,6 +147,12 @@ public class Settings {
                         giveImmun = Boolean.valueOf(arr[1]);
                         break;
                     }
+                    case ATTACK_CONQUEROR:
+                        if (arr.length == 1) {
+                            break;
+                        }
+                        attackConqueror = Boolean.valueOf(arr[1]);
+                        break;
                 }
             }
         } catch (IOException e) {
@@ -177,6 +185,7 @@ public class Settings {
                 OPPONENT_KEY + SPLITTER + opponent + "\n" +
                 MAX_SEARCH + SPLITTER + maxSearch + "\n" +
                 BUILDING_SCENARIO + SPLITTER + buildingScenario + "\n" +
+                ATTACK_CONQUEROR + SPLITTER + attackConqueror + "\n" +
                 generateAllyAlliancesValues() +
                 generateAllyPlayersValues();
     }
@@ -337,5 +346,13 @@ public class Settings {
 
     public static boolean isGiveImmun() {
         return giveImmun;
+    }
+
+    public static void setAttackConqueror(boolean attackConqueror) {
+        Settings.attackConqueror = attackConqueror;
+    }
+
+    public static boolean isAttackConqueror() {
+        return attackConqueror;
     }
 }
