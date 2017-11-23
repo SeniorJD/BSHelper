@@ -25,7 +25,7 @@ public class Helper {
     public static final String COMMAND_SEARCH_APPROPRIATE = "searchappropriate";
     public static final String COMMAND_GIVE_IMMUN = "giveimmun";
     public static final String COMMAND_MAX_SEARCH = "maxsearch";
-    public static final String COMMAND_ATTACK_CONQUEROR = "attackConqueror";
+    public static final String COMMAND_ATTACK_CONQUEROR = "attackconqueror";
 
     public static final String RESPONSE_HELP =
             "/start - старт. нужно юзать после /stop\n" +
