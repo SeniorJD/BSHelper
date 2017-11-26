@@ -323,6 +323,24 @@ public class BSMessageHandler extends MessageHandler {
             }
 
             return;
+        } else if (message.startsWith(Helper.COMMAND_ATTACK_IF_MEET)) {
+            String task = tlMessage.getMessage().substring(Helper.COMMAND_ATTACK_IF_MEET.length());
+            if (!task.isEmpty()) {
+                if (task.startsWith(" ")) {
+                    task = task.substring(1);
+                }
+            }
+
+            task = task.toLowerCase();
+
+            Settings.setAttackIfMeet(task);
+            if (task.isEmpty()) {
+                getSender().sendHelperMessage("no attack if meet");
+            } else {
+                getSender().sendHelperMessage("next attack if meet: " + task);
+            }
+
+            return;
         } else if (message.startsWith(Helper.COMMAND_SEARCH_APPROPRIATE)) {
             if (message.equals(Helper.COMMAND_SEARCH_APPROPRIATE)) {
                 getSender().sendHelperMessage("search appropriate " + Settings.isSearchAppropriate());

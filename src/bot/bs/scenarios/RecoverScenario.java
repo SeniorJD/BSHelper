@@ -200,7 +200,7 @@ public class RecoverScenario implements RunningScenario {
                 public void run() {
                     sendMessage(CONTROL_UP);
                 }
-            }, (recruitsToCall * 10 - getMediator().gold) / getMediator().goldPerMinute);
+            }, 600 * 1000); // 5 mins
 
             return;
         }

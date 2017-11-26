@@ -242,6 +242,16 @@ public class FindingScenario implements RunningScenario {
             return;
         }
 
+        if (shouldAttackIfMeet(playerName, playerAlliance)) {
+            if (canAttack()) {
+                stop();
+                attack(tlMessage);
+            } else {
+                delayAttack(tlMessage);
+            }
+            return;
+        }
+
         if (!Settings.getFindOpponent().isEmpty() && (searchCount < Settings.getMaxSearch() || Settings.getMaxSearch() < 0)) {
             foundByName = isEnemyByName(playerName);
             boolean foundByAlliance = isEnemyByAlliance(playerAlliance);
@@ -398,6 +408,28 @@ public class FindingScenario implements RunningScenario {
         String[] opponents = opponentS.split(";");
         for (String opponent : opponents) {
             if (playerAlliance.equals(opponent)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean shouldAttackIfMeet(String playerName, String playerAlliance) {
+        if (Settings.getAttackIfMeet().isEmpty()) {
+            return false;
+        }
+
+        playerName = playerName.toLowerCase();
+        String opponentS = Settings.getAttackIfMeet();
+
+        String[] opponents = opponentS.split(";");
+        for (String opponent : opponents) {
+            if (playerName.equals(opponent)) {
+                return true;
+            }
+
+            if (playerAlliance.equalsIgnoreCase(opponent)) {
                 return true;
             }
         }

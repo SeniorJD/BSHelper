@@ -16,6 +16,7 @@ public class Helper {
     public static final String COMMAND_AUTOBUILD = "autobuild";
     public static final String COMMAND_RECOVER = "recover";
     public static final String COMMAND_OPPONENT = "opponent";
+    public static final String COMMAND_ATTACK_IF_MEET = "attackifmeet";
     public static final String COMMAND_BUILDING_SCENARIO = "building";
     public static final String COMMAND_ADD_ALLY_ALLIANCE = "addallyalliance";
     public static final String COMMAND_REMOVE_ALLY_ALLIANCE = "removeallyalliance";
@@ -33,7 +34,8 @@ public class Helper {
             "/build - процесс слива денег, поддержания достаточного количества еды, а также постройки зданий\n" +
             "/stop - остановить бота\n" +
             "/recover - восстановить армию\n" +
-            "*opponent* - задать имя ИЛИ альянс противника для поиска. имя обнулится после атаки\n" +
+            "*opponent* - задать имя ИЛИ альянс противника(-ов) для поиска. имя обнулится после атаки. можно задавать несколько имен/аллов через точку с запятой (без пробелов!)\n" +
+            "*attackifmeet* - задать имя ИЛИ альянс противника(-ов). если бот его увидит в поиске, то атакует, не смотря на терру/карму, но специально искать его не будет. правила такие же как для *opponent*\n" +
             "*setgold X* - установить минимальную сумму золота (X), после которой бот будет пытаться от золота избавиться, насколько хватит склада\n" +
             "*autoattack true/false* - атаковать противника сразу после нахождения\n" +
             "*riskyattack true/false* - атаковать противника с любой кармой если его территория < 4000\n" +

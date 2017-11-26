@@ -16,6 +16,7 @@ public class Settings {
     public static final String AUTO_SEARCH_KEY = "autoSearch";
     public static final String AUTO_BUILD_KEY = "autoBuild";
     public static final String OPPONENT_KEY = "opponent";
+    public static final String ATTACK_IF_MEET_KEY = "attackIfMeet";
     public static final String ALLY_ALLIANCES = "allyAlliances";
     public static final String ALLY_PLAYERS = "allyPlayers";
     public static final String BUILDING_SCENARIO = "building";
@@ -36,6 +37,7 @@ public class Settings {
     private static boolean attackConqueror = false;
     private static String buildingScenario = "0 2 1";
     private static String opponent = "";
+    private static String attackIfMeet = "";
     private static List<String> allyAlliances = new ArrayList<>();
     private static List<String> allyPlayers = new ArrayList<>();
 
@@ -81,6 +83,14 @@ public class Settings {
                             opponent = (arr[1]);
                         } else {
                             opponent = "";
+                        }
+                        break;
+                    }
+                    case ATTACK_IF_MEET_KEY: {
+                        if (arr.length > 1) {
+                            attackIfMeet = (arr[1]);
+                        } else {
+                            attackIfMeet = "";
                         }
                         break;
                     }
@@ -183,6 +193,7 @@ public class Settings {
                 SEARCH_APPROPRIATE + SPLITTER + searchAppropriate + "\n" +
                 GIVE_IMMUN + SPLITTER + giveImmun + "\n" +
                 OPPONENT_KEY + SPLITTER + opponent + "\n" +
+                ATTACK_IF_MEET_KEY + SPLITTER + attackIfMeet + "\n" +
                 MAX_SEARCH + SPLITTER + maxSearch + "\n" +
                 BUILDING_SCENARIO + SPLITTER + buildingScenario + "\n" +
                 ATTACK_CONQUEROR + SPLITTER + attackConqueror + "\n" +
@@ -265,6 +276,14 @@ public class Settings {
     public static void setAutoBuild(boolean autoBuild) {
         Settings.autoBuild = autoBuild;
         saveSettings();
+    }
+
+    public static String getAttackIfMeet() {
+        return attackIfMeet;
+    }
+
+    public static void setAttackIfMeet(String attackIfMeet) {
+        Settings.attackIfMeet = attackIfMeet;
     }
 
     public static String getFindOpponent() {
