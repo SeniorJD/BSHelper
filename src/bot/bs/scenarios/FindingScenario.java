@@ -243,11 +243,16 @@ public class FindingScenario implements RunningScenario {
         }
 
         if (shouldAttackIfMeet(playerName, playerAlliance)) {
-            if (canAttack()) {
-                stop();
-                attack(tlMessage);
+            if (Settings.isAutoAttack()) {
+                if (canAttack()) {
+                    stop();
+                    attack(tlMessage);
+                } else {
+                    delayAttack(tlMessage);
+                }
             } else {
-                delayAttack(tlMessage);
+                stop();
+                sendHelperMessage(originalMessage);
             }
             return;
         }
@@ -389,7 +394,6 @@ public class FindingScenario implements RunningScenario {
     }
 
     private boolean isEnemyByName(String playerName) {
-        playerName = playerName.toLowerCase();
         String opponentS = Settings.getFindOpponent();
 
         String[] opponents = opponentS.split(";");
@@ -420,7 +424,6 @@ public class FindingScenario implements RunningScenario {
             return false;
         }
 
-        playerName = playerName.toLowerCase();
         String opponentS = Settings.getAttackIfMeet();
 
         String[] opponents = opponentS.split(";");
@@ -429,7 +432,7 @@ public class FindingScenario implements RunningScenario {
                 return true;
             }
 
-            if (playerAlliance.equalsIgnoreCase(opponent)) {
+            if (playerAlliance.equals(opponent)) {
                 return true;
             }
         }

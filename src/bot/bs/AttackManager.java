@@ -156,7 +156,7 @@ public class AttackManager {
 
         String opponents[] = Settings.getFindOpponent().split(";");
         int opponentCount = opponents.length;
-        String opponent = getOpponentName(message).toLowerCase();
+        String opponent = getOpponentName(message);
 
         battlesTime.put(opponent, System.currentTimeMillis());
 

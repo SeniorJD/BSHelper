@@ -22,6 +22,7 @@ import static bot.bs.Util.*;
 public class BSMessageHandler extends MessageHandler {
 
     private boolean ignoreHelperMessage = false;
+    private boolean ignoreBotMessage = false;
     private boolean started = false;
     private BSMediator mediator = BSMediator.getInstance();
     private AttackManager attackManager = new AttackManager(this);
@@ -192,6 +193,7 @@ public class BSMessageHandler extends MessageHandler {
                 getSender().sendHelperMessage(Settings.generateAllyAlliancesValues());
             } else {
                 String alliance = message.substring(Helper.COMMAND_ADD_ALLY_ALLIANCE.length() + 1);
+                alliance = alliance.trim();
                 Settings.addAllyAlliance(alliance);
 
                 getSender().sendHelperMessage(Settings.generateAllyAlliancesValues());
@@ -203,7 +205,7 @@ public class BSMessageHandler extends MessageHandler {
                 getSender().sendHelperMessage(Settings.generateAllyAlliancesValues());
             } else {
                 String alliance = message.substring(Helper.COMMAND_REMOVE_ALLY_ALLIANCE.length() + 1);
-                alliance = alliance.toLowerCase();
+                alliance = alliance.trim();
                 Settings.removeAllyAlliance(alliance);
 
                 getSender().sendHelperMessage(Settings.generateAllyAlliancesValues());
@@ -214,9 +216,9 @@ public class BSMessageHandler extends MessageHandler {
             if (message.equals(Helper.COMMAND_ADD_ALLY_PLAYER)) {
                 getSender().sendHelperMessage(Settings.generateAllyPlayersValues());
             } else {
-                String alliance = message.substring(Helper.COMMAND_ADD_ALLY_PLAYER.length() + 1);
-                alliance = alliance.toLowerCase();
-                Settings.addAllyPlayer(alliance);
+                String player = tlMessage.getMessage().substring(Helper.COMMAND_ADD_ALLY_PLAYER.length() + 1);
+                player = player.trim();
+                Settings.addAllyPlayer(player);
 
                 getSender().sendHelperMessage(Settings.generateAllyPlayersValues());
             }
@@ -226,8 +228,9 @@ public class BSMessageHandler extends MessageHandler {
             if (message.equals(Helper.COMMAND_REMOVE_ALLY_PLAYER)) {
                 getSender().sendHelperMessage(Settings.generateAllyPlayersValues());
             } else {
-                String alliance = message.substring(Helper.COMMAND_REMOVE_ALLY_PLAYER.length() + 1);
-                Settings.removeAllyPlayer(alliance);
+                String player = tlMessage.getMessage().substring(Helper.COMMAND_REMOVE_ALLY_PLAYER.length() + 1);
+                player = player.trim();
+                Settings.removeAllyPlayer(player);
 
                 getSender().sendHelperMessage(Settings.generateAllyPlayersValues());
             }
@@ -306,13 +309,7 @@ public class BSMessageHandler extends MessageHandler {
             return;
         } else if (message.startsWith(Helper.COMMAND_OPPONENT)) {
             String task = tlMessage.getMessage().substring(Helper.COMMAND_OPPONENT.length());
-            if (!task.isEmpty()) {
-                if (task.startsWith(" ")) {
-                    task = task.substring(1);
-                }
-            }
-
-            task = task.toLowerCase();
+            task = task.trim();
 
             Settings.setOpponent(task);
             attackManager.clearBattlesList();
@@ -325,13 +322,7 @@ public class BSMessageHandler extends MessageHandler {
             return;
         } else if (message.startsWith(Helper.COMMAND_ATTACK_IF_MEET)) {
             String task = tlMessage.getMessage().substring(Helper.COMMAND_ATTACK_IF_MEET.length());
-            if (!task.isEmpty()) {
-                if (task.startsWith(" ")) {
-                    task = task.substring(1);
-                }
-            }
-
-            task = task.toLowerCase();
+            task = task.trim();
 
             Settings.setAttackIfMeet(task);
             if (task.isEmpty()) {
@@ -481,43 +472,60 @@ public class BSMessageHandler extends MessageHandler {
         }
 
         if (shouldIgnore(message.getMessage())) {
-            if (shouldRecover(message.getMessage())) {
-                if (message.getMessage().contains(BATTLE_FINISHED)) {
-                    Battles.getInstance().addBattle(message.getMessage());
-                }
-
-                if (runningScenario != null) {
-                    runningScenario.stop();
-                }
-
-                runningScenario = new RecoverScenario(this);
-                runningScenario.start();
-            } else if (campaignFinished(message.getMessage())) {
-                if (mediator.inBattle) {
-                    return;
-                }
-
-                if (!message.getMessage().contains(CAMPAIGN_SUCCESSFUL)) {
-                    return;
-                }
-
-                if (runningScenario != null) {
-                    runningScenario.stop();
-                }
-
-                runningScenario = new BuildingScenario(this);
-                runningScenario.start();
-
-                if (attackManager.isWaitingForRecover()) {
-                    attackManager.start();
-                }
-            }
+            processIgnore(message.getMessage());
             return;
         }
 
         if (runningScenario != null) {
             runningScenario.handleMessage(message);
             return;
+        }
+    }
+
+    private void processIgnore(String message) {
+        if (ignoreBotMessage) {
+            ignoreBotMessage = false;
+        } else if (shouldRecover(message)) {
+            if (message.contains(BATTLE_FINISHED)) {
+                Battles.getInstance().addBattle(message);
+            }
+
+            if (runningScenario != null) {
+                runningScenario.stop();
+            }
+
+            runningScenario = new RecoverScenario(this);
+            runningScenario.start();
+        } else if (campaignFinished(message)) {
+            if (mediator.inBattle) {
+                return;
+            }
+
+            if (!message.contains(CAMPAIGN_SUCCESSFUL)) {
+                return;
+            }
+
+            if (runningScenario != null) {
+                runningScenario.stop();
+            }
+
+            runningScenario = new BuildingScenario(this);
+            runningScenario.start();
+
+            if (attackManager.isWaitingForRecover()) {
+                attackManager.start();
+            }
+        } else if (message.contains(ENEMY_UNDER_IMMUN)) {
+            if (runningScenario != null) {
+                runningScenario.stop();
+            }
+
+            ignoreBotMessage = true;
+
+            getSender().sendMessage(CONTROL_FIND_ALL);
+
+            runningScenario = new FindingScenario(this);
+            runningScenario.start();
         }
     }
 
@@ -541,37 +549,7 @@ public class BSMessageHandler extends MessageHandler {
         }
 
         if (shouldIgnore(message.getMessage())) {
-            if (shouldRecover(message.getMessage())) {
-                if (message.getMessage().contains(BATTLE_FINISHED)) {
-                    Battles.getInstance().addBattle(message.getMessage());
-                }
-
-                if (runningScenario != null) {
-                    runningScenario.stop();
-                }
-
-                runningScenario = new RecoverScenario(this);
-                runningScenario.start();
-            } else if (campaignFinished(message.getMessage())) {
-                if (mediator.inBattle) {
-                    return;
-                }
-
-                if (!message.getMessage().contains(CAMPAIGN_SUCCESSFUL)) {
-                    return;
-                }
-
-                if (runningScenario != null) {
-                    runningScenario.stop();
-                }
-
-                runningScenario = new BuildingScenario(this);
-                runningScenario.start();
-
-                if (attackManager.isWaitingForRecover()) {
-                    attackManager.start();
-                }
-            }
+            processIgnore(message.getMessage());
             return;
         }
 
@@ -586,7 +564,9 @@ public class BSMessageHandler extends MessageHandler {
     }
 
     protected boolean shouldIgnore(String message) {
-        if (message.contains(ALLY_ATTACKS)) {
+        if (ignoreBotMessage) {
+            return true;
+        } else if (message.contains(ALLY_ATTACKS)) {
             return true;
         } else if (message.contains(ALLY_ATTACKS2)) {
             return true;
@@ -642,6 +622,9 @@ public class BSMessageHandler extends MessageHandler {
             return true;
         } else if (message.contains(ARMY_JOINED_ATTACK)) {
             mediator.inBattle = true;
+            return true;
+        } else if (message.contains(ENEMY_UNDER_IMMUN)) {
+            mediator.inBattle = false;
             return true;
         }
 
