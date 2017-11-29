@@ -530,7 +530,7 @@ public class BSMessageHandler extends MessageHandler {
     }
 
     private boolean shouldRecover(String message) {
-        return message.contains(BATTLE_FINISHED) || message.contains(DEFENCE_STARTED);
+        return message.contains(BATTLE_FINISHED) || message.contains(DEFENCE_STARTED) || message.contains(WATCHERS_GONE);
     }
 
     @Override
@@ -624,6 +624,9 @@ public class BSMessageHandler extends MessageHandler {
             mediator.inBattle = true;
             return true;
         } else if (message.contains(ENEMY_UNDER_IMMUN)) {
+            mediator.inBattle = false;
+            return true;
+        } else if (message.equals(WATCHERS_GONE)) {
             mediator.inBattle = false;
             return true;
         }

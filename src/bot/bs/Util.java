@@ -44,6 +44,7 @@ public class Util {
     public static final String NEXT_ATTACK_MINS = "мин.";
     public static final String NEXT_ATTACK_SECS = "сек.";
     public static final String ENEMY_UNDER_IMMUN = "еще не оправился от предыдущей битвы.";
+    public static final String WATCHERS_GONE = "⚔ Дозорные отправились в путь.";
 
     public static final String CONTROL_UP = ":arrow_up: Наверх";
     public static final String CONTROL_BACK = ":arrow_left: Назад";

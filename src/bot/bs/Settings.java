@@ -284,6 +284,7 @@ public class Settings {
 
     public static void setAttackIfMeet(String attackIfMeet) {
         Settings.attackIfMeet = attackIfMeet;
+        saveSettings();
     }
 
     public static String getFindOpponent() {
@@ -345,6 +346,7 @@ public class Settings {
 
     public static void setMaxSearch(int maxSearch) {
         Settings.maxSearch = maxSearch;
+        saveSettings();
     }
 
     public static int getMaxSearch() {
@@ -353,6 +355,7 @@ public class Settings {
 
     public static void setSearchAppropriate(boolean searchAppropriate) {
         Settings.searchAppropriate = searchAppropriate;
+        saveSettings();
     }
 
     public static boolean isSearchAppropriate() {
@@ -361,6 +364,7 @@ public class Settings {
 
     public static void setGiveImmun(boolean giveImmun) {
         Settings.giveImmun = giveImmun;
+        saveSettings();
     }
 
     public static boolean isGiveImmun() {
@@ -369,6 +373,7 @@ public class Settings {
 
     public static void setAttackConqueror(boolean attackConqueror) {
         Settings.attackConqueror = attackConqueror;
+        saveSettings();
     }
 
     public static boolean isAttackConqueror() {
