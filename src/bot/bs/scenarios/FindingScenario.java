@@ -16,6 +16,7 @@ import static bot.bs.Util.*;
  * @author SeniorJD
  */
 public class FindingScenario implements RunningScenario {
+    private static final String RECRUITING = "recruiting";
 
     protected BSSender sender;
     protected String lastSentMessage;
@@ -26,6 +27,8 @@ public class FindingScenario implements RunningScenario {
     boolean foundByName = false;
 
     int searchCount = 0;
+
+    int shouldRecoverTrebuchet;
 
     public FindingScenario(BSMessageHandler messageHandler) {
         this.messageHandler = messageHandler;
@@ -121,11 +124,55 @@ public class FindingScenario implements RunningScenario {
             case CONTROL_FIND_APPROPRIATE:
                 handleFindAll(tlMessage);
                 break;
+            case CONTROL_RECRUIT:
+                handleRecruit();
+                break;
+            case CONTROL_TREBUCHET2:
+                handleRecruitTrebuchet2();
+                break;
+            case RECRUITING:
+                sendMessage(CONTROL_UP);
+                break;
         }
+    }
+
+    private void handleRecruitTrebuchet2() {
+        if (getMediator().population < shouldRecoverTrebuchet) {
+            int deficit = shouldRecoverTrebuchet - getMediator().population;
+
+            int mins = deficit / getMediator().houseLevel + 1;
+
+            createTimer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    lastSentMessage = RECRUITING;
+                    sender.sendMessage(String.valueOf(shouldRecoverTrebuchet));
+                }
+            }, mins * 1000 * 60);
+        } else {
+            lastSentMessage = RECRUITING;
+            sender.sendMessage(String.valueOf(shouldRecoverTrebuchet));
+        }
+    }
+
+    private void handleRecruit() {
+        sendMessage(CONTROL_TREBUCHET2);
     }
 
     private void handleControlUp(String message) {
         getMediator().parseMainState(message);
+
+        int shouldRecoverArmy = shouldRecoverArmy(message);
+        if (shouldRecoverArmy > 0) {
+            BSMessageHandler messageHandler = this.messageHandler;
+            stop();
+            messageHandler.getAttackManager().setWaitingForRecover(true);
+            RunningScenario runningScenario = new RecoverScenario(messageHandler);
+            messageHandler.setRunningScenario(runningScenario);
+            runningScenario.start();
+            return;
+        }
         sendMessage(CONTROL_WAR);
     }
 
@@ -163,6 +210,12 @@ public class FindingScenario implements RunningScenario {
             messageHandler.getAttackManager().setLastAttackTime(System.currentTimeMillis() - AttackManager.TEN_MINUTES_IN_MILLIS - AttackManager.MINUTE_IN_MILLIS);
         }
 
+        shouldRecoverTrebuchet = shouldRecoverTrebuchet(message);
+        if (shouldRecoverTrebuchet > 0) {
+            sendMessage(CONTROL_RECRUIT);
+            return;
+        }
+
         lastSentMessage = getFindMessage();
         createTimer();
         timer.schedule(new TimerTask() {
@@ -171,6 +224,60 @@ public class FindingScenario implements RunningScenario {
                 sendMessage(getFindMessage());
             }
         }, 5000);
+    }
+
+    private int shouldRecoverArmy(String message) {
+        try {
+            if (!getMediator().buildingsParsed) {
+                return 1;
+            }
+
+            if (!message.contains(ARMY_WORD) || getMediator().barracksLevel <= 0) {
+                return 0;
+            }
+
+            message = message.substring(message.indexOf(ARMY_WORD) + ARMY_WORD.length());
+            message = message.substring(0, message.indexOf(ARMY_SIGN));
+
+            message = message.trim();
+
+            String[] data = message.split("\\D+");
+
+            int army = Integer.valueOf(data[0]);
+
+            if (Settings.isGiveImmun()) {
+                return 1 - army;
+            } else {
+                return getMediator().barracksLevel - army;
+            }
+        } catch (Throwable t) {
+            return 0;
+        }
+    }
+
+    private int shouldRecoverTrebuchet(String message) {
+        try {
+            if (!message.contains(CONTROL_TREBUCHET) || !getMediator().buildingsParsed) {
+                return 0;
+            }
+
+            message = message.substring(message.indexOf(CONTROL_TREBUCHET) + CONTROL_TREBUCHET.length());
+            message = message.substring(0, message.indexOf(POPULATION_SIGN));
+
+            message = message.trim();
+
+            String[] data = message.split("\\D+");
+
+            int[] people = new int[data.length];
+
+            for (int i = 0; i < data.length; i++) {
+                people[i] = Integer.valueOf(data[i]);
+            }
+
+            return people[1] - people[0];
+        } catch (Throwable t) {
+            return 0;
+        }
     }
 
     private void handleFindAll(@NotNull TLMessage tlMessage) {

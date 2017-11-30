@@ -45,12 +45,14 @@ public class Util {
     public static final String NEXT_ATTACK_SECS = "сек.";
     public static final String ENEMY_UNDER_IMMUN = "еще не оправился от предыдущей битвы.";
     public static final String WATCHERS_GONE = "⚔ Дозорные отправились в путь.";
+    public static final String ARMY_WORD = "Армия";
 
     public static final String CONTROL_UP = ":arrow_up: Наверх";
     public static final String CONTROL_BACK = ":arrow_left: Назад";
     public static final String CONTROL_BUILDINGS = "\uD83C\uDFD8 Постройки";
     public static final String CONTROL_WORKSHOP = "⚒ Мастерская";
     public static final String CONTROL_TREBUCHET = "⚔Требушет";
+    public static final String CONTROL_TREBUCHET2 = "⚔ Требушет";
     public static final String CONTROL_TOWN = ":european_post_office: Ратуша";
     public static final String CONTROL_TRADE = ":circus_tent: Торговля";
     public static final String CONTROL_BUY = ":moneybag: Купить";

@@ -40,6 +40,8 @@ public class BSMediator {
     public int nextBuildingToUpgrade = -1;
     public long timeToWait = 0;
 
+    public boolean buildingsParsed = false;
+
     int goldRequired = 0;
     public int woodRequired = 0;
     public int stoneRequired = 0;
@@ -107,6 +109,8 @@ public class BSMediator {
         goldPerMinute = (int) (houseLevel * 10 + (townLevel * houseLevel * 2));
 
         refreshUpgradeList();
+
+        buildingsParsed = true;
     }
 
     void parseTown(String string) {

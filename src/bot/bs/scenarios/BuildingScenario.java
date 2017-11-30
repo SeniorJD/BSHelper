@@ -342,6 +342,12 @@ public class BuildingScenario implements RunningScenario {
                 getMediator().minesLevel++;
             } else if (getMediator().nextBuildingToUpgrade == BARRACKS) {
                 getMediator().barracksLevel++;
+                BSMessageHandler messageHandler = this.messageHandler;
+                stop();
+                RunningScenario runningScenario = new RecoverScenario(messageHandler);
+                messageHandler.setRunningScenario(runningScenario);
+                runningScenario.start();
+                return;
             } else if (getMediator().nextBuildingToUpgrade == WALL) {
                 getMediator().wallLevel++;
             } else if (getMediator().nextBuildingToUpgrade == TREBUCHET) {
