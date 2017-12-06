@@ -1,9 +1,6 @@
 package bot.bs.handler;
 
-import bot.bs.AttackManager;
-import bot.bs.BSMediator;
-import bot.bs.Helper;
-import bot.bs.Settings;
+import bot.bs.*;
 import bot.bs.player.Battles;
 import bot.bs.scenarios.*;
 import bot.plugins.handlers.MessageHandler;
@@ -194,8 +191,22 @@ public class BSMessageHandler extends MessageHandler {
             } else {
                 String alliance = message.substring(Helper.COMMAND_ADD_ALLY_ALLIANCE.length() + 1);
                 alliance = alliance.trim();
-                Settings.addAllyAlliance(alliance);
 
+                if (alliance.contains(";")) {
+                    String[] opponents = alliance.split(";");
+                    for (String opponent : opponents) {
+                        opponent = opponent.trim();
+                        opponent = Util.translateAllianceIfNeeded(opponent);
+
+                        if (opponent.isEmpty()) {
+                            continue;
+                        }
+
+                        Settings.addAllyAlliance(opponent);
+                    }
+                } else {
+                    Settings.addAllyAlliance(alliance);
+                }
                 getSender().sendHelperMessage(Settings.generateAllyAlliancesValues());
             }
 
@@ -206,7 +217,22 @@ public class BSMessageHandler extends MessageHandler {
             } else {
                 String alliance = message.substring(Helper.COMMAND_REMOVE_ALLY_ALLIANCE.length() + 1);
                 alliance = alliance.trim();
-                Settings.removeAllyAlliance(alliance);
+
+                if (alliance.contains(";")) {
+                    String[] opponents = alliance.split(";");
+                    for (String opponent : opponents) {
+                        opponent = opponent.trim();
+                        opponent = Util.translateAllianceIfNeeded(opponent);
+
+                        if (opponent.isEmpty()) {
+                            continue;
+                        }
+
+                        Settings.removeAllyAlliance(opponent);
+                    }
+                } else {
+                    Settings.removeAllyAlliance(alliance);
+                }
 
                 getSender().sendHelperMessage(Settings.generateAllyAlliancesValues());
             }
@@ -218,7 +244,21 @@ public class BSMessageHandler extends MessageHandler {
             } else {
                 String player = tlMessage.getMessage().substring(Helper.COMMAND_ADD_ALLY_PLAYER.length() + 1);
                 player = player.trim();
-                Settings.addAllyPlayer(player);
+
+                if (player.contains(";")) {
+                    String[] opponents = player.split(";");
+                    for (String opponent : opponents) {
+                        opponent = opponent.trim();
+
+                        if (opponent.isEmpty()) {
+                            continue;
+                        }
+
+                        Settings.addAllyPlayer(opponent);
+                    }
+                } else {
+                    Settings.addAllyPlayer(player);
+                }
 
                 getSender().sendHelperMessage(Settings.generateAllyPlayersValues());
             }
@@ -230,7 +270,21 @@ public class BSMessageHandler extends MessageHandler {
             } else {
                 String player = tlMessage.getMessage().substring(Helper.COMMAND_REMOVE_ALLY_PLAYER.length() + 1);
                 player = player.trim();
-                Settings.removeAllyPlayer(player);
+
+                if (player.contains(";")) {
+                    String[] opponents = player.split(";");
+                    for (String opponent : opponents) {
+                        opponent = opponent.trim();
+
+                        if (opponent.isEmpty()) {
+                            continue;
+                        }
+
+                        Settings.removeAllyPlayer(opponent);
+                    }
+                } else {
+                    Settings.removeAllyPlayer(player);
+                }
 
                 getSender().sendHelperMessage(Settings.generateAllyPlayersValues());
             }
@@ -311,6 +365,25 @@ public class BSMessageHandler extends MessageHandler {
             String task = tlMessage.getMessage().substring(Helper.COMMAND_OPPONENT.length());
             task = task.trim();
 
+            if (task.contains(";")) {
+                String[] opponents = task.split(";");
+                StringBuilder sb = new StringBuilder();
+
+                for (String opponent : opponents) {
+                    opponent = opponent.trim();
+                    opponent = Util.translateAllianceIfNeeded(opponent);
+
+                    if (opponent.isEmpty()) {
+                        continue;
+                    }
+
+                    sb.append(opponent);
+                    sb.append(";");
+                }
+
+                task = sb.toString();
+            }
+
             Settings.setOpponent(task);
             attackManager.clearBattlesList();
             if (task.isEmpty()) {
@@ -323,6 +396,24 @@ public class BSMessageHandler extends MessageHandler {
         } else if (message.startsWith(Helper.COMMAND_ATTACK_IF_MEET)) {
             String task = tlMessage.getMessage().substring(Helper.COMMAND_ATTACK_IF_MEET.length());
             task = task.trim();
+
+            if (task.contains(";")) {
+                String[] opponents = task.split(";");
+                StringBuilder sb = new StringBuilder();
+
+                for (String opponent : opponents) {
+                    opponent = opponent.trim();
+                    opponent = Util.translateAllianceIfNeeded(opponent);
+
+                    if (opponent.isEmpty()) {
+                        continue;
+                    }
+                    sb.append(opponent);
+                    sb.append(";");
+                }
+
+                task = sb.toString();
+            }
 
             Settings.setAttackIfMeet(task);
             if (task.isEmpty()) {

@@ -17,6 +17,7 @@ import static bot.bs.Util.*;
  */
 public class FindingScenario implements RunningScenario {
     private static final String RECRUITING = "recruiting";
+    private static final String SEMICOLON = ";";
 
     protected BSSender sender;
     protected String lastSentMessage;
@@ -339,6 +340,9 @@ public class FindingScenario implements RunningScenario {
 
         if (playerName.startsWith("[")) {
             playerAlliance = playerName.substring(playerName.indexOf("[") + 1, playerName.indexOf("]"));
+
+            playerAlliance = Util.translateAllianceIfNeeded(playerAlliance);
+
             playerName = playerName.substring(playerAlliance.length() + 2);
         } else {
             playerAlliance = "";
@@ -503,7 +507,7 @@ public class FindingScenario implements RunningScenario {
     private boolean isEnemyByName(String playerName) {
         String opponentS = Settings.getFindOpponent();
 
-        String[] opponents = opponentS.split(";");
+        String[] opponents = opponentS.split(SEMICOLON);
         for (String opponent : opponents) {
             if (playerName.equals(opponent)) {
                 return true;
@@ -516,7 +520,7 @@ public class FindingScenario implements RunningScenario {
     private boolean isEnemyByAlliance(String playerAlliance) {
         String opponentS = Settings.getFindOpponent();
 
-        String[] opponents = opponentS.split(";");
+        String[] opponents = opponentS.split(SEMICOLON);
         for (String opponent : opponents) {
             if (playerAlliance.equals(opponent)) {
                 return true;
@@ -533,7 +537,7 @@ public class FindingScenario implements RunningScenario {
 
         String opponentS = Settings.getAttackIfMeet();
 
-        String[] opponents = opponentS.split(";");
+        String[] opponents = opponentS.split(SEMICOLON);
         for (String opponent : opponents) {
             if (playerName.equals(opponent)) {
                 return true;

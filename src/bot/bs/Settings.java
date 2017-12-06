@@ -80,7 +80,25 @@ public class Settings {
                         break;
                     case OPPONENT_KEY: {
                         if (arr.length > 1) {
-                            opponent = (arr[1]);
+                            if (arr[1].contains(";")) {
+                                StringBuilder sb = new StringBuilder();
+                                String[] opponents = arr[1].split(";");
+                                for (String opponent : opponents) {
+                                    opponent = opponent.trim();
+                                    opponent = Util.translateAllianceIfNeeded(opponent);
+
+                                    if (opponent.isEmpty()) {
+                                        continue;
+                                    }
+
+                                    sb.append(opponent);
+                                    sb.append(";");
+                                }
+
+                                opponent = sb.toString();
+                            } else {
+                                opponent = arr[1];
+                            }
                         } else {
                             opponent = "";
                         }
@@ -88,7 +106,25 @@ public class Settings {
                     }
                     case ATTACK_IF_MEET_KEY: {
                         if (arr.length > 1) {
-                            attackIfMeet = (arr[1]);
+                            if (arr[1].contains(";")) {
+                                StringBuilder sb = new StringBuilder();
+                                String[] opponents = arr[1].split(";");
+                                for (String opponent : opponents) {
+                                    opponent = opponent.trim();
+                                    opponent = Util.translateAllianceIfNeeded(opponent);
+
+                                    if (opponent.isEmpty()) {
+                                        continue;
+                                    }
+
+                                    sb.append(opponent);
+                                    sb.append(";");
+                                }
+
+                                attackIfMeet = sb.toString();
+                            } else {
+                                attackIfMeet = arr[1];
+                            }
                         } else {
                             attackIfMeet = "";
                         }
@@ -100,6 +136,8 @@ public class Settings {
                         }
                         String[] allies = arr[1].split(";");
                         for (String ally : allies) {
+                            ally = ally.trim();
+                            ally = Util.translateAllianceIfNeeded(ally);
                             if (ally.isEmpty()) {
                                 continue;
                             }
@@ -114,6 +152,7 @@ public class Settings {
                         }
                         String[] allies = arr[1].split(";");
                         for (String ally : allies) {
+                            ally = ally.trim();
                             if (ally.isEmpty()) {
                                 continue;
                             }

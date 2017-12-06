@@ -206,4 +206,187 @@ public class Util {
     public static int getStockCapacity(int level) {
         return (level * 50 + 1000) * level;
     }
+
+    public static final String[] ALLIANCE_TRIADA = new String[] {
+            "\uD83D\uDDE1\u200B",
+            "\uD83D\uDDE1",
+            ":dagger:"
+    };
+
+    public static final String[] ALLIANCE_RAIDERS = new String[] {
+            "\uD83D\uDEE1\u200B",
+            "\uD83D\uDEE1",
+            ":shield:"
+    };
+
+    public static final String[] ALLIANCE_FREEDOM = new String[] {
+            "⭐️",
+            "⭐",
+            ":star:"
+    };
+
+    public static final String[] ALLIANCE_FTARS = new String[] {
+            "\uD83C\uDF1A\u200B",
+            "\uD83C\uDF1A",
+            ":new_moon_with_face:"
+    };
+
+    public static final String[] ALLIANCE_SHMALLIANCE = new String[] {
+            "\uD83D\uDD31\u200B",
+            "\uD83D\uDD31",
+            ":trident:"
+    };
+
+    public static final String[] ALLIANCE_COWS = new String[] {
+            "\uD83D\uDC04\u200B",
+            "\uD83D\uDC04",
+            ":cow2:"
+    };
+
+    public static final String[] ALLIANCE_CONFEDERATION = new String[] {
+            "☣\u200B",
+            "☣",
+            ":biohazard:"
+    };
+
+    public static final String[] ALLIANCE_FOX = new String[] {
+            "\uD83E\uDD8A\u200B",
+            "\uD83E\uDD8A",
+            ":fox:"
+    };
+
+    public static final String[] ALLIANCE_SMILEY = new String[] {
+            "\uD83D\uDE08\u200B",
+            "\uD83D\uDE08",
+            ":smiling_imp:"
+    };
+
+    public static final String[] ALLIANCE_RABBIT = new String[] {
+            "\uD83D\uDC30\u200B",
+            "\uD83D\uDC30",
+            ":rabbit:"
+    };
+
+    public static final String[] ALLIANCE_FOREST = new String[] {
+            "\uD83C\uDF32\u200B",
+            "\uD83C\uDF32",
+            ":evergreen_tree:"
+    };
+
+    public static final String[] ALLIANCE_SNAKES = new String[] {
+            "\uD83D\uDC09\u200B",
+            "\uD83D\uDC09",
+            ":dragon:"
+    };
+
+    public static final String[] ALLIANCE_ANCHOR = new String[] {
+            "⚓\u200B",
+            "⚓",
+            ":anchor:"
+    };
+
+    public static final String[] ALLIANCE_WOLVES = new String[] {
+            "\uD83D\uDC3A\u200B",
+            "\uD83D\uDC3A",
+            ":wolf:"
+    };
+
+    public static final String[] ALLIANCE_SWORDS = new String[] {
+            "⚔\u200B",
+            "⚔",
+            ":crossed_swords:"
+    };
+
+    public static final String[] ALLIANCE_MEMES = new String[] {
+            "☠️",
+            "☠",
+            ":skull_and_crossbones:"
+    };
+
+    public static final String[] ALLIANCE_LEGION = new String[] {
+            "\uD83E\uDD85\u200B",
+            "\uD83E\uDD85",
+            ":eagle:"
+    };
+
+    public static final String[] ALLIANCE_POO = new String[] {
+            "\uD83D\uDCA9\u200B",
+            "\uD83D\uDCA9",
+            ":poo:"
+    };
+
+    public static final String[] ALLIANCE_BUTTERFLY = new String[] {
+            "\uD83E\uDD8B\u200B",
+            "\uD83E\uDD8B",
+            ":butterfly:"
+    };
+
+    public static final String[] ALLIANCE_ALIENS = new String[] {
+            "\uD83D\uDC7D\u200B",
+            "\uD83D\uDC7D",
+            ":alien:"
+    };
+
+    public static final String[] ALLIANCE_CAT = new String[] {
+            "\uD83D\uDC31\u200B",
+            "\uD83D\uDC31",
+            ":cat:"
+    };
+
+    public static final String[] ALLIANCE_EYE = new String[] {
+            "\uD83D\uDC41\u200B",
+            "\uD83D\uDC41",
+            ":eye:"
+    };
+
+    public static final String[] ALLIANCE_GUITAR = new String[] {
+            "\uD83C\uDFB8\u200B",
+            "\uD83C\uDFB8",
+            ":guitar:"
+    };
+
+    public static final String[][] ALLIANCES = new String[23][3];
+    static {
+        int i = 0;
+        ALLIANCES[i++] = ALLIANCE_TRIADA;
+        ALLIANCES[i++] = ALLIANCE_RAIDERS;
+        ALLIANCES[i++] = ALLIANCE_FREEDOM;
+        ALLIANCES[i++] = ALLIANCE_FTARS;
+        ALLIANCES[i++] = ALLIANCE_SHMALLIANCE;
+        ALLIANCES[i++] = ALLIANCE_COWS;
+        ALLIANCES[i++] = ALLIANCE_CONFEDERATION;
+        ALLIANCES[i++] = ALLIANCE_FOX;
+        ALLIANCES[i++] = ALLIANCE_SMILEY;
+        ALLIANCES[i++] = ALLIANCE_RABBIT;
+        ALLIANCES[i++] = ALLIANCE_FOREST;
+        ALLIANCES[i++] = ALLIANCE_SNAKES;
+        ALLIANCES[i++] = ALLIANCE_ANCHOR;
+        ALLIANCES[i++] = ALLIANCE_WOLVES;
+        ALLIANCES[i++] = ALLIANCE_SWORDS;
+        ALLIANCES[i++] = ALLIANCE_MEMES;
+        ALLIANCES[i++] = ALLIANCE_LEGION;
+        ALLIANCES[i++] = ALLIANCE_POO;
+        ALLIANCES[i++] = ALLIANCE_BUTTERFLY;
+        ALLIANCES[i++] = ALLIANCE_ALIENS;
+        ALLIANCES[i++] = ALLIANCE_CAT;
+        ALLIANCES[i++] = ALLIANCE_EYE;
+        ALLIANCES[i] = ALLIANCE_GUITAR;
+    }
+
+    public static String translateAllianceIfNeeded(String alliance) {
+        if (alliance == null || alliance.isEmpty()) {
+            return alliance;
+        }
+
+        for (int i = 0; i < ALLIANCES.length; i++) {
+            String[] allInfo = ALLIANCES[i];
+            for (int j = 0; j < allInfo.length; j++) {
+                if (alliance.equals(allInfo[j])) {
+                    return allInfo[0];
+                }
+            }
+        }
+
+        return alliance;
+    }
 }
