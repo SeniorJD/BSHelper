@@ -340,10 +340,9 @@ public class FindingScenario implements RunningScenario {
 
         if (playerName.startsWith("[")) {
             playerAlliance = playerName.substring(playerName.indexOf("[") + 1, playerName.indexOf("]"));
+            playerName = playerName.substring(playerAlliance.length() + 2);
 
             playerAlliance = Util.translateAllianceIfNeeded(playerAlliance);
-
-            playerName = playerName.substring(playerAlliance.length() + 2);
         } else {
             playerAlliance = "";
         }
