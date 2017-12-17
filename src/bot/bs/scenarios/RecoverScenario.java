@@ -215,11 +215,6 @@ public class RecoverScenario implements RunningScenario {
             }
         }
 
-        if (getMediator().wallLevel <= 0) {
-            sendMessage(CONTROL_BARRACKS);
-            return;
-        }
-
         if (getMediator().inBattle) {
             if (getMediator().population > getMediator().houseLevel * 15) {
                 if (getMediator().barracksLevel * 8 <= getMediator().houseLevel) {
@@ -238,6 +233,11 @@ public class RecoverScenario implements RunningScenario {
 
         if (armyToRecoverFirst > 0) {
             sendMessage(CONTROL_BARRACKS);
+            return;
+        }
+
+        if (getMediator().wallLevel <= 0) {
+            finish();
             return;
         }
 
