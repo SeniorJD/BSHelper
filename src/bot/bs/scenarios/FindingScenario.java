@@ -413,7 +413,18 @@ public class FindingScenario implements RunningScenario {
             String karmaS = message.substring(0, message.indexOf(Util.KARMA_SIGN));
             int karma = Integer.parseInt(karmaS);
 
-            if (karma == 0 || karma == 1) {
+            if (Settings.isRiskyAttackOnlyEnabled() && Settings.isRiskyAttackEnabled()) {
+                if (territory < 4000 && karma >= 0) {
+                    if (canAttack()) {
+                        stop();
+                        attack(tlMessage);
+                    } else {
+                        delayAttack(tlMessage);
+                    }
+                } else {
+                    sendMessage(getFindMessage());
+                }
+            } else if (karma == 0 || karma == 1) {
                 if (Settings.isAutoAttack()) {
                     if (canAttack()) {
                         stop();
@@ -425,7 +436,6 @@ public class FindingScenario implements RunningScenario {
                     stop();
                     sendHelperMessage(originalMessage);
                 }
-                return;
             } else if (Settings.isRiskyAttackEnabled() && territory < 4000 && karma >= 0) {
                 if (canAttack()) {
                     stop();
@@ -433,7 +443,6 @@ public class FindingScenario implements RunningScenario {
                 } else {
                     delayAttack(tlMessage);
                 }
-                return;
             } else {
                 sendMessage(getFindMessage());
             }
@@ -454,7 +463,6 @@ public class FindingScenario implements RunningScenario {
                 stop();
                 sendHelperMessage(originalMessage);
             }
-            return;
         }
     }
 

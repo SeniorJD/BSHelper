@@ -23,6 +23,7 @@ public class Helper {
     public static final String COMMAND_ADD_ALLY_PLAYER = "addallyplayer";
     public static final String COMMAND_REMOVE_ALLY_PLAYER = "removeallyplayer";
     public static final String COMMAND_RISKY_ATTACK = "riskyattack";
+    public static final String COMMAND_RISKY_ATTACK_ONLY = "riskyattackonly";
     public static final String COMMAND_SEARCH_APPROPRIATE = "searchappropriate";
     public static final String COMMAND_GIVE_IMMUN = "giveimmun";
     public static final String COMMAND_MAX_SEARCH = "maxsearch";
@@ -39,6 +40,7 @@ public class Helper {
             "*setgold X* - установить минимальную сумму золота (X), после которой бот будет пытаться от золота избавиться, насколько хватит склада\n" +
             "*autoattack true/false* - атаковать противника сразу после нахождения\n" +
             "*riskyattack true/false* - атаковать противника с любой кармой если его территория < 4000\n" +
+            "*riskyattackonly true/false* - атаковать противников только в режиме *riskyattack*\n" +
             "*giveimmun true/false* - атаковать противника с целью дать ему иммун. атака будет раз в час\n" +
             "*searchappropriate true/false* - искать среди Подходящих\n" +
             "*maxsearch X* - максимальное кол-во поисков противника по имени/альянсу, затем переключение на дефолтный поиск\n" +

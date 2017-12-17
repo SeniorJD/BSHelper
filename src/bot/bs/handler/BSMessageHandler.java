@@ -340,6 +340,28 @@ public class BSMessageHandler extends MessageHandler {
             getSender().sendHelperMessage("risky attack " + value);
 
             return;
+        } else if (message.startsWith(Helper.COMMAND_RISKY_ATTACK_ONLY)) {
+            if (message.equals(Helper.COMMAND_RISKY_ATTACK_ONLY)) {
+                getSender().sendHelperMessage("risky attack only " + Settings.isRiskyAttackOnlyEnabled());
+                return;
+            }
+            String valueS = message.substring(Helper.COMMAND_RISKY_ATTACK_ONLY.length() + 1);
+            boolean value = false;
+            try {
+                value = Boolean.valueOf(valueS);
+            } catch (Throwable t) {
+                t.printStackTrace();
+                return;
+            }
+
+            Settings.setRiskyAttackOnly(value);
+
+            getSender().sendHelperMessage("risky attack only " + value);
+            if (value) {
+                Settings.setRiskyAttack(true);
+                getSender().sendHelperMessage("risky attack enabled as well");
+            }
+            return;
         } else if (message.startsWith(Helper.COMMAND_MAX_SEARCH)) {
 
             if (message.equals(Helper.COMMAND_MAX_SEARCH)) {
@@ -468,7 +490,7 @@ public class BSMessageHandler extends MessageHandler {
             return;
         } else if (message.startsWith(Helper.COMMAND_ATTACK_CONQUEROR)) {
             if (message.equals(Helper.COMMAND_ATTACK_CONQUEROR)) {
-                getSender().sendHelperMessage("attackConqueror " + Settings.isAttackConqueror());
+                getSender().sendHelperMessage("attack conqueror " + Settings.isAttackConqueror());
                 return;
             }
 
@@ -483,7 +505,7 @@ public class BSMessageHandler extends MessageHandler {
 
             Settings.setAttackConqueror(value);
 
-            getSender().sendHelperMessage("attackConqueror " + value);
+            getSender().sendHelperMessage("attack conqueror " + value);
 
             return;
         }

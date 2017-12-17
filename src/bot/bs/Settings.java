@@ -21,6 +21,7 @@ public class Settings {
     public static final String ALLY_PLAYERS = "allyPlayers";
     public static final String BUILDING_SCENARIO = "building";
     public static final String RISKY_ATTACK = "riskyAttack";
+    public static final String RISKY_ATTACK_ONLY = "riskyAttackOnly";
     public static final String SEARCH_APPROPRIATE = "searchAppropriate";
     public static final String GIVE_IMMUN = "giveImmun";
     public static final String MAX_SEARCH = "maxSearch";
@@ -32,6 +33,7 @@ public class Settings {
     private static boolean autoSearch = true;
     private static boolean autoBuild = true;
     private static boolean riskyAttack = false;
+    private static boolean riskyAttackOnly = false;
     private static boolean searchAppropriate = false;
     private static boolean giveImmun = false;
     private static boolean attackConqueror = false;
@@ -175,6 +177,13 @@ public class Settings {
                         riskyAttack = Boolean.valueOf(arr[1]);
                         break;
                     }
+                    case RISKY_ATTACK_ONLY: {
+                        if (arr.length == 1) {
+                            break;
+                        }
+                        riskyAttackOnly = Boolean.valueOf(arr[1]);
+                        break;
+                    }
                     case MAX_SEARCH: {
                         if (arr.length == 1) {
                             break;
@@ -229,6 +238,7 @@ public class Settings {
                 AUTO_SEARCH_KEY + SPLITTER + autoSearch + "\n" +
                 AUTO_BUILD_KEY + SPLITTER + autoBuild + "\n" +
                 RISKY_ATTACK + SPLITTER + riskyAttack + "\n" +
+                RISKY_ATTACK_ONLY + SPLITTER + riskyAttackOnly + "\n" +
                 SEARCH_APPROPRIATE + SPLITTER + searchAppropriate + "\n" +
                 GIVE_IMMUN + SPLITTER + giveImmun + "\n" +
                 OPPONENT_KEY + SPLITTER + opponent + "\n" +
@@ -381,6 +391,14 @@ public class Settings {
 
     public static boolean isRiskyAttackEnabled() {
         return riskyAttack;
+    }
+
+    public static void setRiskyAttackOnly(boolean riskyAttackOnly) {
+        Settings.riskyAttackOnly = riskyAttackOnly;
+    }
+
+    public static boolean isRiskyAttackOnlyEnabled() {
+        return riskyAttackOnly;
     }
 
     public static void setMaxSearch(int maxSearch) {
