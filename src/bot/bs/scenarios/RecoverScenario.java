@@ -256,7 +256,7 @@ public class RecoverScenario implements RunningScenario {
                     @Override
                     public void run() {
                         lastSentMessage = CONTROL_WALL;
-                        sendMessage(CONTROL_BACK, false);
+                        sendMessage(CONTROL_INFO, false);
                     }
                 }, 60 * 1000);
             }
