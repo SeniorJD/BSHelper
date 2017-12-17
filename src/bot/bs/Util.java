@@ -72,6 +72,7 @@ public class Util {
     public static final String CONTROL_FIND_APPROPRIATE = ":mag_right: Подходящих";
     public static final String CONTROL_RECRUIT = ":heavy_plus_sign: Обучить";
     public static final String CONTROL_REPAIR = "⚒ Чинить";
+    public static final String CONTROL_INFO = ":scroll: Инфо";
 
     public static final String DIGIT_REGEX = "\\D";
 
@@ -83,6 +84,11 @@ public class Util {
 
     public static final String ARMY_SIGN = "⚔";
     public static final String ARMY_REGEX = "([\\d]+)("+ ARMY_SIGN +"?)";
+
+    public static final String ARCHERS_KEYWORD = "Лучники";
+    public static final String WALL_RUINED_KEYWORD = "Чинить";
+    public static final String POPULATION_KEYWORD = "Жители";
+    public static final String GOLD_KEYWORD = "Золото";
 
     public static final String GOLD_SIGN = "\uD83D\uDCB0";
     public static final String GOLD_REGEX = "([\\d]+)("+ GOLD_SIGN +"?)";

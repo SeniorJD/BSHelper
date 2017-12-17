@@ -23,6 +23,7 @@ public class BSMediator {
     public int stone = 0;
     int food = 0;
     public int archers = 0;
+    public boolean wallRuined = false;
 
     public int townLevel = 0;
     public int stockLevel = 0;

@@ -73,7 +73,11 @@ public class Main {
                 BSSender sender = new BSSender(messageHandler, kernel.getKernelComm());
                 messageHandler.setSender(sender);
 
-                sender.sendHelperMessage(Helper.RESPONSE_HELP);
+                if (new File("settings.bs").exists()) {
+                    Settings.printSettings(sender);
+                } else {
+                    sender.sendHelperMessage(Helper.RESPONSE_HELP);
+                }
             } else {
                 throw new Exception("Failed to log in: " + status);
             }

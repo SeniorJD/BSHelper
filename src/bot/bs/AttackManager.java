@@ -23,7 +23,7 @@ public class AttackManager {
     private Map<String, Long> battlesTime = new HashMap<>();
 
     private long lastBattleTime;
-    private boolean isAttack = false;
+    private boolean isAttacking = false;
     private boolean waitingForRecover = false;
     private Timer timer;
     private volatile boolean timerCancelled;
@@ -60,19 +60,19 @@ public class AttackManager {
 
     public void battleStarted(String message) {
         if (message.contains(ATTACK_STARTED)) {
-            isAttack = true;
+            isAttacking = true;
             waitingForRecover = false;
             cancelTimer();
         } else if (message.contains(ALLIANCE_ATTACK_JOINED)) {
-            isAttack = true;
+            isAttacking = true;
             waitingForRecover = false;
             cancelTimer();
         } else if (message.contains(ALLIANCE_DEFENCE_JOINED)) {
-            isAttack = false;
+            isAttacking = false;
             waitingForRecover = false;
             cancelTimer();
         } else if (message.contains(DEFENCE_STARTED)) {
-            isAttack = false;
+            isAttacking = false;
             waitingForRecover = false;
             cancelTimer();
         }
@@ -84,7 +84,7 @@ public class AttackManager {
     }
 
     public void schedule(long waitTime) {
-        isAttack = false;
+        isAttacking = false;
         waitingForRecover = false;
 
         if (waitTime < 0) {
@@ -136,7 +136,7 @@ public class AttackManager {
 
     private long getWaitTime(String message) {
         long waitTime = 0;
-        if (!isAttack) {
+        if (!isAttacking) {
             waitTime = (TEN_MINUTES_IN_MILLIS - (System.currentTimeMillis() - lastBattleTime)) / MINUTE_IN_MILLIS;
 
             if (waitTime < 0) {
