@@ -99,7 +99,10 @@ public class Settings {
 
                                 opponent = sb.toString();
                             } else {
-                                opponent = arr[1];
+                                String data = arr[1];
+                                data = data.trim();
+                                data = Util.translateAllianceIfNeeded(data);
+                                opponent = data;
                             }
                         } else {
                             opponent = "";

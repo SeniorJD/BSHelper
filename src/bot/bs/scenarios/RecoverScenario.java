@@ -208,13 +208,14 @@ public class RecoverScenario implements RunningScenario {
             return;
         }
 
-        if (!getMediator().wallRuined && getMediator().archers >= getMediator().wallLevel * 10 && !getMediator().inBattle) {
+        if ((getMediator().wallLevel == 0 || !getMediator().wallRuined) && getMediator().archers >= getMediator().wallLevel * 10 && !getMediator().inBattle) {
             if (getMediator().army >= getMediator().barracksLevel * 40) {
                 finish();
                 return;
             }
         }
 
+        armyToRecoverFirst = 0;
         if (getMediator().inBattle) {
             if (getMediator().population > getMediator().houseLevel * 15) {
                 if (getMediator().barracksLevel * 8 <= getMediator().houseLevel) {
@@ -226,7 +227,7 @@ public class RecoverScenario implements RunningScenario {
                 armyToRecoverFirst = 0;
             }
         } else {
-            if (!getMediator().wallRuined && getMediator().archers >= getMediator().wallLevel * 10) {
+            if ((getMediator().wallLevel == 0 || !getMediator().wallRuined) && getMediator().archers >= getMediator().wallLevel * 10) {
                 armyToRecoverFirst = getMediator().barracksLevel * 40 - getMediator().army;
             }
         }
@@ -260,7 +261,7 @@ public class RecoverScenario implements RunningScenario {
                     }
                 }, 60 * 1000);
             }
-        } else if (getMediator().wallRuined) {
+        } else if (getMediator().wallRuined && getMediator().wallLevel > 0) {
             repairWalls(message);
         } else if (getMediator().archers < getMediator().wallLevel * 10) {
             sendMessage(CONTROL_RECRUIT);

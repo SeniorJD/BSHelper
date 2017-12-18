@@ -404,6 +404,9 @@ public class BSMessageHandler extends MessageHandler {
                 }
 
                 task = sb.toString();
+            } else {
+                task = task.trim();
+                task = Util.translateAllianceIfNeeded(task);;
             }
 
             Settings.setOpponent(task);
@@ -601,7 +604,9 @@ public class BSMessageHandler extends MessageHandler {
         } else if (shouldRecover(message)) {
             if (message.contains(BATTLE_FINISHED)) {
                 Battles.getInstance().addBattle(message);
-                mediator.wallRuined = true;
+                if (!mediator.buildingsParsed || mediator.wallLevel > 0) {
+                    mediator.wallRuined = true;
+                }
             }
 
             if (runningScenario != null) {

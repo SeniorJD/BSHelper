@@ -525,6 +525,8 @@ public class BuildingScenario implements RunningScenario {
             return;
         }
 
+        getMediator().wallRuined = true;
+
         String substring = message.substring(index + 1);
 
         String[] digits = substring.split("\\D+");
@@ -549,6 +551,7 @@ public class BuildingScenario implements RunningScenario {
 
         if (getMediator().gold >= goldRequired && getMediator().wood >= woodRequired && getMediator().stone >= stoneRequired) {
             sendMessage(CONTROL_REPAIR);
+            getMediator().wallRuined = false;
             return;
         } else {
             int goldDiff = goldRequired - getMediator().gold;
