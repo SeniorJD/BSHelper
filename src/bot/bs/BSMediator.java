@@ -429,7 +429,7 @@ public class BSMediator {
             timeToWait = 0;
         } else {
             if (woodRequired <= 0 && stoneRequired <= 0) {
-                timeToWait = (goldRequired / goldPerMinute + 1) * 1000 * 60;
+                timeToWait = (goldRequired / goldPerMinute + 1) * AttackManager.MINUTE_IN_MILLIS;
             } else {
                 if (woodRequired > 0) {
                     goldRequired += woodRequired * 2;
@@ -442,21 +442,21 @@ public class BSMediator {
                 if (gold > Settings.getGoldToChange()) {
                     timeToWait = -1;
                 } else {
-                    timeToWait = (Math.min(goldRequired, Settings.getGoldToChange()) / goldPerMinute + 1) * 1000 * 60;
+                    timeToWait = (Math.min(goldRequired, Settings.getGoldToChange()) / goldPerMinute + 1) * AttackManager.MINUTE_IN_MILLIS;
                 }
             }
         }
 
-        int foodLeftTime = foodPerMinute >= 0 ? Integer.MAX_VALUE : ((food - barracksLevel * 40) / -foodPerMinute) * 1000 * 60;
+        long foodLeftTime = foodPerMinute >= 0 ? Integer.MAX_VALUE : ((food - barracksLevel * 40) / -foodPerMinute) * AttackManager.MINUTE_IN_MILLIS;
 
-        if (timeToWait > foodLeftTime || foodLeftTime < 60 * 1000 * 30) {
+        if (timeToWait > foodLeftTime || foodLeftTime < AttackManager.MINUTE_IN_MILLIS * 30) {
             this.foodRequired = (int) (stockCapacity * 0.8 - food);
             if (foodRequired <= 0) {
                 foodRequired = stockCapacity - food;
             }
 
             if (gold < Settings.getGoldToChange()) {
-                timeToWait = ((Settings.getGoldToChange() - gold) / goldPerMinute + 1) * 1000 * 60;
+                timeToWait = ((Settings.getGoldToChange() - gold) / goldPerMinute + 1) * AttackManager.MINUTE_IN_MILLIS;
             } else {
                 timeToWait = -1;
             }

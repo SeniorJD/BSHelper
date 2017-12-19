@@ -141,7 +141,7 @@ public class FindingScenario implements RunningScenario {
         if (getMediator().population < shouldRecoverTrebuchet) {
             int deficit = shouldRecoverTrebuchet - getMediator().population;
 
-            int mins = deficit / getMediator().houseLevel + 1;
+            long mins = deficit / getMediator().houseLevel + 1;
 
             createTimer();
             timer.schedule(new TimerTask() {
@@ -150,7 +150,7 @@ public class FindingScenario implements RunningScenario {
                     lastSentMessage = RECRUITING;
                     sender.sendMessage(String.valueOf(shouldRecoverTrebuchet));
                 }
-            }, mins * 1000 * 60);
+            }, mins * AttackManager.MINUTE_IN_MILLIS);
         } else {
             lastSentMessage = RECRUITING;
             sender.sendMessage(String.valueOf(shouldRecoverTrebuchet));
@@ -298,7 +298,7 @@ public class FindingScenario implements RunningScenario {
                 public void run() {
                     sendMessage(getFindMessage());
                 }
-            }, 1000* 60);
+            }, AttackManager.MINUTE_IN_MILLIS);
             return;
         } else if (originalMessage.contains(NO_FOOD)) {
             createTimer();
@@ -307,7 +307,7 @@ public class FindingScenario implements RunningScenario {
                 public void run() {
                     sendMessage(getFindMessage());
                 }
-            }, 1000* 60);
+            }, AttackManager.MINUTE_IN_MILLIS);
             return;
         }
 
@@ -476,7 +476,7 @@ public class FindingScenario implements RunningScenario {
                 public void run() {
                     sendMessage(getFindMessage());
                 }
-            }, 1000* 60);
+            }, AttackManager.MINUTE_IN_MILLIS);
             return;
         } else if (message.contains(NO_FOOD)) {
             createTimer();
@@ -485,7 +485,7 @@ public class FindingScenario implements RunningScenario {
                 public void run() {
                     sendMessage(getFindMessage());
                 }
-            }, 1000* 60);
+            }, AttackManager.MINUTE_IN_MILLIS);
             return;
         }
 

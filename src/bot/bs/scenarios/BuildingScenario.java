@@ -1,5 +1,6 @@
 package bot.bs.scenarios;
 
+import bot.bs.AttackManager;
 import bot.bs.BSMediator;
 import bot.bs.handler.BSMessageHandler;
 import org.telegram.api.message.TLMessage;
@@ -33,10 +34,6 @@ public class BuildingScenario implements RunningScenario {
 
     protected Timer timer;
 
-//    protected Timer findingTimer = new Timer();
-
-//    private static Random random = new Random();
-
     public BuildingScenario(BSMessageHandler messageHandler) {
         this.messageHandler = messageHandler;
         this.sender = messageHandler.getSender();
@@ -62,54 +59,11 @@ public class BuildingScenario implements RunningScenario {
     public void start() {
         stage = RETRIEVING;
         sendMessage(CONTROL_UP);
-
-//        BSMessageHandler messageHandler = this.messageHandler;
-//
-//        int delayMultiplier;
-//        if (Settings.isGiveImmun()) {
-//            if (Settings.getFindOpponent().isEmpty()) {
-//                delayMultiplier = 10;
-//            } else {
-//                String[] arr = Settings.getFindOpponent().split(";");
-//                delayMultiplier = (60 / arr.length) - arr.length;
-//                if (delayMultiplier < 10) {
-//                    delayMultiplier = 10;
-//                }
-//            }
-//        } else {
-//            delayMultiplier = 10;
-//        }
-//
-//        delayMultiplier *= 1000 * 60;
-//
-//        delayMultiplier += (1 + random.nextInt(60) * 1000);
-//
-//        findingTimer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                if (!Settings.isAutoSearch()) {
-//                    return;
-//                }
-//
-//                FindingScenario scenario = new FindingScenario(messageHandler);
-//                stop();
-//
-//                try {
-//                    Thread.sleep(5000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                messageHandler.setRunningScenario(scenario);
-//                scenario.start();
-//            }
-//        }, delayMultiplier);
     }
 
     @Override
     public void stop() {
         cancelTimer();
-//        findingTimer.cancel();
         messageHandler.setRunningScenario(null);
         messageHandler = null;
     }
@@ -192,7 +146,7 @@ public class BuildingScenario implements RunningScenario {
                 sendMessage(CONTROL_BUY);
                 break;
             case CONTROL_BUY:
-                handleBuy(message);
+                handleBuy();
                 break;
             case CONTROL_BUY_WOOD:
                 handleBuyWood(message);
@@ -241,7 +195,7 @@ public class BuildingScenario implements RunningScenario {
                     stage = RETRIEVING;
                     sendMessage(CONTROL_UP);
                 }
-            }, 60 * 1000);
+            }, AttackManager.MINUTE_IN_MILLIS);
 
             return;
         }
@@ -299,7 +253,7 @@ public class BuildingScenario implements RunningScenario {
                     stage = RETRIEVING;
                     sendMessage(CONTROL_UP);
                 }
-            }, 60 * 1000);
+            }, AttackManager.MINUTE_IN_MILLIS);
 
             return;
         }
@@ -359,7 +313,7 @@ public class BuildingScenario implements RunningScenario {
         sendMessage(CONTROL_UP);
     }
 
-    private void handleBuy(String message) {
+    private void handleBuy() {
         woodToBuy = 0;
         stoneToBuy = 0;
 
@@ -552,7 +506,6 @@ public class BuildingScenario implements RunningScenario {
         if (getMediator().gold >= goldRequired && getMediator().wood >= woodRequired && getMediator().stone >= stoneRequired) {
             sendMessage(CONTROL_REPAIR);
             getMediator().wallRuined = false;
-            return;
         } else {
             int goldDiff = goldRequired - getMediator().gold;
             int woodDiff = woodRequired - getMediator().wood;
@@ -570,7 +523,7 @@ public class BuildingScenario implements RunningScenario {
             } else {
                 sendHelperMessage("Waiting for wall repair...");
 
-                int waitingTime = ((goldDiff / getMediator().goldPerMinute) + 1) * 1000 * 60;
+                long waitingTime = ((goldDiff / getMediator().goldPerMinute) + 1) * AttackManager.MINUTE_IN_MILLIS;
                 createTimer();
                 timer.schedule(new TimerTask() {
                     @Override

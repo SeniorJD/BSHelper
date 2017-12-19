@@ -259,7 +259,7 @@ public class RecoverScenario implements RunningScenario {
                         lastSentMessage = CONTROL_WALL;
                         sendMessage(CONTROL_INFO, false);
                     }
-                }, 60 * 1000);
+                }, AttackManager.MINUTE_IN_MILLIS);
             }
         } else if (getMediator().wallRuined && getMediator().wallLevel > 0) {
             repairWalls(message);
@@ -296,7 +296,7 @@ public class RecoverScenario implements RunningScenario {
             } else {
                 sendHelperMessage("Waiting for wall repair...");
 
-                int waitingTime = ((goldDiff / getMediator().goldPerMinute) + 1) * 1000 * 60;
+                long waitingTime = ((goldDiff / getMediator().goldPerMinute) + 1) * AttackManager.MINUTE_IN_MILLIS;
                 createTimer();
                 timer.schedule(new TimerTask() {
                     @Override
@@ -375,7 +375,7 @@ public class RecoverScenario implements RunningScenario {
                         lastSentMessage = CONTROL_WALL;
                         sendMessage(CONTROL_BACK, false);
                     }
-                }, 60 * 1000);
+                }, AttackManager.MINUTE_IN_MILLIS);
                 return;
             } else {
                 stage = RETRIEVING;
@@ -398,7 +398,7 @@ public class RecoverScenario implements RunningScenario {
                     lastSentMessage = CONTROL_WALL;
                     sendMessage(CONTROL_BACK, false);
                 }
-            }, 60 * 1000);
+            }, AttackManager.MINUTE_IN_MILLIS);
             return;
         }
 
@@ -422,7 +422,7 @@ public class RecoverScenario implements RunningScenario {
                     stage = RETRIEVING;
                     sendMessage(CONTROL_UP);
                 }
-            }, 60*1000);
+            }, AttackManager.MINUTE_IN_MILLIS);
             return;
         }
 
@@ -459,7 +459,7 @@ public class RecoverScenario implements RunningScenario {
                     stage = RETRIEVING;
                     sendMessage(CONTROL_UP);
                 }
-            }, 60 * 1000); // 1 min
+            }, AttackManager.MINUTE_IN_MILLIS); // 1 min
             return;
         }
 
@@ -493,7 +493,7 @@ public class RecoverScenario implements RunningScenario {
                     getMediator().population += getMediator().houseLevel;
                     handleRecruit(message);
                 }
-            }, 60*1000);
+            }, AttackManager.MINUTE_IN_MILLIS);
         }
     }
 
