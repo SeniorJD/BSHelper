@@ -321,25 +321,6 @@ public class BSMessageHandler extends MessageHandler {
 
             getSender().sendHelperMessage("building scenario: " + scenario);
             return;
-        } else if (message.startsWith(Helper.COMMAND_RISKY_ATTACK)) {
-            if (message.equals(Helper.COMMAND_RISKY_ATTACK)) {
-                getSender().sendHelperMessage("risky attack " + Settings.isRiskyAttackEnabled());
-                return;
-            }
-            String valueS = message.substring(Helper.COMMAND_RISKY_ATTACK.length() + 1);
-            boolean value = false;
-            try {
-                value = Boolean.valueOf(valueS);
-            } catch (Throwable t) {
-                t.printStackTrace();
-                return;
-            }
-
-            Settings.setRiskyAttack(value);
-
-            getSender().sendHelperMessage("risky attack " + value);
-
-            return;
         } else if (message.startsWith(Helper.COMMAND_RISKY_ATTACK_ONLY)) {
             if (message.equals(Helper.COMMAND_RISKY_ATTACK_ONLY)) {
                 getSender().sendHelperMessage("risky attack only " + Settings.isRiskyAttackOnlyEnabled());
@@ -361,6 +342,25 @@ public class BSMessageHandler extends MessageHandler {
                 Settings.setRiskyAttack(true);
                 getSender().sendHelperMessage("risky attack enabled as well");
             }
+            return;
+        } else if (message.startsWith(Helper.COMMAND_RISKY_ATTACK)) {
+            if (message.equals(Helper.COMMAND_RISKY_ATTACK)) {
+                getSender().sendHelperMessage("risky attack " + Settings.isRiskyAttackEnabled());
+                return;
+            }
+            String valueS = message.substring(Helper.COMMAND_RISKY_ATTACK.length() + 1);
+            boolean value = false;
+            try {
+                value = Boolean.valueOf(valueS);
+            } catch (Throwable t) {
+                t.printStackTrace();
+                return;
+            }
+
+            Settings.setRiskyAttack(value);
+
+            getSender().sendHelperMessage("risky attack " + value);
+
             return;
         } else if (message.startsWith(Helper.COMMAND_MAX_SEARCH)) {
 
