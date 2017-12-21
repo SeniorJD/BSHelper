@@ -287,6 +287,7 @@ public class Util {
 
     public static final String[] ALLIANCE_ANCHOR = new String[] {
             "⚓\u200B",
+            "⚓️",
             "⚓",
             ":anchor:"
     };

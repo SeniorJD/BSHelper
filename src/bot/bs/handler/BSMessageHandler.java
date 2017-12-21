@@ -205,6 +205,7 @@ public class BSMessageHandler extends MessageHandler {
                         Settings.addAllyAlliance(opponent);
                     }
                 } else {
+                    alliance = Util.translateAllianceIfNeeded(alliance);
                     Settings.addAllyAlliance(alliance);
                 }
                 getSender().sendHelperMessage(Settings.generateAllyAlliancesValues());
@@ -231,6 +232,7 @@ public class BSMessageHandler extends MessageHandler {
                         Settings.removeAllyAlliance(opponent);
                     }
                 } else {
+                    alliance = Util.translateAllianceIfNeeded(alliance);
                     Settings.removeAllyAlliance(alliance);
                 }
 
@@ -405,7 +407,6 @@ public class BSMessageHandler extends MessageHandler {
 
                 task = sb.toString();
             } else {
-                task = task.trim();
                 task = Util.translateAllianceIfNeeded(task);;
             }
 
@@ -438,6 +439,8 @@ public class BSMessageHandler extends MessageHandler {
                 }
 
                 task = sb.toString();
+            } else {
+                task = Util.translateAllianceIfNeeded(task);
             }
 
             Settings.setAttackIfMeet(task);
