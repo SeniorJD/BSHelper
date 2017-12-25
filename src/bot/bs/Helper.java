@@ -28,6 +28,7 @@ public class Helper {
     public static final String COMMAND_GIVE_IMMUN = "giveimmun";
     public static final String COMMAND_MAX_SEARCH = "maxsearch";
     public static final String COMMAND_ATTACK_CONQUEROR = "attackconqueror";
+    public static final String COMMAND_JOIN_ALLIANCE_BATTLES = "joinalliancebattles";
 
     public static final String RESPONSE_HELP =
             "/start - старт. нужно юзать после /stop\n" +

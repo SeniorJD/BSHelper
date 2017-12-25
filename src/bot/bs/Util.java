@@ -47,6 +47,8 @@ public class Util {
     public static final String WATCHERS_GONE = "⚔ Дозорные отправились в путь.";
     public static final String ARMY_WORD = "Армия";
 
+    public static final String ALLY_ATTACKED_PART1 = " атаковал";
+
     public static final String CONTROL_UP = ":arrow_up: Наверх";
     public static final String CONTROL_BACK = ":arrow_left: Назад";
     public static final String CONTROL_BUILDINGS = "\uD83C\uDFD8 Постройки";
@@ -395,5 +397,23 @@ public class Util {
         }
 
         return alliance;
+    }
+
+    public static boolean isAllyOrFriend(String playerAlliance, String playerName) {
+        if (playerAlliance != null && !playerAlliance.isEmpty()) {
+            for (String s : Settings.getAllyAlliances()) {
+                if (playerAlliance.equals(s)) {
+                    return true;
+                }
+            }
+        }
+
+        for (String s : Settings.getAllyPlayers()) {
+            if (playerName.equalsIgnoreCase(s)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

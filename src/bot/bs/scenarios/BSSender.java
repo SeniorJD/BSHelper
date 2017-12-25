@@ -141,7 +141,7 @@ public class BSSender {
         }
     }
 
-    protected void pressAttackButton(TLMessage message) {
+    public void pressAttackButton(TLMessage message) {
         TLReplayInlineKeyboardMarkup replyMarkup = (TLReplayInlineKeyboardMarkup) message.getReplyMarkup();
         TLKeyboardButtonCallback button = (TLKeyboardButtonCallback) replyMarkup.getRows().get(0).buttons.get(0);
         TLInputPeerUser peer = new TLInputPeerUser();

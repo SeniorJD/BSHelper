@@ -282,6 +282,20 @@ public class FindingScenario implements RunningScenario {
     }
 
     private void handleFindAll(@NotNull TLMessage tlMessage) {
+        if (!Settings.isAutoSearch()) {
+            if (Settings.isAutoBuild()) {
+                BSMessageHandler messageHandler = this.messageHandler;
+                stop();
+                messageHandler.setRunningScenario(new BuildingScenario(messageHandler));
+                messageHandler.getRunningScenario().start();
+            } else {
+                BSMessageHandler messageHandler = this.messageHandler;
+                stop();
+                messageHandler.setRunningScenario(new RecoverScenario(messageHandler));
+                messageHandler.getRunningScenario().start();
+            }
+            return;
+        }
         if (searchCount == Settings.getMaxSearch() && Settings.getFindOpponent() != null && !Settings.getFindOpponent().isEmpty() && !Settings.isGiveImmun()) {
             sendHelperMessage("maximum searches amount reached, switching to default");
         }
@@ -347,7 +361,7 @@ public class FindingScenario implements RunningScenario {
             playerAlliance = "";
         }
 
-        if (isAllyOrFriend(playerAlliance, playerName)) {
+        if (Util.isAllyOrFriend(playerAlliance, playerName)) {
             sendMessage(getFindMessage());
             return;
         }
@@ -491,24 +505,6 @@ public class FindingScenario implements RunningScenario {
 
         sendHelperMessage("Finding scenario got unexpected message: \n" + tlUpdateShortMessage.getMessage());
         stop();
-    }
-
-    private boolean isAllyOrFriend(String playerAlliance, String playerName) {
-        if (!playerAlliance.isEmpty()) {
-            for (String s : Settings.getAllyAlliances()) {
-                if (playerAlliance.equals(s)) {
-                    return true;
-                }
-            }
-        }
-
-        for (String s : Settings.getAllyPlayers()) {
-            if (playerName.equalsIgnoreCase(s)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     private boolean isEnemyByName(String playerName) {

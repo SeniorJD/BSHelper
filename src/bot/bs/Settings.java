@@ -26,6 +26,7 @@ public class Settings {
     public static final String GIVE_IMMUN = "giveImmun";
     public static final String MAX_SEARCH = "maxSearch";
     public static final String ATTACK_CONQUEROR = "attackConqueror";
+    public static final String JOIN_ALLIANCE_BATTLES = "joinAllianceBattles";
 
     private static int goldToChange = 100000;
     private static int maxSearch = 100;
@@ -37,6 +38,7 @@ public class Settings {
     private static boolean searchAppropriate = false;
     private static boolean giveImmun = false;
     private static boolean attackConqueror = false;
+    private static boolean joinAllianceBattles = false;
     private static String buildingScenario = "0 2 1";
     private static String opponent = "";
     private static String attackIfMeet = "";
@@ -214,6 +216,12 @@ public class Settings {
                         }
                         attackConqueror = Boolean.valueOf(arr[1]);
                         break;
+                    case JOIN_ALLIANCE_BATTLES:
+                        if (arr.length == 1) {
+                            break;
+                        }
+                        joinAllianceBattles = Boolean.valueOf(arr[1]);
+                        break;
                 }
             }
         } catch (IOException e) {
@@ -249,6 +257,7 @@ public class Settings {
                 MAX_SEARCH + SPLITTER + maxSearch + "\n" +
                 BUILDING_SCENARIO + SPLITTER + buildingScenario + "\n" +
                 ATTACK_CONQUEROR + SPLITTER + attackConqueror + "\n" +
+                JOIN_ALLIANCE_BATTLES + SPLITTER + joinAllianceBattles + "\n" +
                 generateAllyAlliancesValues() +
                 generateAllyPlayersValues();
     }
@@ -438,5 +447,14 @@ public class Settings {
 
     public static boolean isAttackConqueror() {
         return attackConqueror;
+    }
+
+    public static void setJoinAllianceBattles(boolean joinAllianceBattles) {
+        Settings.joinAllianceBattles = joinAllianceBattles;
+        saveSettings();
+    }
+
+    public static boolean shouldJoinAllianceBattles() {
+        return joinAllianceBattles;
     }
 }

@@ -5,6 +5,8 @@ import bot.bs.player.Battles;
 import bot.bs.scenarios.*;
 import bot.plugins.handlers.MessageHandler;
 import org.jetbrains.annotations.NotNull;
+import org.telegram.api.keyboard.button.TLKeyboardButtonCallback;
+import org.telegram.api.keyboard.replymarkup.TLReplayInlineKeyboardMarkup;
 import org.telegram.api.message.TLMessage;
 import org.telegram.api.updates.TLUpdateShortMessage;
 import org.telegram.bot.structure.Chat;
@@ -514,6 +516,26 @@ public class BSMessageHandler extends MessageHandler {
             getSender().sendHelperMessage("attack conqueror " + value);
 
             return;
+        } else if (message.startsWith(Helper.COMMAND_JOIN_ALLIANCE_BATTLES)) {
+            if (message.equals(Helper.COMMAND_JOIN_ALLIANCE_BATTLES)) {
+                getSender().sendHelperMessage("join alliance battles " + Settings.shouldJoinAllianceBattles());
+                return;
+            }
+
+            String valueS = message.substring(Helper.COMMAND_JOIN_ALLIANCE_BATTLES.length() + 1);
+            boolean value = false;
+            try {
+                value = Boolean.valueOf(valueS);
+            } catch (Throwable t) {
+                t.printStackTrace();
+                return;
+            }
+
+            Settings.setJoinAllianceBattles(value);
+
+            getSender().sendHelperMessage("join alliance battles " + value);
+
+            return;
         }
 
         if (runningScenario != null) {
@@ -675,6 +697,36 @@ public class BSMessageHandler extends MessageHandler {
             return;
         }
 
+        if (shouldJoinAllianceBattle(message)) {
+            if (runningScenario != null) {
+                runningScenario.stop();
+                runningScenario = null;
+            }
+            sender.pressAttackButton(message);
+            return;
+        } else if (message.getMessage().contains("Похоже ты опоздал")) {
+            if (runningScenario != null) {
+                return;
+            }
+
+            if (Settings.isAutoSearch()) {
+                FindingScenario scenario = new FindingScenario(this);
+                setRunningScenario(scenario);
+                scenario.start();
+                return;
+            }
+            if (Settings.isAutoBuild()) {
+                BuildingScenario scenario = new BuildingScenario(this);
+                setRunningScenario(scenario);
+                scenario.start();
+                return;
+            }
+            RecoverScenario scenario = new RecoverScenario(this);
+            setRunningScenario(scenario);
+            scenario.start();
+            return;
+        }
+
         if (runningScenario != null) {
             try {
                 runningScenario.handleMessage(message);
@@ -685,15 +737,56 @@ public class BSMessageHandler extends MessageHandler {
         }
     }
 
+    private boolean shouldJoinAllianceBattle(TLMessage tlMessage) {
+        String message = tlMessage.getMessage();
+        if (!Settings.shouldJoinAllianceBattles()) {
+            return false;
+        }
+
+        String playerName = null;
+        if (message.contains(ALLY_ATTACKED) || message.contains(ALLY_ATTACKS2)) {
+            try {
+                playerName = message.substring(message.indexOf("]") + 1, message.indexOf(" атаковал"));
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        } else if (message.contains(ALLY_ATTACKS)) {
+            try {
+                TLReplayInlineKeyboardMarkup replyMarkup = (TLReplayInlineKeyboardMarkup) tlMessage.getReplyMarkup();
+                TLKeyboardButtonCallback button = (TLKeyboardButtonCallback) replyMarkup.getRows().get(0).buttons.get(0);
+
+                message = new String(button.getData().getData());
+
+                playerName = message.substring(message.indexOf("]") + 1, message.indexOf(" против"));
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }
+
+        if (playerName == null) {
+            return false;
+        }
+
+        playerName = playerName.trim();
+
+        if (!Util.isAllyOrFriend(null, playerName)) {
+            return false;
+        }
+
+        return (System.currentTimeMillis() - attackManager.getLastAttackTime()) >= AttackManager.TEN_MINUTES_IN_MILLIS;
+    }
+
     protected boolean shouldIgnore(String message) {
         if (ignoreBotMessage) {
             return true;
-        } else if (message.contains(ALLY_ATTACKS)) {
-            return true;
-        } else if (message.contains(ALLY_ATTACKS2)) {
-            return true;
-        } else if (message.contains(ALLY_ATTACKED)) {
-            return true;
+        } else if (!Settings.shouldJoinAllianceBattles()) {
+            if (message.contains(ALLY_ATTACKS)) {
+                return true;
+            } else if (message.contains(ALLY_ATTACKS2)) {
+                return true;
+            } else if (message.contains(ALLY_ATTACKED)) {
+                return true;
+            }
         } else if (message.contains(DEFENCE_STARTED)) {
             mediator.inBattle = true;
             attackManager.battleStarted(message);

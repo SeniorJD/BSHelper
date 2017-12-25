@@ -100,7 +100,7 @@ public class AttackManager {
             public void run() {
                 timerCancelled = false;
 
-                if (!Settings.isAutoSearch()) {
+                if (!Settings.isAutoSearch() && !Settings.shouldJoinAllianceBattles()) {
                     return;
                 }
 
