@@ -12,6 +12,10 @@ import org.telegram.api.updates.TLUpdateShortMessage;
 import org.telegram.bot.structure.Chat;
 import org.telegram.bot.structure.IUser;
 
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import static bot.bs.Helper.*;
 import static bot.bs.Util.*;
 
@@ -28,6 +32,8 @@ public class BSMessageHandler extends MessageHandler {
     private BSSender sender;
 
     private RunningScenario runningScenario;
+
+    private Timer joiningTimer;
 
     public BSMessageHandler() {
         attackManager.start();
@@ -679,6 +685,11 @@ public class BSMessageHandler extends MessageHandler {
 
     @Override
     public void handleMessage(@NotNull TLMessage message) {
+        if (joiningTimer != null) {
+            joiningTimer.cancel();
+            joiningTimer = null;
+        }
+
         if (!started) {
             return;
         }
@@ -702,7 +713,43 @@ public class BSMessageHandler extends MessageHandler {
                 runningScenario.stop();
                 runningScenario = null;
             }
-            sender.pressAttackButton(message);
+
+            if (message.getMessage().contains(ALLY_ATTACKS)) {
+                sender.pressAttackButton(message);
+                if (joiningTimer != null) {
+                    joiningTimer.cancel();
+                    joiningTimer = null;
+                }
+                return;
+            }
+
+            if (joiningTimer != null) {
+                joiningTimer.cancel();
+            }
+            joiningTimer = new Timer();
+            joiningTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    joiningTimer = null;
+                    if (!started) {
+                        return;
+                    }
+
+                    if (mediator.inBattle) {
+                        return;
+                    }
+
+                    if (!Settings.shouldJoinAllianceBattles()) {
+                        return;
+                    }
+
+                    if (runningScenario != null) {
+                        runningScenario.stop();
+                        runningScenario = null;
+                    }
+                    sender.pressAttackButton(message);
+                }
+            }, (new Random().nextInt(55) + 5) * 1000);
             return;
         } else if (message.getMessage().contains("Похоже ты опоздал")) {
             if (runningScenario != null) {
@@ -787,7 +834,9 @@ public class BSMessageHandler extends MessageHandler {
             } else if (message.contains(ALLY_ATTACKED)) {
                 return true;
             }
-        } else if (message.contains(DEFENCE_STARTED)) {
+        }
+
+        if (message.contains(DEFENCE_STARTED)) {
             mediator.inBattle = true;
             attackManager.battleStarted(message);
             return true;
