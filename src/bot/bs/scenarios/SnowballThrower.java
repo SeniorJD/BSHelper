@@ -72,11 +72,20 @@ public class SnowballThrower {
     public void throwSnowball() {
         isThrowingSnowball = true;
         snowballThrown = false;
-        lastScenario = messageHandler.getRunningScenario();
         if (lastScenario != null) {
-            lastScenario.stop();
+            if (messageHandler.getRunningScenario() != null) {
+                lastScenario = messageHandler.getRunningScenario();
+                lastScenario.stop();
+                messageHandler.setRunningScenario(null);
+            }
+        } else {
+            lastScenario = messageHandler.getRunningScenario();
+            if (lastScenario != null) {
+                lastScenario.stop();
+            }
+            messageHandler.setRunningScenario(null);
         }
-        messageHandler.setRunningScenario(null);
+
 
         createTimer();
         timer.schedule(new TimerTask() {
