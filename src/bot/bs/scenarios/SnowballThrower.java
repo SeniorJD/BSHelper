@@ -19,6 +19,7 @@ public class SnowballThrower {
     private static final long FIVE_SEC_IN_MILLIS = 1000 * 5;
 
     private static final String THROW_SNOWBALL_BUTTON_TEXT = "Швырнуть снежок в ";
+    private static final String ZERO_SYMBOL = ""+'\u200B';
 
     private BSMessageHandler messageHandler;
 
@@ -216,7 +217,11 @@ public class SnowballThrower {
                 return null;
             }
 
-            return button.getText().substring(button.getText().indexOf(THROW_SNOWBALL_BUTTON_TEXT) + THROW_SNOWBALL_BUTTON_TEXT.length());
+            String result = button.getText().substring(button.getText().indexOf(THROW_SNOWBALL_BUTTON_TEXT) + THROW_SNOWBALL_BUTTON_TEXT.length());
+            if (result.startsWith(ZERO_SYMBOL)) {
+                result = result.substring(1);
+            }
+            return result;
         } catch (Throwable t) {
             return null;
         }
