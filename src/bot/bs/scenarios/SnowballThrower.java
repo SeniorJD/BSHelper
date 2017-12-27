@@ -1,7 +1,10 @@
 package bot.bs.scenarios;
 
+import bot.bs.Settings;
 import bot.bs.Util;
 import bot.bs.handler.BSMessageHandler;
+import org.telegram.api.keyboard.button.TLKeyboardButton;
+import org.telegram.api.keyboard.replymarkup.TLReplayKeyboardMarkup;
 import org.telegram.api.message.TLMessage;
 
 import java.util.Timer;
@@ -14,6 +17,8 @@ public class SnowballThrower {
     private static final long MINUTE_IN_MILLIS = 1000 * 60;
     private static final long TEN_SEC_IN_MILLIS = 1000 * 10;
     private static final long FIVE_SEC_IN_MILLIS = 1000 * 5;
+
+    private static final String THROW_SNOWBALL_BUTTON_TEXT = "Швырнуть снежок в ";
 
     private BSMessageHandler messageHandler;
 
@@ -62,7 +67,7 @@ public class SnowballThrower {
     }
 
     public boolean canThrowSnowball() {
-        return (System.currentTimeMillis() - MINUTE_IN_MILLIS) >= lastSnowballThrow;
+        return Settings.isPlaySnowballs() && (System.currentTimeMillis() - MINUTE_IN_MILLIS) >= lastSnowballThrow;
     }
 
     public boolean isThrowingSnowball() {
@@ -97,12 +102,14 @@ public class SnowballThrower {
     }
 
     public void processThrowingSnowballMessage(TLMessage message) {
+        cancelTimer();
         if (!snowballThrown) {
-            boolean thrown = getSender().pressThrowSnowballButton(message);
-            if (!thrown) {
-                throwSnowball();
+            if (!canThrowSnowballAt(message)) {
+                getSender().sendMessage(Util.CONTROL_UP);
                 return;
             }
+
+            getSender().pressThrowSnowballButton(message);
             snowballThrown = true;
         } else {
             if (!message.getMessage().startsWith("❄")) {
@@ -112,7 +119,6 @@ public class SnowballThrower {
                     public void run() {
                         snowballThrown = false;
                         isThrowingSnowball = false;
-                        lastScenario = null;
                         throwSnowball();
                     }
                 }, MINUTE_IN_MILLIS);
@@ -126,11 +132,12 @@ public class SnowballThrower {
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        boolean thrown = getSender().pressThrowSnowballButton(message);
-                        if (!thrown) {
-                            throwSnowball();
+                        if (!canThrowSnowballAt(message)) {
+                            getSender().sendMessage(Util.CONTROL_UP);
                             return;
                         }
+
+                        getSender().pressThrowSnowballButton(message);
                         snowballThrown = true;
                     }
                 }, TEN_SEC_IN_MILLIS);
@@ -174,5 +181,44 @@ public class SnowballThrower {
             return new RecoverScenario(messageHandler);
         }
         return null;
+    }
+
+    private boolean canThrowSnowballAt(TLMessage message) {
+        String playerName = retrievePlayer(message);
+
+        if (playerName == null) {
+            return false;
+        }
+
+        String noSnowballsFor = Settings.getNoSnowballsFor();
+        if (noSnowballsFor == null || noSnowballsFor.isEmpty()) {
+            return true;
+        }
+
+        String[] array = noSnowballsFor.split(";");
+
+        for (String s : array) {
+            if (s.equals(playerName)) {
+                getSender().sendHelperMessage("skipping snowwar with: " + playerName);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private String retrievePlayer(TLMessage message) {
+        try {
+            TLReplayKeyboardMarkup replyMarkup = (TLReplayKeyboardMarkup) message.getReplyMarkup();
+            TLKeyboardButton button = (TLKeyboardButton) replyMarkup.getRows().get(2).buttons.get(0);
+
+            if (!button.getText().startsWith("☃")) {
+                return null;
+            }
+
+            return button.getText().substring(button.getText().indexOf(THROW_SNOWBALL_BUTTON_TEXT) + THROW_SNOWBALL_BUTTON_TEXT.length());
+        } catch (Throwable t) {
+            return null;
+        }
     }
 }

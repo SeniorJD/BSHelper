@@ -27,6 +27,8 @@ public class Settings {
     public static final String MAX_SEARCH = "maxSearch";
     public static final String ATTACK_CONQUEROR = "attackConqueror";
     public static final String JOIN_ALLIANCE_BATTLES = "joinAllianceBattles";
+    public static final String NO_SNOWBALLS_FOR = "noSnowballsFor";
+    public static final String PLAY_SNOWBALLS = "playSnowballs";
 
     private static int goldToChange = 100000;
     private static int maxSearch = 100;
@@ -44,6 +46,8 @@ public class Settings {
     private static String attackIfMeet = "";
     private static List<String> allyAlliances = new ArrayList<>();
     private static List<String> allyPlayers = new ArrayList<>();
+    private static String noSnowballsFor = "";
+    private static boolean playSnowballs = false;
 
     public static void readSettings() {
         File file = new File("settings.bs");
@@ -222,6 +226,42 @@ public class Settings {
                         }
                         joinAllianceBattles = Boolean.valueOf(arr[1]);
                         break;
+                    case NO_SNOWBALLS_FOR: {
+                        if (arr.length > 1) {
+                            if (arr[1].contains(";")) {
+                                StringBuilder sb = new StringBuilder();
+                                String[] opponents = arr[1].split(";");
+                                for (String opponent : opponents) {
+                                    opponent = opponent.trim();
+                                    opponent = Util.translateAllianceIfNeeded(opponent);
+
+                                    if (opponent.isEmpty()) {
+                                        continue;
+                                    }
+
+                                    sb.append(opponent);
+                                    sb.append(";");
+                                }
+
+                                noSnowballsFor = sb.toString();
+                            } else {
+                                String data = arr[1];
+                                data = data.trim();
+                                data = Util.translateAllianceIfNeeded(data);
+                                noSnowballsFor = data;
+                            }
+                        } else {
+                            noSnowballsFor = "";
+                        }
+                        break;
+                    }
+                    case PLAY_SNOWBALLS: {
+                        if (arr.length == 1) {
+                            break;
+                        }
+                        playSnowballs = Boolean.valueOf(arr[1]);
+                        break;
+                    }
                 }
             }
         } catch (IOException e) {
@@ -253,6 +293,8 @@ public class Settings {
                 SEARCH_APPROPRIATE + SPLITTER + searchAppropriate + "\n" +
                 GIVE_IMMUN + SPLITTER + giveImmun + "\n" +
                 OPPONENT_KEY + SPLITTER + opponent + "\n" +
+                PLAY_SNOWBALLS + SPLITTER + playSnowballs + "\n" +
+                NO_SNOWBALLS_FOR + SPLITTER + noSnowballsFor + "\n" +
                 ATTACK_IF_MEET_KEY + SPLITTER + attackIfMeet + "\n" +
                 MAX_SEARCH + SPLITTER + maxSearch + "\n" +
                 BUILDING_SCENARIO + SPLITTER + buildingScenario + "\n" +
@@ -456,5 +498,23 @@ public class Settings {
 
     public static boolean shouldJoinAllianceBattles() {
         return joinAllianceBattles;
+    }
+
+    public static String getNoSnowballsFor() {
+        return noSnowballsFor;
+    }
+
+    public static void setNoSnowballsFor(String noSnowballsFor) {
+        Settings.noSnowballsFor = noSnowballsFor;
+        saveSettings();
+    }
+
+    public static boolean isPlaySnowballs() {
+        return playSnowballs;
+    }
+
+    public static void setPlaySnowballs(boolean playSnowballs) {
+        Settings.playSnowballs = playSnowballs;
+        saveSettings();
     }
 }

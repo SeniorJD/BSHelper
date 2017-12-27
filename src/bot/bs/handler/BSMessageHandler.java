@@ -549,6 +549,61 @@ public class BSMessageHandler extends MessageHandler {
             getSender().sendHelperMessage("join alliance battles " + value);
 
             return;
+        } else if (message.startsWith(Helper.COMMAND_NO_SNOWBALLS_FOR)) {
+            String task = tlMessage.getMessage().substring(Helper.COMMAND_NO_SNOWBALLS_FOR.length());
+            task = task.trim();
+
+            if (task.contains(";")) {
+                String[] opponents = task.split(";");
+                StringBuilder sb = new StringBuilder();
+
+                for (String opponent : opponents) {
+                    opponent = opponent.trim();
+                    opponent = Util.translateAllianceIfNeeded(opponent);
+
+                    if (opponent.isEmpty()) {
+                        continue;
+                    }
+
+                    sb.append(opponent);
+                    sb.append(";");
+                }
+
+                task = sb.toString();
+            } else {
+                task = Util.translateAllianceIfNeeded(task);
+                ;
+            }
+
+            Settings.setNoSnowballsFor(task);
+            if (task.isEmpty()) {
+                getSender().sendHelperMessage("lets snowwar begin!");
+            } else {
+                getSender().sendHelperMessage("snowpeace with next player(s): " + task);
+            }
+
+            return;
+        } else if (message.startsWith(Helper.COMMAND_PLAY_SNOWBALLS)) {
+            if (message.equals(Helper.COMMAND_PLAY_SNOWBALLS)) {
+                getSender().sendHelperMessage("play snowballs: " + Settings.isPlaySnowballs());
+                return;
+            }
+
+            String valueS = message.substring(Helper.COMMAND_PLAY_SNOWBALLS.length() + 1);
+            boolean value = false;
+            try {
+                value = Boolean.valueOf(valueS);
+            } catch (Throwable t) {
+                t.printStackTrace();
+                return;
+            }
+
+            Settings.setPlaySnowballs(value);
+
+            getSender().sendHelperMessage("play snowballs " + value);
+            snowballThrower.refresh();
+
+            return;
         }
 
         if (runningScenario != null) {
@@ -717,7 +772,9 @@ public class BSMessageHandler extends MessageHandler {
             } else {
                 snowballThrower.throwSnowball();
             }
-            return;
+            if (!shouldIgnore(message.getMessage())) {
+                return;
+            }
         } else if (message.getMessage().startsWith("❄")) {
             return;
         }

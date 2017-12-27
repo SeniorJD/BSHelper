@@ -201,19 +201,10 @@ public class BSSender {
         }
     }
 
-    public boolean pressThrowSnowballButton(TLMessage message) {
-        try {
-            TLReplayKeyboardMarkup replyMarkup = (TLReplayKeyboardMarkup) message.getReplyMarkup();
-            TLKeyboardButton button = (TLKeyboardButton) replyMarkup.getRows().get(2).buttons.get(0);
+    public void pressThrowSnowballButton(TLMessage message) {
+        TLReplayKeyboardMarkup replyMarkup = (TLReplayKeyboardMarkup) message.getReplyMarkup();
+        TLKeyboardButton button = (TLKeyboardButton) replyMarkup.getRows().get(2).buttons.get(0);
 
-            if (!button.getText().startsWith("☃")) {
-                return false;
-            }
-            sendMessage(button.getText());
-        } catch (Throwable t) {
-            return false;
-        }
-
-        return true;
+        sendMessage(button.getText());
     }
 }
