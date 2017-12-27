@@ -33,10 +33,13 @@ public class BSMessageHandler extends MessageHandler {
 
     private RunningScenario runningScenario;
 
+    private SnowballThrower snowballThrower;
+
     private Timer joiningTimer;
 
     public BSMessageHandler() {
         attackManager.start();
+        snowballThrower = new SnowballThrower(this);
     }
 
     public void setSender(BSSender sender) {
@@ -309,6 +312,7 @@ public class BSMessageHandler extends MessageHandler {
             String[] parsed = scenario.split("\\D+");
 
             int value = -1;
+            StringBuilder sb = new StringBuilder();
             for (String s : parsed) {
                 if (s.isEmpty()) {
                     continue;
@@ -325,11 +329,14 @@ public class BSMessageHandler extends MessageHandler {
                     getSender().sendHelperMessage("only values 0-8 are OK");
                     return;
                 }
+
+                sb.append(String.valueOf(value));
+                sb.append(" ");
             }
 
-            Settings.setBuildingScenario(scenario);
+            Settings.setBuildingScenario(sb.toString());
 
-            getSender().sendHelperMessage("building scenario: " + scenario);
+            getSender().sendHelperMessage("building scenario: " + sb.toString());
             return;
         } else if (message.startsWith(Helper.COMMAND_RISKY_ATTACK_ONLY)) {
             if (message.equals(Helper.COMMAND_RISKY_ATTACK_ONLY)) {
@@ -560,6 +567,7 @@ public class BSMessageHandler extends MessageHandler {
         if (message.equals(Helper.COMMAND_START)) {
             started = true;
             attackManager.start();
+            snowballThrower.refresh();
 
             Settings.printSettings(sender);
             return;
@@ -700,6 +708,17 @@ public class BSMessageHandler extends MessageHandler {
         }
 
         if (message.getFromId() != bsBot.getUserId()) {
+            return;
+        }
+
+        if (snowballThrower.canThrowSnowball()) {
+            if (snowballThrower.isThrowingSnowball()) {
+                snowballThrower.processThrowingSnowballMessage(message);
+            } else {
+                snowballThrower.throwSnowball();
+            }
+            return;
+        } else if (message.getMessage().startsWith("❄")) {
             return;
         }
 

@@ -11,8 +11,10 @@ import org.telegram.api.functions.messages.TLRequestMessagesGetBotCallbackAnswer
 import org.telegram.api.functions.messages.TLRequestMessagesGetDialogs;
 import org.telegram.api.input.peer.TLInputPeerSelf;
 import org.telegram.api.input.peer.TLInputPeerUser;
+import org.telegram.api.keyboard.button.TLKeyboardButton;
 import org.telegram.api.keyboard.button.TLKeyboardButtonCallback;
 import org.telegram.api.keyboard.replymarkup.TLReplayInlineKeyboardMarkup;
+import org.telegram.api.keyboard.replymarkup.TLReplayKeyboardMarkup;
 import org.telegram.api.message.TLMessage;
 import org.telegram.api.messages.TLMessagesBotCallbackAnswer;
 import org.telegram.api.messages.dialogs.TLAbsDialogs;
@@ -197,5 +199,21 @@ public class BSSender {
         } catch (Throwable e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean pressThrowSnowballButton(TLMessage message) {
+        try {
+            TLReplayKeyboardMarkup replyMarkup = (TLReplayKeyboardMarkup) message.getReplyMarkup();
+            TLKeyboardButton button = (TLKeyboardButton) replyMarkup.getRows().get(2).buttons.get(0);
+
+            if (!button.getText().startsWith("☃")) {
+                return false;
+            }
+            sendMessage(button.getText());
+        } catch (Throwable t) {
+            return false;
+        }
+
+        return true;
     }
 }
