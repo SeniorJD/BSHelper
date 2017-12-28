@@ -49,32 +49,32 @@ public class Util {
 
     public static final String ALLY_ATTACKED_PART1 = " атаковал";
 
-    public static final String CONTROL_UP = ":arrow_up: Наверх";
-    public static final String CONTROL_BACK = ":arrow_left: Назад";
+    public static final String CONTROL_UP = "⬆️ Наверх";
+    public static final String CONTROL_BACK = "⬅️ Назад";
     public static final String CONTROL_BUILDINGS = "\uD83C\uDFD8 Постройки";
     public static final String CONTROL_WORKSHOP = "⚒ Мастерская";
     public static final String CONTROL_TREBUCHET = "⚔Требушет";
     public static final String CONTROL_TREBUCHET2 = "⚔ Требушет";
-    public static final String CONTROL_TOWN = ":european_post_office: Ратуша";
-    public static final String CONTROL_TRADE = ":circus_tent: Торговля";
-    public static final String CONTROL_BUY = ":moneybag: Купить";
-    public static final String CONTROL_BUY_WOOD = ":evergreen_tree: Дерево";
+    public static final String CONTROL_TOWN = "\uD83C\uDFE4 Ратуша";
+    public static final String CONTROL_TRADE = "\uD83C\uDFAA Торговля";
+    public static final String CONTROL_BUY = "\uD83D\uDCB0 Купить";
+    public static final String CONTROL_BUY_WOOD = "\uD83C\uDF32 Дерево";
     public static final String CONTROL_BUY_STONE = "⛏ Камень";
-    public static final String CONTROL_BUY_FOOD = ":meat_on_bone: Еда";
+    public static final String CONTROL_BUY_FOOD = "\uD83C\uDF56 Еда";
     public static final String CONTROL_STOCK = "\uD83C\uDFDA Склад";
     public static final String CONTROL_HOUSE = "\uD83C\uDFD8 Дома";
-    public static final String CONTROL_FARM = ":sunflower: Ферма";
-    public static final String CONTROL_SAWMILL = ":evergreen_tree: Лесопилка";
+    public static final String CONTROL_FARM = "\uD83C\uDF3B Ферма";
+    public static final String CONTROL_SAWMILL = "\uD83C\uDF32 Лесопилка";
     public static final String CONTROL_MINES = "⛏ Шахта";
     public static final String CONTROL_BARRACKS = "\uD83D\uDEE1 Казармы";
-    public static final String CONTROL_WALL = ":european_castle: Стена";
+    public static final String CONTROL_WALL = "\uD83C\uDFF0 Стена";
     public static final String CONTROL_UPGRADE = "⚒ Улучшить";
     public static final String CONTROL_WAR = "⚔ Война";
-    public static final String CONTROL_FIND_ALL = ":mag_right: Всех";
-    public static final String CONTROL_FIND_APPROPRIATE = ":mag_right: Подходящих";
-    public static final String CONTROL_RECRUIT = ":heavy_plus_sign: Обучить";
+    public static final String CONTROL_FIND_ALL = "\uD83D\uDD0E Всех";
+    public static final String CONTROL_FIND_APPROPRIATE = "\uD83D\uDD0E Подходящих";
+    public static final String CONTROL_RECRUIT = "➕ Обучить";
     public static final String CONTROL_REPAIR = "⚒ Чинить";
-    public static final String CONTROL_INFO = ":scroll: Инфо";
+    public static final String CONTROL_INFO = "\uD83D\uDCDC Инфо";
 
     public static final String DIGIT_REGEX = "\\D";
 
@@ -96,15 +96,12 @@ public class Util {
     public static final String GOLD_REGEX = "([\\d]+)("+ GOLD_SIGN +"?)";
 
     public static final String WOOD_SIGN = "\uD83C\uDF32";
-    public static final String WOOD_SIGN2 = ":evergreen_tree:";
     public static final String WOOD_REGEX = "([\\d]+)("+ WOOD_SIGN +"?)";
 
     public static final String STONE_SIGN = "⛏";
-    public static final String STONE_SIGN2 = "⛏";
     public static final String STONE_REGEX = "([\\d]+)("+ STONE_SIGN +"?)";
 
     public static final String FOOD_SIGN = "\uD83C\uDF56";
-    public static final String FOOD_SIGN2 = ":meat_on_bone:";
     public static final String FOOD_REGEX = "([\\d]+)("+ FOOD_SIGN +"?)";
 
     public static final String TOWN_SIGN = "\uD83C\uDFE4";

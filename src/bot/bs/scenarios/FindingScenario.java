@@ -352,14 +352,16 @@ public class FindingScenario implements RunningScenario {
             playerName = playerName.substring(playerName.indexOf(Helper.EXPLORING_6) + Helper.EXPLORING_6.length());
         }
 
-        if (playerName.startsWith("[")) {
+        if (playerName.contains("[")) {
             playerAlliance = playerName.substring(playerName.indexOf("[") + 1, playerName.indexOf("]"));
-            playerName = playerName.substring(playerAlliance.length() + 2);
+            playerName = playerName.substring(playerName.indexOf("]") + 1);
 
             playerAlliance = Util.translateAllianceIfNeeded(playerAlliance);
         } else {
             playerAlliance = "";
         }
+
+        playerName = playerName.trim();
 
         if (Util.isAllyOrFriend(playerAlliance, playerName)) {
             sendMessage(getFindMessage());

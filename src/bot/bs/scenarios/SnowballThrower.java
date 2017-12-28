@@ -200,7 +200,6 @@ public class SnowballThrower {
 
         for (String s : array) {
             if (s.equals(playerName)) {
-                getSender().sendHelperMessage("skipping snowwar with: " + playerName);
                 return false;
             }
         }
