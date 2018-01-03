@@ -9,6 +9,7 @@ public class Util {
     public static final String BS_HELPER_NAME = "BastionSiegeHelper";
 
     public static final String SEASON = "Сезон";
+    public static final String WEATHER = "Погода";
     public static final String BUILDINGS_MENU = "Постройки";
     public static final String CANNOT_BUILD = "К сожалению, у тебя не хватает";
     public static final String DEFENCE_STARTED = "Твои владения атакованы!";

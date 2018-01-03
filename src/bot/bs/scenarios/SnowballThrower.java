@@ -56,6 +56,13 @@ public class SnowballThrower {
         }, TEN_SEC_IN_MILLIS);
     }
 
+    public void stop() {
+        cancelTimer();
+        isThrowingSnowball = false;
+        snowballThrown = false;
+        lastScenario = null;
+    }
+
     private void cancelTimer() {
         if (timer != null) {
             timer.cancel();

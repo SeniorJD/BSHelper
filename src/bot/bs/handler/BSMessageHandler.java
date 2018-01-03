@@ -96,6 +96,7 @@ public class BSMessageHandler extends MessageHandler {
             attackManager.stop();
             started = false;
             mediator.inBattle = false;
+            snowballThrower.stop();
             return;
         }
 
@@ -634,11 +635,17 @@ public class BSMessageHandler extends MessageHandler {
 //        }
 
         if (message.equals(Helper.COMMAND_FIND)) {
+            if (!started) {
+                snowballThrower.refresh();
+            }
             started = true;
             runningScenario = new FindingScenario(this);
             runningScenario.start();
             return;
         } else if (message.equals(Helper.COMMAND_BUILD)) {
+            if (!started) {
+                snowballThrower.refresh();
+            }
             started = true;
             if (mediator.inBattle) {
                 sendHelperMessage("Cannot build while the battle");
@@ -649,6 +656,9 @@ public class BSMessageHandler extends MessageHandler {
             runningScenario.start();
             return;
         } else if (message.equals(COMMAND_RECOVER)) {
+            if (!started) {
+                snowballThrower.refresh();
+            }
             started = true;
             runningScenario = new RecoverScenario(this);
             runningScenario.start();
@@ -766,17 +776,14 @@ public class BSMessageHandler extends MessageHandler {
             return;
         }
 
-        if (snowballThrower.canThrowSnowball()) {
-            if (snowballThrower.isThrowingSnowball()) {
-                snowballThrower.processThrowingSnowballMessage(message);
-            } else {
-                snowballThrower.throwSnowball();
-            }
-            if (!shouldIgnore(message.getMessage())) {
+        if (snowballThrower.isThrowingSnowball()) {
+            snowballThrower.processThrowingSnowballMessage(message);
+        }
+
+        if (message.getMessage().startsWith("❄")) {
+            if (!message.getMessage().contains(Util.SEASON) || !message.getMessage().contains(Util.POPULATION_KEYWORD) || !message.getMessage().contains(Util.GOLD_KEYWORD) || !message.getMessage().contains(Util.WEATHER)) {
                 return;
             }
-        } else if (message.getMessage().startsWith("❄")) {
-            return;
         }
 
         if (shouldIgnore(message.getMessage())) {
