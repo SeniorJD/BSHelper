@@ -151,14 +151,15 @@ public class SnowballThrower {
                 }, TEN_SEC_IN_MILLIS);
             } else {
                 createTimer();
-                timer.schedule(new TimerTask() {
+                timer.scheduleAtFixedRate(new TimerTask() {
                     @Override
                     public void run() {
                         if (canThrowSnowball() && !isThrowingSnowball()) {
+                            cancelTimer();
                             throwSnowball();
                         }
                     }
-                }, MINUTE_IN_MILLIS);
+                }, MINUTE_IN_MILLIS + TEN_SEC_IN_MILLIS, MINUTE_IN_MILLIS + TEN_SEC_IN_MILLIS);
 
                 RunningScenario scenario = createScenario();
 
